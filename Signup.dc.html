@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+</helmet>
+<div dir="rtl" style="fontFamily:'Cairo',sans-serif;background:#fff;color:#1F1B29;minHeight:100vh;display:flex;flexDirection:column">
+
+<div style="padding:20px 40px;borderBottom:1px solid #E7E3ED">
+  <img src="uploads/logo-1786385021537-76qk.png" alt="احتواء" style="height:30px"/>
+</div>
+
+<div style="flex:1;background:#F4F0FC;display:flex;alignItems:center;justifyContent:center;padding:48px 20px">
+  <div style="width:100%;maxWidth:440px;background:#fff;borderRadius:18px;padding:36px;boxShadow:0 12px 32px -8px #00000014">
+
+    <sc-if value="{{isSuccess}}" hint-placeholder-val="{{false}}">
+      <div style="textAlign:center;padding:20px 0">
+        <span style="width:56px;height:56px;borderRadius:50%;background:#1E8E5A;color:#fff;display:flex;alignItems:center;justifyContent:center;fontSize:24px;fontWeight:800;margin:0 auto 18px">✓</span>
+        <div style="fontSize:18px;fontWeight:800;marginBottom:8px">تم إنشاء حسابك بنجاح</div>
+        <div style="fontSize:14px;color:#6B667A;lineHeight:1.8;marginBottom:24px">تحقق من بريدك الإلكتروني لتفعيل الحساب والبدء في استخدام المنصة.</div>
+        <a href="Dashboard.dc.html" style="display:inline-block;background:#3A1078;color:#fff;padding:13px 36px;borderRadius:10px;fontWeight:700;fontSize:14px;textDecoration:none">الذهاب إلى حسابي</a>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isForm}}" hint-placeholder-val="{{true}}">
+      <h1 style="fontSize:20px;fontWeight:800;textAlign:center;margin:0 0 6px">إنشاء حساب جديد</h1>
+      <div style="fontSize:12px;color:#6B667A;textAlign:center;marginBottom:24px;display:flex;alignItems:center;justifyContent:center;gap:6px">
+        <span style="fontSize:13px">🔒</span>بياناتك مشفّرة وسرية بالكامل
+      </div>
+
+      <div style="display:flex;gap:22px;borderBottom:1px solid #E7E3ED;marginBottom:20px">
+        <span style="fontSize:14px;fontWeight:700;color:#3A1078;paddingBottom:10px;borderBottom:2px solid #3A1078;marginBottom:-1px">بريد إلكتروني</span>
+        <span style="fontSize:14px;fontWeight:600;color:#6B667A;paddingBottom:10px">رقم جوال</span>
+      </div>
+
+      <label style="fontSize:13px;fontWeight:600;marginBottom:6px;display:block">الاسم الكامل</label>
+      <input placeholder="اكتب اسمك" style="width:100%;padding:12px 14px;border:1px solid #E7E3ED;borderRadius:8px;fontSize:14px;fontFamily:Cairo;marginBottom:16px"/>
+
+      <label style="fontSize:13px;fontWeight:600;marginBottom:6px;display:block">البريد الإلكتروني</label>
+      <input placeholder="name@example.com" style="width:100%;padding:12px 14px;border:1px solid {{emailBorder}};borderRadius:8px;fontSize:14px;fontFamily:Cairo"/>
+      <sc-if value="{{isError}}" hint-placeholder-val="{{false}}">
+        <div style="fontSize:12px;color:#D8352F;marginTop:6px;marginBottom:16px">هذا البريد مسجّل بالفعل، جرّب تسجيل الدخول بدلاً من ذلك.</div>
+      </sc-if>
+      <sc-if value="{{isDefault}}" hint-placeholder-val="{{true}}"><div style="marginBottom:16px"></div></sc-if>
+
+      <label style="fontSize:13px;fontWeight:600;marginBottom:6px;display:block">كلمة المرور</label>
+      <input type="password" placeholder="••••••••" style="width:100%;padding:12px 14px;border:1px solid #E7E3ED;borderRadius:8px;fontSize:14px;fontFamily:Cairo;marginBottom:8px"/>
+      <div style="display:flex;gap:4px;marginBottom:4px">
+        <div style="height:4px;flex:1;borderRadius:2px;background:#1E8E5A"></div>
+        <div style="height:4px;flex:1;borderRadius:2px;background:#1E8E5A"></div>
+        <div style="height:4px;flex:1;borderRadius:2px;background:#F1EEF6"></div>
+      </div>
+      <div style="fontSize:12px;color:#1E8E5A;fontWeight:600;marginBottom:20px">قوة كلمة المرور: متوسطة</div>
+
+      <label style="display:flex;alignItems:flex-start;gap:8px;marginBottom:22px">
+        <input type="checkbox" style="marginTop:2px"/>
+        <span style="fontSize:13px;lineHeight:1.7">أوافق على <a href="#" style="color:#3A1078;textDecoration:underline">الشروط والأحكام</a> و<a href="#" style="color:#3A1078;textDecoration:underline">سياسة الخصوصية</a></span>
+      </label>
+
+      <a href="Signup.dc.html" style="display:block;textAlign:center;background:#FF8A00;color:#fff;padding:14px;borderRadius:10px;fontWeight:700;fontSize:15px;textDecoration:none;marginBottom:20px">إنشاء حساب</a>
+
+      <div style="display:flex;alignItems:center;gap:12px;marginBottom:20px">
+        <div style="flex:1;height:1px;background:#E7E3ED"></div><span style="fontSize:12px;color:#6B667A">أو</span><div style="flex:1;height:1px;background:#E7E3ED"></div>
+      </div>
+      <button style="width:100%;background:#fff;color:#1F1B29;padding:12px;borderRadius:10px;border:1px solid #E7E3ED;fontWeight:700;fontSize:13px;fontFamily:Cairo;marginBottom:20px">التسجيل عبر Google</button>
+
+      <div style="fontSize:13px;color:#6B667A;textAlign:center">عندك حساب بالفعل؟ <a href="Login.dc.html" style="color:#3A1078;fontWeight:700;textDecoration:none">سجّل الدخول</a></div>
+    </sc-if>
+
+  </div>
+</div>
+
+<dc-import name="Footer" hint-size="100%,300px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;عادي&quot;,&quot;options&quot;:[&quot;عادي&quot;,&quot;خطأ: بريد مستخدم&quot;,&quot;نجاح&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const state = this.props.state ?? "عادي";
+    const isError = state === "خطأ: بريد مستخدم";
+    const isSuccess = state === "نجاح";
+    return {
+      isForm: !isSuccess, isSuccess,
+      isError, isDefault: !isError,
+      emailBorder: isError ? "#D8352F" : "#E7E3ED",
+    };
+  }
+}
+</script>
+</body>
+</html>

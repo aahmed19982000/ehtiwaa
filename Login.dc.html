@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+</helmet>
+<div dir="rtl" style="fontFamily:'Cairo',sans-serif;background:#FAF9FB;color:#1F1B29;minHeight:100vh;display:flex;flexDirection:column">
+<dc-import name="Header" is-logged-in="{{false}}" hint-size="100%,64px"></dc-import>
+
+<div style="flex:1;display:flex;alignItems:center;justifyContent:center;padding:60px 20px">
+  <div style="width:100%;maxWidth:400px;border:1px solid #E7E3ED;borderRadius:16px;padding:36px;background:#fff">
+    <div style="display:flex;gap:24px;borderBottom:1px solid #E7E3ED;marginBottom:28px">
+      <span style="fontSize:15px;fontWeight:700;color:{{loginColor}};paddingBottom:12px;borderBottom:{{loginBorder}};marginBottom:-1px">تسجيل الدخول</span>
+      <span style="fontSize:15px;fontWeight:700;color:{{signupColor}};paddingBottom:12px;borderBottom:{{signupBorder}};marginBottom:-1px">إنشاء حساب</span>
+    </div>
+    <sc-if value="{{isSignup}}" hint-placeholder-val="{{false}}">
+      <label style="fontSize:13px;fontWeight:600;marginBottom:6px;display:block">الاسم الكامل</label>
+      <input placeholder="اكتب اسمك" style="width:100%;padding:12px 14px;border:1px solid #E7E3ED;borderRadius:8px;fontSize:14px;fontFamily:Cairo;marginBottom:16px"/>
+    </sc-if>
+    <label style="fontSize:13px;fontWeight:600;marginBottom:6px;display:block">البريد الإلكتروني</label>
+    <input placeholder="name@example.com" style="width:100%;padding:12px 14px;border:1px solid #E7E3ED;borderRadius:8px;fontSize:14px;fontFamily:Cairo;marginBottom:16px"/>
+    <label style="fontSize:13px;fontWeight:600;marginBottom:6px;display:block">كلمة المرور</label>
+    <input placeholder="••••••••" style="width:100%;padding:12px 14px;border:1px solid #E7E3ED;borderRadius:8px;fontSize:14px;fontFamily:Cairo;marginBottom:8px"/>
+    <sc-if value="{{isLogin}}" hint-placeholder-val="{{true}}">
+      <div style="textAlign:left;marginBottom:20px"><a href="#" style="fontSize:12px;color:#3A1078;textDecoration:none">نسيت كلمة المرور؟</a></div>
+    </sc-if>
+    <sc-if value="{{isSignup}}" hint-placeholder-val="{{false}}"><div style="height:20px"></div></sc-if>
+    <a href="Dashboard.dc.html" style="display:block;textAlign:center;background:#3A1078;color:#fff;padding:13px;borderRadius:10px;fontWeight:700;fontSize:14px;textDecoration:none;marginBottom:14px">{{ctaLabel}}</a>
+    <div style="fontSize:12px;color:#6B667A;textAlign:center">بتسجيلك أنت توافق على <a href="#" style="color:#3A1078;textDecoration:none">الشروط والأحكام</a></div>
+  </div>
+</div>
+
+<dc-import name="Footer" hint-size="100%,300px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;تسجيل دخول&quot;,&quot;options&quot;:[&quot;تسجيل دخول&quot;,&quot;إنشاء حساب&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const isSignup = (this.props.mode ?? "تسجيل دخول") === "إنشاء حساب";
+    return {
+      isSignup, isLogin: !isSignup,
+      loginColor: isSignup ? "#6B667A" : "#3A1078",
+      signupColor: isSignup ? "#3A1078" : "#6B667A",
+      loginBorder: isSignup ? "none" : "2px solid #3A1078",
+      signupBorder: isSignup ? "2px solid #3A1078" : "none",
+      ctaLabel: isSignup ? "إنشاء الحساب" : "تسجيل الدخول",
+    };
+  }
+}
+</script>
+</body>
+</html>

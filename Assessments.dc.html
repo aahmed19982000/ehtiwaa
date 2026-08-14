@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+<style>
+@media (max-width:900px){[data-assess-grid]{grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important}}
+@media (max-width:640px){[data-assess-pad]{padding:20px 16px 100px !important}[data-assess-grid]{grid-template-columns:minmax(0,1fr) !important}}
+</style>
+</helmet>
+<div dir="rtl" style="fontFamily:'Cairo',sans-serif;background:#FAF9FB;color:#1F1B29;minHeight:100vh">
+<dc-import name="Header" hint-size="100%,64px"></dc-import>
+
+<div data-assess-pad="true" style="maxWidth:1440px;margin:0 auto;padding:32px 40px 100px">
+  <div style="background:#F4F0FC;border:1px solid #E6DBF7;borderRadius:14px;padding:20px 24px;display:flex;gap:14px;alignItems:flex-start;marginBottom:32px">
+    <span style="width:28px;height:28px;borderRadius:50%;background:#3A1078;color:#fff;display:flex;alignItems:center;justifyContent:center;fontSize:14px;fontWeight:800;flexShrink:0">i</span>
+    <span style="fontSize:15px;fontWeight:700;color:#3A1078;lineHeight:1.8">هذه الاختبارات أداة إرشادية للتعرف على حالتك بشكل أولي، ولا تُغني عن استشارة أخصائي مختص. النتيجة ليست تشخيصاً طبياً.</span>
+  </div>
+
+  <h1 style="fontSize:28px;fontWeight:800;margin:0 0 10px">اختبارات ومقاييس نفسية ذاتية</h1>
+  <p style="fontSize:15px;color:#6B667A;margin:0 0 28px;maxWidth:640px">تقييم إرشادي أولي لمساعدتك على فهم حالتك بشكل عام — وليس تشخيصاً طبياً.</p>
+
+  <div style="display:flex;gap:10px;marginBottom:28px;flexWrap:wrap">
+    <sc-for list="{{topics}}" as="t" hint-placeholder-count="6">
+      <span style="fontSize:13px;fontWeight:700;padding:8px 18px;borderRadius:999px;background:{{t.bg}};color:{{t.color}};cursor:pointer">{{t.label}}</span>
+    </sc-for>
+  </div>
+
+  <div data-assess-grid="true" style="display:grid;gridTemplateColumns:repeat(3,1fr);gap:20px">
+    <sc-for list="{{assessments}}" as="a" hint-placeholder-count="9">
+      <div style="border:1px solid #E7E3ED;borderRadius:14px;padding:22px;background:#fff">
+        <span style="width:44px;height:44px;borderRadius:50%;background:{{a.iconBg}};color:{{a.iconColor}};display:flex;alignItems:center;justifyContent:center;fontSize:18px;fontWeight:800;marginBottom:14px">{{a.icon}}</span>
+        <div style="fontSize:16px;fontWeight:700;marginBottom:8px">{{a.name}}</div>
+        <div style="fontSize:13px;color:#6B667A;lineHeight:1.7;marginBottom:14px">{{a.desc}}</div>
+        <div style="fontSize:12px;color:#6B667A;marginBottom:16px">{{a.questions}} سؤال · {{a.time}}</div>
+        <a href="AssessmentTake.dc.html" style="display:block;textAlign:center;background:#FF8A00;color:#fff;padding:11px;borderRadius:8px;fontWeight:700;fontSize:13px;textDecoration:none">ابدأ الاختبار</a>
+      </div>
+    </sc-for>
+  </div>
+</div>
+
+<dc-import name="Footer" hint-size="100%,300px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      topics: [
+        { label: "الكل", bg: "#3A1078", color: "#fff" },
+        { label: "قلق", bg: "#F1EEF6", color: "#1F1B29" },
+        { label: "اكتئاب", bg: "#F1EEF6", color: "#1F1B29" },
+        { label: "علاقات", bg: "#F1EEF6", color: "#1F1B29" },
+        { label: "نوم", bg: "#F1EEF6", color: "#1F1B29" },
+        { label: "ضغط عصبي", bg: "#F1EEF6", color: "#1F1B29" },
+      ],
+      assessments: [
+        { icon: "٭", iconBg: "#F4F0FC", iconColor: "#3A1078", name: "مقياس الضغط العصبي", desc: "يقيس مستوى الضغط النفسي اليومي وتأثيره على تركيزك ومزاجك.", questions: 12, time: "4 دقائق" },
+        { icon: "◐", iconBg: "#FFF4E5", iconColor: "#B85F00", name: "مقياس القلق", desc: "يساعدك على التعرف على شدة أعراض القلق التي تشعر بها مؤخراً.", questions: 15, time: "5 دقائق" },
+        { icon: "☾", iconBg: "#F1EEF6", iconColor: "#3A1078", name: "مقياس جودة النوم", desc: "يقيس جودة نومك وأثره على نشاطك خلال اليوم.", questions: 10, time: "3 دقائق" },
+        { icon: "♡", iconBg: "#FFF4E5", iconColor: "#B85F00", name: "مقياس تقدير الذات", desc: "يعكس نظرتك لذاتك وثقتك بقدراتك في الوقت الحالي.", questions: 10, time: "4 دقائق" },
+        { icon: "≈", iconBg: "#F4F0FC", iconColor: "#3A1078", name: "مقياس أعراض الاكتئاب", desc: "يرصد مؤشرات المزاج المنخفض والطاقة خلال الأسابيع الأخيرة.", questions: 14, time: "5 دقائق" },
+        { icon: "⚭", iconBg: "#F1EEF6", iconColor: "#3A1078", name: "مقياس جودة العلاقات", desc: "يقيّم مستوى الرضا والتواصل في علاقاتك القريبة.", questions: 12, time: "4 دقائق" },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

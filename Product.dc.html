@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+<style>
+@media (max-width:900px){[data-product-grid]{grid-template-columns:minmax(0,1fr) !important}}
+@media (max-width:640px){[data-product-pad]{padding:20px 16px 100px !important}[data-cart-box]{max-width:100% !important}}
+</style>
+</helmet>
+<div dir="rtl" style="fontFamily:'Cairo',sans-serif;background:#FAF9FB;color:#1F1B29;minHeight:100vh">
+<dc-import name="Header" hint-size="100%,64px"></dc-import>
+
+<div data-product-pad="true" style="maxWidth:1440px;margin:0 auto;padding:32px 40px 100px">
+  <div data-product-grid="true" style="display:grid;gridTemplateColumns:460px minmax(0,1fr);gap:48px;marginBottom:40px">
+    <div>
+      <div style="height:420px;borderRadius:12px;overflow:hidden;marginBottom:12px"><img src="https://images.unsplash.com/photo-1517971071642-34a2d3ecc9cd?w=900&h=900&fit=crop&q=80&auto=format" alt="دفتر تدوين المشاعر اليومي" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+      <div style="display:flex;gap:8px">
+        <div style="width:76px;height:76px;borderRadius:8px;overflow:hidden"><img src="https://images.unsplash.com/photo-1517842645767-c639042777db?w=200&h=200&fit=crop&q=80&auto=format" alt="صورة" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+        <div style="width:76px;height:76px;borderRadius:8px;overflow:hidden"><img src="https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=200&h=200&fit=crop&q=80&auto=format" alt="صورة" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+      </div>
+    </div>
+    <div>
+      <h1 style="fontSize:28px;fontWeight:800;margin:0 0 10px">دفتر تدوين المشاعر اليومي</h1>
+      <div style="fontSize:14px;color:#B85F00;fontWeight:600;marginBottom:16px">★★★★★ 4.6 (89 تقييم)</div>
+      <div style="display:flex;alignItems:center;gap:12px;marginBottom:14px">
+        <span style="fontSize:26px;fontWeight:800;color:#B85F00">144 ج.م</span>
+        <span style="fontSize:14px;color:#6B667A;textDecoration:line-through">169 ج.م</span>
+        <span style="fontSize:12px;background:#FFE3BF;color:#8A4700;padding:4px 10px;borderRadius:999px;fontWeight:700">وفّر 15%</span>
+      </div>
+      <span style="fontSize:12px;background:#E7F6EE;color:#166B44;padding:4px 12px;borderRadius:999px;fontWeight:700;display:inline-block;marginBottom:18px">متوفر</span>
+      <p style="fontSize:15px;lineHeight:1.8;color:#1F1B29;margin:0 0 22px;maxWidth:460px">دفتر بتصميم مرن مع تمارين تدوين موجهة تساعدك على تتبع مشاعرك اليومية بشكل بسيط ومستمر، مناسب للاستخدام اليومي أو مع خطة علاجية.</p>
+      <div style="display:flex;alignItems:center;gap:16px;marginBottom:24px">
+        <div style="display:flex;alignItems:center;border:1px solid #E7E3ED;borderRadius:8px">
+          <span style="padding:10px 16px;fontSize:15px">−</span><span style="padding:10px 16px;fontSize:15px;borderLeft:1px solid #E7E3ED;borderRight:1px solid #E7E3ED">1</span><span style="padding:10px 16px;fontSize:15px">+</span>
+        </div>
+        <button style="background:#FF8A00;color:#fff;padding:13px 30px;borderRadius:10px;border:none;fontWeight:700;fontSize:14px;fontFamily:Cairo">أضف للسلة</button>
+        <button style="background:transparent;color:#3A1078;padding:12px 30px;borderRadius:10px;border:1.5px solid #3A1078;fontWeight:700;fontSize:14px;fontFamily:Cairo">اشترِ الآن</button>
+      </div>
+      <div style="background:#F1EEF6;borderRadius:10px;padding:14px 16px;fontSize:13px;color:#6B667A;maxWidth:460px">شحن مجاني للطلبات فوق 250 ج.م، إرجاع مجاني خلال 14 يوماً.</div>
+    </div>
+  </div>
+
+  <div data-cart-box="true" style="maxWidth:460px;border:1px solid #E7E3ED;borderRadius:14px;padding:20px">
+    <div style="fontSize:14px;fontWeight:700;marginBottom:14px">سلة التسوق</div>
+    <sc-if value="{{cartHasItems}}" hint-placeholder-val="{{true}}">
+      <div style="display:flex;alignItems:center;gap:12px;paddingBottom:14px;borderBottom:1px solid #E7E3ED;marginBottom:14px">
+        <div style="width:48px;height:48px;borderRadius:8px;overflow:hidden;flexShrink:0"><img src="https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=140&h=140&fit=crop&q=80&auto=format" alt="دفتر تدوين المشاعر اليومي" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+        <div style="flex:1"><div style="fontSize:13px;fontWeight:600">دفتر تدوين المشاعر اليومي</div><div style="fontSize:12px;color:#6B667A">الكمية: 1</div></div>
+        <span style="fontSize:14px;fontWeight:700">144 ج.م</span>
+      </div>
+      <a href="Checkout.dc.html" style="display:block;textAlign:center;background:#3A1078;color:#fff;padding:12px;borderRadius:8px;fontWeight:700;fontSize:13px;textDecoration:none">إتمام الشراء</a>
+    </sc-if>
+    <sc-if value="{{cartEmpty}}" hint-placeholder-val="{{false}}">
+      <div style="textAlign:center;padding:20px 0">
+        <div style="fontSize:14px;fontWeight:700;marginBottom:6px">سلتك فارغة</div>
+        <div style="fontSize:13px;color:#6B667A">أضف منتجات من المتجر لتظهر هنا.</div>
+      </div>
+    </sc-if>
+  </div>
+</div>
+
+<dc-import name="Footer" hint-size="100%,300px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;cartState&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;عادي&quot;,&quot;options&quot;:[&quot;عادي&quot;,&quot;سلة فارغة&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const empty = (this.props.cartState ?? "عادي") === "سلة فارغة";
+    return { cartHasItems: !empty, cartEmpty: empty };
+  }
+}
+</script>
+</body>
+</html>

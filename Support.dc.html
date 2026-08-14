@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+<style>
+@media (max-width:900px){[data-cat-grid]{grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important}[data-help-grid]{grid-template-columns:minmax(0,1fr) !important}}
+@media (max-width:640px){[data-support-hero]{padding:40px 20px !important}[data-support-body]{padding:40px 20px !important}[data-cat-grid]{grid-template-columns:minmax(0,1fr) !important}}
+</style>
+</helmet>
+<div dir="rtl" style="fontFamily:'Cairo',sans-serif;background:#FAF9FB;color:#1F1B29;minHeight:100vh;position:relative">
+<dc-import name="Header" hint-size="100%,64px"></dc-import>
+
+<div data-support-hero="true" style="background:#F4F0FC;padding:56px 40px;textAlign:center">
+  <h1 style="fontSize:28px;fontWeight:800;margin:0 0 20px">كيف نقدر نساعدك؟</h1>
+  <div style="maxWidth:600px;margin:0 auto;position:relative">
+    <input onInput="{{onSearchInput}}" value="{{searchQuery}}" placeholder="ابحث عن سؤالك... (مثال: كيف ألغي حجز جلسة)" style="width:100%;padding:16px 20px;border:1px solid #E7E3ED;borderRadius:12px;fontSize:15px;fontFamily:Cairo"/>
+    <sc-if value="{{hasResults}}" hint-placeholder-val="{{false}}">
+      <div style="background:#fff;border:1px solid #E7E3ED;borderRadius:12px;marginTop:8px;textAlign:right;overflow:hidden">
+        <sc-for list="{{searchResults}}" as="r" hint-placeholder-count="3">
+          <div style="padding:14px 20px;fontSize:14px;borderBottom:1px solid #F1EEF6">{{r}}</div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{noResults}}" hint-placeholder-val="{{false}}">
+      <div style="background:#fff;border:1px solid #E7E3ED;borderRadius:12px;marginTop:8px;padding:20px;textAlign:center">
+        <div style="fontSize:14px;fontWeight:700;marginBottom:8px">لا توجد نتائج مطابقة</div>
+        <div style="fontSize:13px;color:#6B667A;marginBottom:14px">جرّب كلمات مختلفة أو أرسل تذكرة دعم وسيتواصل معك فريقنا.</div>
+        <button style="background:#3A1078;color:#fff;padding:10px 24px;borderRadius:8px;border:none;fontWeight:700;fontSize:13px;fontFamily:Cairo">إرسال تذكرة دعم</button>
+      </div>
+    </sc-if>
+  </div>
+</div>
+
+<div data-support-body="true" style="maxWidth:1440px;margin:0 auto;padding:56px 40px">
+  <h2 style="fontSize:20px;fontWeight:800;margin:0 0 24px">تصفح حسب التصنيف</h2>
+  <div data-cat-grid="true" style="display:grid;gridTemplateColumns:repeat(3,1fr);gap:20px;marginBottom:56px">
+    <sc-for list="{{categories}}" as="c" hint-placeholder-count="6">
+      <div style="border:1px solid #E7E3ED;borderRadius:14px;padding:22px;background:#fff;display:flex;alignItems:center;gap:16px;cursor:pointer">
+        <span style="width:44px;height:44px;borderRadius:50%;background:#F4F0FC;color:#3A1078;display:flex;alignItems:center;justifyContent:center;fontSize:18px;fontWeight:800;flexShrink:0">{{c.icon}}</span>
+        <div><div style="fontSize:15px;fontWeight:700;marginBottom:4px">{{c.title}}</div><div style="fontSize:12px;color:#6B667A">{{c.count}} مقالة</div></div>
+      </div>
+    </sc-for>
+  </div>
+
+  <h2 style="fontSize:20px;fontWeight:800;margin:0 0 24px">الأسئلة الأكثر شيوعاً</h2>
+  <div style="border:1px solid #E7E3ED;borderRadius:14px;overflow:hidden;marginBottom:56px;maxWidth:900px">
+    <sc-for list="{{faqs}}" as="f" hint-placeholder-count="7">
+      <div style="borderBottom:1px solid #F1EEF6;padding:18px 22px">
+        <div style="display:flex;justifyContent:space-between;alignItems:center;fontSize:15px;fontWeight:700;cursor:pointer">
+          <span>{{f.q}}</span><span style="color:#6B667A;fontSize:18px">{{f.sign}}</span>
+        </div>
+        <sc-if value="{{f.open}}" hint-placeholder-val="{{false}}">
+          <p style="fontSize:14px;lineHeight:1.8;color:#6B667A;margin:12px 0 0">{{f.a}}</p>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+
+  <h2 style="fontSize:20px;fontWeight:800;margin:0 0 24px">لسه محتاج مساعدة؟</h2>
+  <div data-help-grid="true" style="display:grid;gridTemplateColumns:minmax(0,1fr) 320px;gap:40px">
+    <div>
+      <div style="display:grid;gridTemplateColumns:1fr 1fr;gap:14px;marginBottom:14px">
+        <input placeholder="الاسم الكامل" style="padding:12px 14px;border:1px solid #E7E3ED;borderRadius:8px;fontSize:14px;fontFamily:Cairo"/>
+        <input placeholder="البريد الإلكتروني" style="padding:12px 14px;border:1px solid #E7E3ED;borderRadius:8px;fontSize:14px;fontFamily:Cairo"/>
+      </div>
+      <div style="display:grid;gridTemplateColumns:1fr 1fr;gap:14px;marginBottom:14px">
+        <select style="padding:12px 14px;border:1px solid #E7E3ED;borderRadius:8px;fontSize:14px;fontFamily:Cairo;background:#fff">
+          <option>اختر التصنيف</option><option>الحسابات وتسجيل الدخول</option><option>الدفع والفواتير</option><option>الحجوزات والجلسات</option>
+        </select>
+        <input placeholder="الموضوع" style="padding:12px 14px;border:1px solid #E7E3ED;borderRadius:8px;fontSize:14px;fontFamily:Cairo"/>
+      </div>
+      <textarea placeholder="اكتب رسالتك بالتفصيل..." style="width:100%;minHeight:120px;padding:12px 14px;border:1px solid #E7E3ED;borderRadius:8px;fontSize:14px;fontFamily:Cairo;resize:vertical;marginBottom:14px"></textarea>
+      <div style="display:flex;alignItems:center;gap:10px;border:1px dashed #E7E3ED;borderRadius:8px;padding:14px;fontSize:13px;color:#6B667A;marginBottom:16px">📎 إرفاق ملف أو صورة (اختياري)</div>
+      <button style="background:#FF8A00;color:#fff;padding:13px 32px;borderRadius:10px;border:none;fontWeight:700;fontSize:14px;fontFamily:Cairo;marginBottom:10px">إرسال التذكرة</button>
+      <div style="fontSize:12px;color:#6B667A">بنرد خلال 24 ساعة في أيام العمل.</div>
+    </div>
+    <div style="display:flex;flexDirection:column;gap:12px">
+      <div style="border:1px solid #E7E3ED;borderRadius:12px;padding:18px;display:flex;alignItems:center;gap:14px;background:#fff">
+        <span style="width:38px;height:38px;borderRadius:50%;background:#E7F6EE;color:#166B44;display:flex;alignItems:center;justifyContent:center;fontSize:14px;fontWeight:800">و</span>
+        <div><div style="fontSize:14px;fontWeight:700">واتساب</div><div style="fontSize:12px;color:#6B667A">تواصل مباشر خلال ساعات العمل</div></div>
+      </div>
+      <div style="border:1px solid #E7E3ED;borderRadius:12px;padding:18px;display:flex;alignItems:center;gap:14px;background:#fff">
+        <span style="width:38px;height:38px;borderRadius:50%;background:#F4F0FC;color:#3A1078;display:flex;alignItems:center;justifyContent:center;fontSize:14px;fontWeight:800">@</span>
+        <div><div style="fontSize:14px;fontWeight:700">support@ehtwaanews.com</div><div style="fontSize:12px;color:#6B667A">بريد الدعم</div></div>
+      </div>
+      <div style="border:1px solid #E7E3ED;borderRadius:12px;padding:18px;display:flex;alignItems:center;gap:14px;background:#fff">
+        <span style="width:38px;height:38px;borderRadius:50%;background:#FFF4E5;color:#B85F00;display:flex;alignItems:center;justifyContent:center;fontSize:14px;fontWeight:800">⏱</span>
+        <div><div style="fontSize:14px;fontWeight:700">ساعات العمل</div><div style="fontSize:12px;color:#6B667A">الأحد - الخميس، 9ص - 6م</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<dc-import name="Footer" hint-size="100%,300px"></dc-import>
+
+<div style="position:fixed;bottom:28px;left:28px;width:56px;height:56px;borderRadius:50%;background:#3A1078;color:#fff;display:flex;alignItems:center;justifyContent:center;fontSize:22px;fontWeight:800;boxShadow:0 8px 20px -4px #3A107866;cursor:pointer;zIndex:60">💬</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;searchState&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;عادي&quot;,&quot;options&quot;:[&quot;عادي&quot;,&quot;نتائج&quot;,&quot;لا نتائج&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = {
+    searchQuery: ""
+  };
+  renderVals() {
+    const searchQuery = this.state.searchQuery;
+    const allSearchable = [
+      "كيف ألغي حجز جلسة استشارية؟",
+      "متى يتم استرداد المبلغ بعد الإلغاء؟",
+      "كيف أغيّر موعد الجلسة؟",
+      "كيف أسترد قيمة دورة اشتريتها؟",
+      "هل يمكن تغيير الأخصائي بعد الحجز؟",
+      "كيف أحصل على شهادة إتمام الدورة؟",
+      "هل بياناتي في الجلسات الاستشارية سرية؟",
+      "ما هي طرق الدفع المتاحة؟",
+      "كيف أتابع طلبي من المتجر؟"
+    ];
+    let searchResults = [];
+    let hasResults = false;
+    let noResults = false;
+    if (searchQuery.trim().length > 0) {
+      searchResults = allSearchable.filter(q => q.includes(searchQuery));
+      if (searchResults.length > 0) {
+        hasResults = true;
+      } else {
+        noResults = true;
+      }
+    }
+    const editorSearch = this.props.searchState ?? "عادي";
+    if (editorSearch === "نتائج" && !searchQuery) {
+      hasResults = true;
+      searchResults = ["كيف ألغي حجز جلسة استشارية؟", "متى يتم استرداد المبلغ بعد الإلغاء؟", "كيف أغيّر موعد الجلسة؟"];
+    } else if (editorSearch === "لا نتائج" && !searchQuery) {
+      noResults = true;
+    }
+    const onSearchInput = (e) => {
+      this.setState({ searchQuery: e.target.value });
+    };
+    return {
+      searchQuery,
+      hasResults, noResults,
+      searchResults,
+      onSearchInput,
+      categories: [
+        { icon: "◐", title: "الحسابات وتسجيل الدخول", count: 12 },
+        { icon: "◆", title: "الدفع والفواتير والاسترداد", count: 18 },
+        { icon: "◷", title: "الحجوزات والجلسات", count: 15 },
+        { icon: "▣", title: "الدورات والشهادات", count: 10 },
+        { icon: "▢", title: "المتجر والطلبات", count: 9 },
+        { icon: "◈", title: "الخصوصية والأمان", count: 7 },
+      ],
+      faqs: [
+        { q: "كيف ألغي حجز جلسة استشارية؟", a: "من لوحة حسابك، افتح «حجوزاتي» واختر «إلغاء» بجانب الموعد، قبل 24 ساعة على الأقل لاسترداد كامل.", open: true, sign: "−" },
+        { q: "كيف أسترد قيمة دورة اشتريتها؟", a: "يمكن استرداد قيمة الدورة كاملة خلال 7 أيام من الشراء عبر تذكرة دعم أو من صفحة الفواتير.", open: false, sign: "+" },
+        { q: "هل يمكن تغيير الأخصائي بعد الحجز؟", a: "نعم، يمكنك إلغاء الموعد الحالي وإعادة الحجز مع أخصائي آخر دون رسوم إضافية.", open: false, sign: "+" },
+        { q: "كيف أحصل على شهادة إتمام الدورة؟", a: "تصدر الشهادة تلقائياً في صفحة الدورة بعد إكمال جميع الدروس والاختبار النهائي.", open: false, sign: "+" },
+        { q: "هل بياناتي في الجلسات الاستشارية سرية؟", a: "نعم، ملاحظات الجلسات لا تظهر إلا للأخصائي المعني والإدارة العليا فقط.", open: false, sign: "+" },
+        { q: "ما هي طرق الدفع المتاحة؟", a: "بطاقات الائتمان والمدى، Apple Pay، والتحويل البنكي.", open: false, sign: "+" },
+        { q: "كيف أتابع طلبي من المتجر؟", a: "من «حسابي ← فواتيري» يمكنك تتبع حالة الشحن لكل طلب.", open: false, sign: "+" },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

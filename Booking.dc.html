@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+<style>
+@media (max-width:900px){[data-booking-grid]{grid-template-columns:minmax(0,1fr) !important}}
+@media (max-width:640px){[data-booking-pad]{padding:20px 16px 100px !important}[data-slots-grid]{grid-template-columns:repeat(3,minmax(0,1fr)) !important}[data-booking-form]{grid-template-columns:minmax(0,1fr) !important}}
+</style>
+</helmet>
+<div dir="rtl" style="fontFamily:'Cairo',sans-serif;background:#FAF9FB;color:#1F1B29;minHeight:100vh">
+<dc-import name="Header" hint-size="100%,64px"></dc-import>
+
+<div data-booking-pad="true" style="maxWidth:1440px;margin:0 auto;padding:32px 40px 100px">
+  <div data-booking-grid="true" style="display:grid;gridTemplateColumns:360px minmax(0,1fr);gap:48px">
+    <div style="border:1px solid #E7E3ED;borderRadius:14px;padding:24px;height:fit-content">
+      <div style="width:88px;height:88px;borderRadius:50%;overflow:hidden;marginBottom:14px"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=180&h=180&fit=crop&crop=faces&q=80&auto=format" alt="د. فهد المطيري" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+      <div style="fontSize:20px;fontWeight:800">د. فهد المطيري</div>
+      <div style="fontSize:14px;color:#6B667A;marginBottom:10px">أخصائي علاقات وأسرة</div>
+      <div style="fontSize:14px;color:#B85F00;fontWeight:600;marginBottom:14px">★★★★★ 4.9 (140 تقييم)</div>
+      <div style="display:flex;gap:6px;marginBottom:14px"><span style="fontSize:12px;background:#F1EEF6;padding:4px 12px;borderRadius:999px">عربي</span><span style="fontSize:12px;background:#F1EEF6;padding:4px 12px;borderRadius:999px">English</span></div>
+      <div style="fontSize:13px;lineHeight:1.8;color:#6B667A;marginBottom:20px">ماجستير علم نفس إكلينيكي، 10 سنوات خبرة في استشارات الأسرة والعلاقات.</div>
+      <div style="fontSize:22px;fontWeight:800;color:#B85F00;paddingTop:16px;borderTop:1px solid #E7E3ED">600 ج.م / جلسة</div>
+    </div>
+    <div>
+      <div style="fontSize:14px;fontWeight:700;marginBottom:12px">المنطقة الزمنية: GMT+3 · الرياض ▾</div>
+      <div style="fontSize:15px;fontWeight:700;marginBottom:12px">اختر التاريخ</div>
+      <div style="display:flex;gap:10px;marginBottom:24px;overflowX:auto;paddingBottom:4px">
+        <sc-for list="{{weekDays}}" as="d" hint-placeholder-count="7">
+          <div onClick="{{d.onClick}}" style="minWidth:64px;textAlign:center;padding:10px 6px;borderRadius:10px;background:{{d.bg}};color:{{d.color}};cursor:pointer">
+            <div style="fontSize:11px">{{d.label}}</div>
+            <div style="fontSize:15px;fontWeight:700">{{d.date}}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="fontSize:15px;fontWeight:700;marginBottom:12px">اختر الوقت</div>
+      <sc-if value="{{hasSlots}}" hint-placeholder-val="{{true}}">
+        <div data-slots-grid="true" style="display:grid;gridTemplateColumns:repeat(4,1fr);gap:10px;marginBottom:28px;maxWidth:520px">
+          <sc-for list="{{timeSlots}}" as="t" hint-placeholder-count="8">
+            <div onClick="{{t.onClick}}" style="textAlign:center;padding:12px 6px;borderRadius:8px;fontSize:13px;border:1px solid {{t.borderColor}};background:{{t.bg}};color:{{t.color}};textDecoration:{{t.strike}};cursor:{{t.cursor}};fontWeight:{{t.weight}}">{{t.time}}</div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{noSlots}}" hint-placeholder-val="{{false}}">
+        <div style="border:1px dashed #E7E3ED;borderRadius:12px;padding:32px;textAlign:center;marginBottom:28px;maxWidth:520px">
+          <div style="fontSize:14px;fontWeight:700;marginBottom:6px">لا توجد مواعيد متاحة هذا الأسبوع</div>
+          <div style="fontSize:13px;color:#6B667A">جرّب أسبوعاً آخر أو اختر أخصائياً آخر من الدليل.</div>
+        </div>
+      </sc-if>
+      <div data-booking-form="true" style="display:grid;gridTemplateColumns:1fr 1fr;gap:14px;maxWidth:520px;marginBottom:20px">
+        <input placeholder="الاسم الكامل" style="padding:12px 14px;border:1px solid #E7E3ED;borderRadius:8px;fontSize:13px;fontFamily:Cairo"/>
+        <input placeholder="رقم الجوال" style="padding:12px 14px;border:1px solid #E7E3ED;borderRadius:8px;fontSize:13px;fontFamily:Cairo"/>
+      </div>
+      <div style="background:#F4F0FC;borderRadius:10px;padding:14px 16px;fontSize:13px;color:#3A1078;marginBottom:24px;maxWidth:520px">لن يتم خصم أي مبلغ حتى تأكيد الحجز. يمكن الإلغاء مجاناً قبل 24 ساعة من الموعد.</div>
+      <a href="Checkout.dc.html" style="display:inline-block;background:#FF8A00;color:#fff;padding:14px 40px;borderRadius:10px;fontWeight:700;fontSize:15px;textDecoration:none">تأكيد وإكمال الدفع — 600 ج.م</a>
+    </div>
+  </div>
+</div>
+
+<dc-import name="Footer" hint-size="100%,300px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;availability&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;متاح&quot;,&quot;options&quot;:[&quot;متاح&quot;,&quot;لا توجد مواعيد&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = {
+    selectedDate: "10",
+    selectedSlot: "11:00 ص"
+  };
+  renderVals() {
+    const empty = (this.props.availability ?? "متاح") === "لا توجد مواعيد";
+    const selectedDate = this.state.selectedDate;
+    const selectedSlot = this.state.selectedSlot;
+    const raw = [
+      { time: "10:00 ص", status: "available" }, { time: "11:00 ص", status: "selected" },
+      { time: "12:00 م", status: "booked" }, { time: "01:00 م", status: "available" },
+      { time: "02:00 م", status: "booked" }, { time: "04:00 م", status: "available" },
+      { time: "05:00 م", status: "available" }, { time: "06:00 م", status: "booked" },
+    ];
+    const timeSlots = raw.map(s => {
+      const isSelected = selectedSlot === s.time;
+      if (s.status === "booked") return { time: s.time, bg: "#F1EEF6", color: "#B0AABF", borderColor: "#F1EEF6", strike: "line-through", cursor: "not-allowed", weight: 400, onClick: () => {} };
+      if (isSelected) return { time: s.time, bg: "#3A1078", color: "#fff", borderColor: "#3A1078", strike: "none", cursor: "pointer", weight: 700, onClick: () => this.setState({ selectedSlot: s.time }) };
+      return { time: s.time, bg: "#fff", color: "#1F1B29", borderColor: "#E7E3ED", strike: "none", cursor: "pointer", weight: 500, onClick: () => this.setState({ selectedSlot: s.time }) };
+    });
+    const weekDays = [
+      { label: "الأحد", date: "9" }, { label: "الاثنين", date: "10" },
+      { label: "الثلاثاء", date: "11" }, { label: "الأربعاء", date: "12" },
+      { label: "الخميس", date: "13" }, { label: "الجمعة", date: "14" }, { label: "السبت", date: "15" },
+    ].map(d => {
+      const active = selectedDate === d.date;
+      return {
+        ...d,
+        active,
+        bg: active ? "#3A1078" : "#F1EEF6",
+        color: active ? "#fff" : "#1F1B29",
+        onClick: () => this.setState({ selectedDate: d.date })
+      };
+    });
+    return {
+      hasSlots: !empty, noSlots: empty, timeSlots,
+      weekDays,
+    };
+  }
+}
+</script>
+</body>
+</html>

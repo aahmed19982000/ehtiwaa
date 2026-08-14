@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+<style>
+@keyframes om-spin{to{transform:rotate(360deg)}}
+@media (max-width:900px){[data-mf-matches]{grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important}}
+@media (max-width:640px){[data-mf-matches]{grid-template-columns:minmax(0,1fr) !important}[data-mf-pad]{padding:32px 20px 100px !important}}
+[data-hover-card]{transition:transform .18s ease,box-shadow .18s ease}
+[data-hover-card]:hover{transform:translateY(-3px);box-shadow:0 16px 32px -12px #3A107829}
+</style>
+</helmet>
+<div dir="rtl" style="fontFamily:'Cairo',sans-serif;background:#FAF9FB;color:#1F1B29;minHeight:100vh">
+<dc-import name="Header" hint-size="100%,64px"></dc-import>
+
+<sc-if value="{{isIntro}}" hint-placeholder-val="{{true}}">
+  <div style="maxWidth:640px;margin:0 auto;padding:100px 24px 120px;textAlign:center">
+    <h1 style="fontSize:30px;fontWeight:800;margin:0 0 14px">خلّينا نساعدك تلاقي الأخصائي المناسب</h1>
+    <p style="fontSize:16px;color:#6B667A;margin:0 0 20px">٣ دقائق بس، إجاباتك خاصة تماماً.</p>
+    <p style="fontSize:14px;color:#6B667A;lineHeight:1.8;margin:0 0 32px">هذه ليست استشارة أو تشخيص، فقط أسئلة لفهم احتياجك وترشيح الأخصائي الأنسب.</p>
+    <div onClick="{{startFinder}}" style="display:inline-block;background:#FF8A00;color:#fff;padding:16px 52px;borderRadius:12px;fontWeight:700;fontSize:16px;textDecoration:none;marginBottom:16px;cursor:pointer">ابدأ</div>
+    <div><a href="Specialists.dc.html" style="fontSize:13px;color:#3A1078;textDecoration:none">تفضل تتصفح دليل الأخصائيين بنفسك؟</a></div>
+  </div>
+</sc-if>
+
+<sc-if value="{{isQuestion}}" hint-placeholder-val="{{false}}">
+  <div style="maxWidth:640px;margin:0 auto;padding:56px 24px 120px">
+    <div style="marginBottom:32px">
+      <div style="fontSize:13px;color:#6B667A;marginBottom:8px">سؤال 1 من 4</div>
+      <div style="height:8px;background:#F1EEF6;borderRadius:999px;overflow:hidden"><div style="width:25%;height:100%;background:#FF8A00"></div></div>
+    </div>
+    <h1 style="fontSize:22px;fontWeight:800;margin:0 0 24px">إيه أقرب وصف لحالتك دلوقتي؟</h1>
+    <div style="display:grid;gridTemplateColumns:1fr 1fr;gap:14px;marginBottom:32px">
+      <sc-for list="{{choices}}" as="c" hint-placeholder-count="5">
+        <div onClick="{{c.onClick}}" style="border:1.5px solid {{c.border}};background:{{c.bg}};borderRadius:14px;padding:22px;textAlign:center;cursor:pointer">
+          <div style="fontSize:15px;fontWeight:700">{{c.label}}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:flex;justifyContent:space-between">
+      <button onClick="{{goPrev}}" style="background:transparent;color:#3A1078;padding:12px 28px;borderRadius:10px;border:1.5px solid #3A1078;fontWeight:700;fontSize:14px;fontFamily:Cairo">السابق</button>
+      <button onClick="{{goNext}}" style="background:#3A1078;color:#fff;padding:12px 32px;borderRadius:10px;border:none;fontWeight:700;fontSize:14px;fontFamily:Cairo">التالي</button>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}">
+  <div style="maxWidth:640px;margin:0 auto;padding:140px 24px;textAlign:center">
+    <div style="width:56px;height:56px;borderRadius:50%;border:5px solid #E6DBF7;borderTopColor:#3A1078;margin:0 auto 24px;animation:om-spin 1s linear infinite"></div>
+    <div style="fontSize:16px;fontWeight:700;color:#3A1078">بنشوفلك أنسب أخصائي...</div>
+  </div>
+</sc-if>
+
+<sc-if value="{{isResults}}" hint-placeholder-val="{{false}}">
+  <div data-mf-pad="true" style="maxWidth:1000px;margin:0 auto;padding:56px 24px 100px">
+    <h1 style="fontSize:24px;fontWeight:800;textAlign:center;margin:0 0 32px">دول أنسب الأخصائيين ليك بناءً على إجاباتك</h1>
+    <div data-mf-matches="true" style="display:grid;gridTemplateColumns:repeat(3,1fr);gap:20px;marginBottom:24px">
+      <sc-for list="{{matches}}" as="m" hint-placeholder-count="3">
+        <div data-hover-card="true" style="border:1px solid #E7E3ED;borderRadius:14px;padding:22px;background:#fff;textAlign:center">
+          <div style="width:72px;height:72px;borderRadius:50%;overflow:hidden;margin:0 auto 12px"><img src="{{m.img}}" alt="{{m.name}}" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+          <div style="fontSize:15px;fontWeight:700;marginBottom:4px">{{m.name}}</div>
+          <div style="fontSize:13px;color:#6B667A;marginBottom:8px">{{m.specialty}}</div>
+          <div style="fontSize:13px;color:#B85F00;fontWeight:600;marginBottom:10px">★★★★★ {{m.rating}}</div>
+          <span style="fontSize:11px;padding:4px 12px;borderRadius:999px;fontWeight:700;background:#E7F6EE;color:#166B44;display:inline-block;marginBottom:10px">{{m.availability}}</span>
+          <div style="fontSize:16px;fontWeight:800;color:#B85F00;marginBottom:12px">{{m.price}} ج.م / جلسة</div>
+          <div style="background:#F4F0FC;borderRadius:8px;padding:10px 12px;fontSize:12px;color:#3A1078;lineHeight:1.6;marginBottom:14px">{{m.reason}}</div>
+          <a href="Booking.dc.html" style="display:block;textAlign:center;background:#FF8A00;color:#fff;padding:11px;borderRadius:8px;fontWeight:700;fontSize:13px;textDecoration:none">عرض الملف والحجز</a>
+        </div>
+      </sc-for>
+    </div>
+    <div style="textAlign:center;marginBottom:24px"><a href="Specialists.dc.html" style="fontSize:14px;color:#3A1078;fontWeight:700;textDecoration:none">مش مقتنع بالترشيحات؟ تصفح كل الأخصائيين</a></div>
+    <div style="textAlign:center;fontSize:13px;color:#6B667A">هذه ترشيحات أولية بناءً على إجاباتك، ولستَ ملزماً باختيارها.</div>
+  </div>
+</sc-if>
+
+<dc-import name="Footer" hint-size="100%,300px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;مقدمة&quot;,&quot;options&quot;:[&quot;مقدمة&quot;,&quot;سؤال&quot;,&quot;تحميل&quot;,&quot;نتائج&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = {
+    currentView: "",
+    selectedChoice: "قلق"
+  };
+  renderVals() {
+    const view = this.state.currentView || (this.props.view ?? "مقدمة");
+    const selectedChoice = this.state.selectedChoice;
+    const startFinder = () => this.setState({ currentView: "سؤال" });
+    const goPrev = () => this.setState({ currentView: "مقدمة" });
+    const goNext = () => {
+      this.setState({ currentView: "تحميل" });
+      setTimeout(() => {
+        this.setState({ currentView: "نتائج" });
+      }, 1000);
+    };
+    const choices = ["قلق", "ضغط نفسي", "مشاكل علاقات", "مشاكل نوم", "غير ذلك"].map((label, i) => {
+      const active = selectedChoice === label;
+      return {
+        label,
+        border: active ? "#3A1078" : "#E7E3ED",
+        bg: active ? "#F4F0FC" : "#fff",
+        onClick: () => this.setState({ selectedChoice: label })
+      };
+    });
+    return {
+      isIntro: view === "مقدمة", isQuestion: view === "سؤال", isLoading: view === "تحميل", isResults: view === "نتائج",
+      choices,
+      startFinder, goPrev, goNext,
+      matches: [
+        { id: "mf-1", name: "د. سلمى العتيبي", specialty: "قلق واكتئاب", rating: "4.8", availability: "متاح مساءً", price: 600, reason: "متخصصة في القلق وضغط العمل، متاحة مساءً.", img: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&h=200&fit=crop&crop=faces&q=80&auto=format" },
+        { id: "mf-2", name: "د. فهد المطيري", specialty: "علاقات وأسرة", rating: "4.9", availability: "متاح اليوم", price: 600, reason: "خبرة واسعة في ضغوط العمل وأثرها على العلاقات.", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces&q=80&auto=format" },
+        { id: "mf-3", name: "أ. ريم القحطاني", specialty: "اضطرابات النوم والقلق", rating: "4.7", availability: "متاح مساءً", price: 450, reason: "تركز على القلق المرتبط باضطراب النوم.", img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=faces&q=80&auto=format" },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

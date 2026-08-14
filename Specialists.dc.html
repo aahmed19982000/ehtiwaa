@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+<style>
+@media (min-width:901px){[data-filters-sidebar]{display:block !important}}
+@media (max-width:900px){
+  [data-layout-grid]{grid-template-columns:minmax(0,1fr) !important}
+  [data-filters-toggle]{display:inline-flex !important}
+  [data-filters-close]{display:flex !important}
+  [data-filters-sidebar]{position:fixed !important;inset:0 !important;zIndex:70 !important;background:#fff !important;overflow:auto !important;padding:24px !important;border:none !important;maxWidth:none !important}
+  [data-results-grid]{grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important}
+}
+@media (max-width:640px){
+  [data-page-pad2]{padding:20px 16px 100px !important}
+  [data-results-grid]{grid-template-columns:minmax(0,1fr) !important}
+}
+[data-hover-card]{transition:transform .18s ease,box-shadow .18s ease}
+[data-hover-card]:hover{transform:translateY(-3px);box-shadow:0 16px 32px -12px #3A107829}
+</style>
+</helmet>
+<div dir="rtl" style="fontFamily:'Cairo',sans-serif;background:#FAF9FB;color:#1F1B29;minHeight:100vh">
+<dc-import name="Header" hint-size="100%,64px"></dc-import>
+
+<div data-page-pad2="true" style="maxWidth:1440px;margin:0 auto;padding:32px 40px 100px">
+  <h1 style="fontSize:26px;fontWeight:800;margin:0 0 8px">دليل الأخصائيين</h1>
+  <p style="fontSize:14px;color:#6B667A;margin:0 0 20px">أكثر من 200 أخصائي معتمد، بدون قوائم انتظار</p>
+
+  <div style="display:flex;alignItems:center;gap:16px;marginBottom:28px;flexWrap:wrap">
+    <input placeholder="ابحث بالاسم أو الكلمة المفتاحية" style="flex:1;minWidth:280px;padding:12px 16px;border:1px solid #E7E3ED;borderRadius:10px;fontSize:14px;fontFamily:Cairo"/>
+    <button data-filters-toggle="true" onClick="{{toggleFilters}}" style="display:none;alignItems:center;background:#3A1078;color:#fff;border:none;padding:10px 18px;borderRadius:8px;fontWeight:700;fontSize:13px;fontFamily:Cairo">الفلاتر</button>
+    <span style="fontSize:13px;color:#6B667A;whiteSpace:nowrap">{{resultsCount}} أخصائي متاح</span>
+    <select style="padding:12px 16px;border:1px solid #E7E3ED;borderRadius:10px;fontSize:13px;fontFamily:Cairo;background:#fff">
+      <option>الأعلى تقييماً</option>
+      <option>الأقل سعراً</option>
+      <option>الأقرب توفراً</option>
+    </select>
+  </div>
+
+  <div data-layout-grid="true" style="display:grid;gridTemplateColumns:260px minmax(0,1fr);gap:40px">
+    <div data-filters-sidebar="true" style="display:{{filtersDisplay}};borderLeft:1px solid #E7E3ED;paddingLeft:32px">
+      <div data-filters-close="true" onClick="{{toggleFilters}}" style="display:none;justifyContent:flex-end;fontSize:20px;color:#3A1078;cursor:pointer;marginBottom:12px">✕</div>
+      <div style="marginBottom:24px">
+        <div style="fontSize:14px;fontWeight:700;marginBottom:12px">التخصص</div>
+        <div style="display:flex;flexDirection:column;gap:10px;fontSize:13px">
+          <sc-for list="{{specialties}}" as="sp" hint-placeholder-count="6">
+            <label style="display:flex;alignItems:center;gap:8px"><input type="checkbox"/>{{sp}}</label>
+          </sc-for>
+        </div>
+      </div>
+      <div style="marginBottom:24px">
+        <div style="fontSize:14px;fontWeight:700;marginBottom:12px">السعر (ج.م / جلسة)</div>
+        <input type="range" min="150" max="1000" defaultValue="600" style="width:100%"/>
+        <div style="display:flex;justifyContent:space-between;fontSize:12px;color:#6B667A;marginTop:4px"><span>150 ج.م</span><span>1000 ج.م</span></div>
+      </div>
+      <div style="marginBottom:24px">
+        <div style="fontSize:14px;fontWeight:700;marginBottom:12px">اللغة</div>
+        <div style="display:flex;flexDirection:column;gap:10px;fontSize:13px">
+          <label style="display:flex;alignItems:center;gap:8px"><input type="checkbox" defaultChecked/>عربي</label>
+          <label style="display:flex;alignItems:center;gap:8px"><input type="checkbox"/>إنجليزي</label>
+          <label style="display:flex;alignItems:center;gap:8px"><input type="checkbox"/>فرنسي</label>
+        </div>
+      </div>
+      <div style="marginBottom:24px">
+        <div style="fontSize:14px;fontWeight:700;marginBottom:12px">التوفر</div>
+        <div style="display:flex;flexDirection:column;gap:10px;fontSize:13px">
+          <label style="display:flex;alignItems:center;gap:8px"><input type="radio" name="avail"/>متاح اليوم</label>
+          <label style="display:flex;alignItems:center;gap:8px"><input type="radio" name="avail"/>متاح هذا الأسبوع</label>
+          <label style="display:flex;alignItems:center;gap:8px"><input type="radio" name="avail" defaultChecked/>أي وقت</label>
+        </div>
+      </div>
+      <div style="marginBottom:28px">
+        <div style="fontSize:14px;fontWeight:700;marginBottom:12px">الجنس</div>
+        <div style="display:flex;flexDirection:column;gap:10px;fontSize:13px">
+          <label style="display:flex;alignItems:center;gap:8px"><input type="radio" name="gender"/>ذكر</label>
+          <label style="display:flex;alignItems:center;gap:8px"><input type="radio" name="gender"/>أنثى</label>
+          <label style="display:flex;alignItems:center;gap:8px"><input type="radio" name="gender" defaultChecked/>بدون تفضيل</label>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button onClick="{{toggleFilters}}" style="flex:1;background:#3A1078;color:#fff;padding:11px;borderRadius:8px;border:none;fontWeight:700;fontSize:13px;fontFamily:Cairo">تطبيق</button>
+        <button style="flex:1;background:transparent;color:#3A1078;padding:10px;borderRadius:8px;border:1.5px solid #3A1078;fontWeight:700;fontSize:13px;fontFamily:Cairo">مسح الفلاتر</button>
+      </div>
+    </div>
+
+    <div>
+      <sc-if value="{{hasResults}}" hint-placeholder-val="{{true}}">
+        <div data-results-grid="true" style="display:grid;gridTemplateColumns:repeat(3,1fr);gap:20px;marginBottom:32px">
+          <sc-for list="{{specialists}}" as="sp" hint-placeholder-count="9">
+            <div data-hover-card="true" style="border:1px solid #E7E3ED;borderRadius:14px;padding:22px;background:#fff;textAlign:center">
+              <div style="width:72px;height:72px;borderRadius:50%;overflow:hidden;margin:0 auto 12px"><img src="{{sp.img}}" alt="{{sp.name}}" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+              <div style="fontSize:15px;fontWeight:700;marginBottom:4px">{{sp.name}}</div>
+              <div style="fontSize:13px;color:#6B667A;marginBottom:8px">{{sp.specialty}}</div>
+              <div style="fontSize:13px;color:#B85F00;fontWeight:600;marginBottom:10px">★★★★★ {{sp.rating}}</div>
+              <span style="fontSize:11px;padding:4px 12px;borderRadius:999px;fontWeight:700;background:{{sp.badgeBg}};color:{{sp.badgeColor}};display:inline-block;marginBottom:10px">{{sp.availability}}</span>
+              <div style="fontSize:12px;color:#6B667A;marginBottom:14px">{{sp.experience}}</div>
+              <div style="fontSize:16px;fontWeight:800;color:#B85F00;marginBottom:14px">{{sp.price}} ج.م / جلسة</div>
+              <a href="Booking.dc.html" style="display:block;textAlign:center;background:#FF8A00;color:#fff;padding:11px;borderRadius:8px;fontWeight:700;fontSize:13px;textDecoration:none">عرض الملف والحجز</a>
+            </div>
+          </sc-for>
+        </div>
+        <div style="textAlign:center">
+          <button style="background:transparent;color:#3A1078;padding:12px 32px;borderRadius:10px;border:1.5px solid #3A1078;fontWeight:700;fontSize:14px;fontFamily:Cairo">عرض المزيد</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{noResults}}" hint-placeholder-val="{{false}}">
+        <div style="border:1px dashed #E7E3ED;borderRadius:14px;padding:60px 20px;textAlign:center">
+          <div style="fontSize:16px;fontWeight:700;marginBottom:8px">لا يوجد أخصائيون مطابقون لهذه الفلاتر</div>
+          <div style="fontSize:14px;color:#6B667A;marginBottom:20px">جرّب تخفيف بعض الفلاتر، مثل نطاق السعر أو اللغة، للوصول إلى نتائج أكثر.</div>
+          <button style="background:#3A1078;color:#fff;padding:11px 28px;borderRadius:8px;border:none;fontWeight:700;fontSize:13px;fontFamily:Cairo">مسح الفلاتر</button>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</div>
+
+<dc-import name="Footer" hint-size="100%,300px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;resultsState&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;عادي&quot;,&quot;options&quot;:[&quot;عادي&quot;,&quot;لا توجد نتائج&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { isFiltersOpen: false };
+  renderVals() {
+    const noResults = (this.props.resultsState ?? "عادي") === "لا توجد نتائج";
+    const filtersDisplay = this.state.isFiltersOpen ? "block" : "none";
+    const toggleFilters = () => this.setState(s => ({ isFiltersOpen: !s.isFiltersOpen }));
+    const raw = [
+      { name: "د. فهد المطيري", specialty: "علاقات وأسرة", rating: "4.9", availability: "متاح اليوم", av: true, experience: "10 سنوات · ماجستير علم نفس إكلينيكي", price: 600, img: "1500648767791-00dcc994a43e" },
+      { name: "د. نورة الحربي", specialty: "قلق واكتئاب", rating: "4.8", availability: "أقرب موعد: الخميس", av: false, experience: "8 سنوات · دكتوراه علم نفس", price: 550, img: "1560250097-0b93528c311a" },
+      { name: "أ. ريم القحطاني", specialty: "اضطرابات النوم", rating: "4.7", availability: "متاح اليوم", av: true, experience: "6 سنوات · ماجستير إرشاد نفسي", price: 450, img: "1580489944761-15a19d654956" },
+      { name: "د. تركي الدوسري", specialty: "إدمان سلوكي", rating: "4.9", availability: "أقرب موعد: الأحد", av: false, experience: "12 سنة · دكتوراه علم نفس إكلينيكي", price: 650, img: "1519085360753-af0119f7cbe7" },
+      { name: "أ. هند العنزي", specialty: "أطفال ومراهقون", rating: "4.8", availability: "متاح اليوم", av: true, experience: "7 سنوات · ماجستير علم نفس الطفل", price: 500, img: "1544005313-94ddf0286df2" },
+      { name: "د. سلطان الشمري", specialty: "اضطرابات الأكل", rating: "4.6", availability: "أقرب موعد: الثلاثاء", av: false, experience: "9 سنوات · دكتوراه تغذية علاجية", price: 550, img: "1547425260-76bcadfb4f2c" },
+      { name: "د. سلمى العتيبي", specialty: "قلق واكتئاب", rating: "4.8", availability: "متاح اليوم", av: true, experience: "12 سنة · ماجستير علم نفس إكلينيكي", price: 600, img: "1573497019940-1c28c88b4f3e" },
+      { name: "أ. لمى الغامدي", specialty: "علاقات وأسرة", rating: "4.7", availability: "أقرب موعد: الأربعاء", av: false, experience: "5 سنوات · ماجستير إرشاد أسري", price: 450, img: "1531123897727-8f129e1688ce" },
+      { name: "د. ماجد القرني", specialty: "إدمان سلوكي", rating: "4.9", availability: "متاح اليوم", av: true, experience: "11 سنة · دكتوراه علم نفس إكلينيكي", price: 600, img: "1552058544-f2b08422138a" },
+    ];
+    const specialists = raw.map((s, i) => ({
+      id: "spec-" + i, name: s.name, specialty: s.specialty, rating: s.rating, experience: s.experience, price: s.price,
+      availability: s.availability,
+      badgeBg: s.av ? "#E7F6EE" : "#F1EEF6", badgeColor: s.av ? "#166B44" : "#6B667A",
+      img: "https://images.unsplash.com/photo-" + s.img + "?w=200&h=200&fit=crop&crop=faces&q=80&auto=format",
+    }));
+    return {
+      filtersDisplay, toggleFilters,
+      hasResults: !noResults, noResults, specialists,
+      resultsCount: noResults ? 0 : 142,
+      specialties: ["قلق واكتئاب", "علاقات وأسرة", "اضطرابات الأكل", "إدمان سلوكي", "أطفال ومراهقون", "اضطرابات النوم"],
+    };
+  }
+}
+</script>
+</body>
+</html>

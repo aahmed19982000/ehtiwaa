@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+<style>
+[data-nav-dropdown]{position:relative}
+[data-nav-dropdown]>[data-dropdown-menu]{display:none}
+[data-nav-dropdown]:hover>[data-dropdown-menu]{display:block}
+@media (max-width:1024px){
+  [data-nav-desktop]{display:none !important}
+  [data-hamburger-btn]{display:flex !important}
+}
+@media (max-width:640px){
+  [data-account-desktop]{display:none !important}
+}
+</style>
+</helmet>
+<div style="position:sticky;top:0;zIndex:50;background:#fff;borderBottom:1px solid #E7E3ED;fontFamily:'Cairo',sans-serif">
+  <div style="maxWidth:1440px;margin:0 auto;display:flex;alignItems:center;justifyContent:space-between;padding:16px 24px;gap:24px">
+    <div style="display:flex;alignItems:center;gap:40px">
+      <a href="Home.dc.html" style="display:flex"><img src="uploads/logo-1786385021537-76qk.png" alt="احتواء" style="height:32px"/></a>
+      <div data-nav-desktop style="display:flex;gap:26px;fontSize:14px;fontWeight:600;color:#3A1078">
+        <a href="Home.dc.html" style="color:#3A1078;textDecoration:none">الرئيسية</a>
+        <a href="Course.dc.html" style="color:#3A1078;textDecoration:none">الدورات</a>
+        <span data-nav-dropdown="true" style="cursor:pointer">
+          <span style="color:#3A1078">الاستشارات</span>
+          <div data-dropdown-menu="true" style="position:absolute;top:100%;insetInlineStart:0;paddingTop:10px;minWidth:230px;zIndex:60">
+            <div style="background:#fff;border:1px solid #E7E3ED;borderRadius:12px;boxShadow:0 12px 24px -8px #00000022;padding:8px;display:flex;flexDirection:column;gap:2px">
+              <a href="Specialists.dc.html" style="color:#1F1B29;textDecoration:none;fontWeight:600;fontSize:13px;padding:10px 12px;borderRadius:8px">دليل الأخصائيين</a>
+              <a href="MatchFinder.dc.html" style="color:#1F1B29;textDecoration:none;fontWeight:600;fontSize:13px;padding:10px 12px;borderRadius:8px">ساعدني أختار الأخصائي المناسب</a>
+              <a href="Assessments.dc.html" style="color:#1F1B29;textDecoration:none;fontWeight:600;fontSize:13px;padding:10px 12px;borderRadius:8px">اختبارات ومقاييس نفسية ذاتية</a>
+            </div>
+          </div>
+        </span>
+        <a href="Article.dc.html" style="color:#3A1078;textDecoration:none">المقالات</a>
+        <a href="Product.dc.html" style="color:#3A1078;textDecoration:none">المتجر</a>
+        <a href="Forum.dc.html" style="color:#3A1078;textDecoration:none">المنتدى</a>
+      </div>
+    </div>
+    <div style="display:flex;alignItems:center;gap:16px">
+      <svg width="18" height="18" viewBox="0 0 18 18" style="flexShrink:0"><circle cx="8" cy="8" r="6" fill="none" stroke="#6B667A" stroke-width="1.6"/><line x1="12.5" y1="12.5" x2="17" y2="17" stroke="#6B667A" stroke-width="1.6"/></svg>
+      <a href="Support.dc.html" style="width:22px;height:22px;borderRadius:50%;border:1.6px solid #6B667A;color:#6B667A;display:flex;alignItems:center;justifyContent:center;fontSize:12px;fontWeight:800;textDecoration:none;flexShrink:0">؟</a>
+      <div data-account-desktop style="display:flex;alignItems:center;gap:16px">
+        <sc-if value="{{isLoggedIn}}" hint-placeholder-val="{{true}}">
+          <a href="Dashboard.dc.html" style="display:flex;alignItems:center;gap:8px;textDecoration:none">
+            <div style="width:32px;height:32px;borderRadius:50%;overflow:hidden"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&crop=faces&q=80&auto=format" alt="{{userName}}" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+            <span style="fontSize:14px;fontWeight:700;color:#1F1B29">{{userName}}</span>
+          </a>
+        </sc-if>
+        <sc-if value="{{notLoggedIn}}" hint-placeholder-val="{{false}}">
+          <a href="Login.dc.html" style="color:#3A1078;fontSize:14px;fontWeight:700;textDecoration:none">تسجيل الدخول</a>
+          <a href="Signup.dc.html" style="background:#3A1078;color:#fff;padding:9px 20px;borderRadius:8px;fontWeight:700;fontSize:14px;textDecoration:none">إنشاء حساب</a>
+        </sc-if>
+      </div>
+      <button data-hamburger-btn="true" onClick="{{toggleMenu}}" style="display:none;alignItems:center;justifyContent:center;width:32px;height:32px;background:transparent;border:none;fontSize:22px;color:#3A1078;cursor:pointer;flexShrink:0">{{menuIcon}}</button>
+    </div>
+  </div>
+  <sc-if value="{{isMenuOpen}}" hint-placeholder-val="{{false}}">
+    <div style="borderTop:1px solid #E7E3ED;padding:16px 24px;display:flex;flexDirection:column;gap:4px;fontSize:15px;fontWeight:600;color:#3A1078">
+      <a href="Home.dc.html" style="color:#3A1078;textDecoration:none;padding:10px 4px">الرئيسية</a>
+      <a href="Course.dc.html" style="color:#3A1078;textDecoration:none;padding:10px 4px">الدورات</a>
+      <div style="padding:10px 4px;color:#3A1078">الاستشارات</div>
+      <a href="Specialists.dc.html" style="color:#6B667A;textDecoration:none;padding:8px 16px;fontSize:14px;fontWeight:600">دليل الأخصائيين</a>
+      <a href="MatchFinder.dc.html" style="color:#6B667A;textDecoration:none;padding:8px 16px;fontSize:14px;fontWeight:600">ساعدني أختار الأخصائي المناسب</a>
+      <a href="Assessments.dc.html" style="color:#6B667A;textDecoration:none;padding:8px 16px;fontSize:14px;fontWeight:600">اختبارات ومقاييس نفسية ذاتية</a>
+      <a href="Article.dc.html" style="color:#3A1078;textDecoration:none;padding:10px 4px">المقالات</a>
+      <a href="Product.dc.html" style="color:#3A1078;textDecoration:none;padding:10px 4px">المتجر</a>
+      <a href="Forum.dc.html" style="color:#3A1078;textDecoration:none;padding:10px 4px">المنتدى</a>
+      <a href="Support.dc.html" style="color:#3A1078;textDecoration:none;padding:10px 4px">مركز الدعم</a>
+      <div style="borderTop:1px solid #E7E3ED;marginTop:8px;paddingTop:12px">
+        <sc-if value="{{isLoggedIn}}" hint-placeholder-val="{{true}}">
+          <a href="Dashboard.dc.html" style="display:block;color:#3A1078;textDecoration:none;padding:10px 4px">{{userName}} · حسابي</a>
+        </sc-if>
+        <sc-if value="{{notLoggedIn}}" hint-placeholder-val="{{false}}">
+          <div style="display:flex;gap:10px">
+            <a href="Login.dc.html" style="flex:1;textAlign:center;color:#3A1078;border:1.5px solid #3A1078;borderRadius:8px;padding:10px;textDecoration:none">تسجيل الدخول</a>
+            <a href="Signup.dc.html" style="flex:1;textAlign:center;background:#3A1078;color:#fff;borderRadius:8px;padding:10px;textDecoration:none">إنشاء حساب</a>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;isLoggedIn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;userName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;سارة أحمد&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { isMenuOpen: false };
+  renderVals() {
+    const isLoggedIn = this.props.isLoggedIn ?? true;
+    return {
+      isLoggedIn, notLoggedIn: !isLoggedIn, userName: this.props.userName ?? "سارة أحمد",
+      isMenuOpen: this.state.isMenuOpen, menuIcon: this.state.isMenuOpen ? "✕" : "☰",
+      toggleMenu: () => this.setState(s => ({ isMenuOpen: !s.isMenuOpen })),
+    };
+  }
+}
+</script>
+</body>
+</html>

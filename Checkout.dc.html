@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+<style>
+@media (max-width:900px){[data-checkout-grid]{grid-template-columns:minmax(0,1fr) !important}}
+@media (max-width:640px){[data-checkout-pad]{padding:24px 16px 100px !important}[data-card-fields]{grid-template-columns:minmax(0,1fr) !important}[data-card-fields] input:first-child{grid-column:span 1 !important}}
+</style>
+</helmet>
+<div dir="rtl" style="fontFamily:'Cairo',sans-serif;background:#FAF9FB;color:#1F1B29;minHeight:100vh">
+<dc-import name="Header" hint-size="100%,64px"></dc-import>
+
+<div data-checkout-pad="true" style="maxWidth:1000px;margin:0 auto;padding:48px 40px 100px">
+  <h1 style="fontSize:26px;fontWeight:800;margin:0 0 32px">تأكيد الدفع</h1>
+  <div data-checkout-grid="true" style="display:grid;gridTemplateColumns:minmax(0,1fr) 380px;gap:48px">
+    <div>
+      <div style="fontSize:15px;fontWeight:700;marginBottom:14px">طريقة الدفع</div>
+      <div style="display:flex;flexDirection:column;gap:10px;marginBottom:28px">
+        <div style="display:flex;alignItems:center;gap:10px;border:1.5px solid #3A1078;borderRadius:10px;padding:14px 16px;background:#F4F0FC"><input type="radio" checked readOnly/><span style="fontSize:14px;fontWeight:600">بطاقة ائتمان / مدى</span></div>
+        <div style="display:flex;alignItems:center;gap:10px;border:1px solid #E7E3ED;borderRadius:10px;padding:14px 16px"><input type="radio" readOnly/><span style="fontSize:14px">Apple Pay</span></div>
+        <div style="display:flex;alignItems:center;gap:10px;border:1px solid #E7E3ED;borderRadius:10px;padding:14px 16px"><input type="radio" readOnly/><span style="fontSize:14px">تحويل بنكي</span></div>
+      </div>
+      <div data-card-fields="true" style="display:grid;gridTemplateColumns:1fr 1fr;gap:14px;maxWidth:480px">
+        <input placeholder="رقم البطاقة" style="padding:12px 14px;border:1px solid {{cardBorder}};borderRadius:8px;fontSize:13px;fontFamily:Cairo;gridColumn:span 2"/>
+        <sc-if value="{{isFailed}}" hint-placeholder-val="{{false}}">
+          <div style="fontSize:12px;color:#D8352F;gridColumn:span 2;marginTop:-8px">تم رفض البطاقة من البنك المُصدر. تحقق من البيانات أو استخدم بطاقة أخرى.</div>
+        </sc-if>
+        <input placeholder="تاريخ الانتهاء" style="padding:12px 14px;border:1px solid #E7E3ED;borderRadius:8px;fontSize:13px;fontFamily:Cairo"/>
+        <input placeholder="CVV" style="padding:12px 14px;border:1px solid #E7E3ED;borderRadius:8px;fontSize:13px;fontFamily:Cairo"/>
+      </div>
+    </div>
+    <div style="border:1px solid #E7E3ED;borderRadius:14px;padding:22px;height:fit-content">
+      <div style="fontSize:14px;fontWeight:700;marginBottom:16px">ملخص الطلب</div>
+      <div style="display:flex;justifyContent:space-between;fontSize:13px;marginBottom:8px;color:#6B667A"><span>الدورة</span><span>579.00 ج.م</span></div>
+      <div style="display:flex;justifyContent:space-between;fontSize:13px;marginBottom:8px;color:#6B667A"><span>ضريبة القيمة المضافة (14%)</span><span>81.06 ج.م</span></div>
+      <div style="display:flex;justifyContent:space-between;fontSize:17px;fontWeight:800;paddingTop:14px;borderTop:1px solid #E7E3ED;marginBottom:18px"><span>الإجمالي</span><span>660.06 ج.م</span></div>
+      <div style="background:#F1EEF6;borderRadius:10px;padding:12px 14px;fontSize:12px;color:#6B667A;lineHeight:1.7;marginBottom:18px">استرداد كامل خلال 7 أيام من الشراء دون رسوم.</div>
+      <sc-if value="{{isFailed}}" hint-placeholder-val="{{false}}">
+        <button disabled style="width:100%;background:#FFC680;color:#fff;padding:14px;borderRadius:10px;border:none;fontWeight:700;fontSize:15px;fontFamily:Cairo;marginBottom:10px;cursor:not-allowed">أكمل الدفع</button>
+      </sc-if>
+      <sc-if value="{{isOk}}" hint-placeholder-val="{{true}}">
+        <button style="width:100%;background:#FF8A00;color:#fff;padding:14px;borderRadius:10px;border:none;fontWeight:700;fontSize:15px;fontFamily:Cairo;marginBottom:10px">أكمل الدفع</button>
+      </sc-if>
+      <div style="fontSize:11px;color:#6B667A;textAlign:center">معاملتك مشفّرة بالكامل</div>
+    </div>
+  </div>
+</div>
+
+<dc-import name="Footer" hint-size="100%,300px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;paymentState&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;عادي&quot;,&quot;options&quot;:[&quot;عادي&quot;,&quot;فشل الدفع&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const isFailed = (this.props.paymentState ?? "عادي") === "فشل الدفع";
+    return { isFailed, isOk: !isFailed, cardBorder: isFailed ? "#D8352F" : "#E7E3ED" };
+  }
+}
+</script>
+</body>
+</html>

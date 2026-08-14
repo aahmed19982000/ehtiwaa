@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+<style>
+@media (max-width:800px){[data-dash-grid]{grid-template-columns:minmax(0,1fr) !important}[data-dash-nav]{display:flex !important;flex-direction:row !important;overflow-x:auto !important;gap:8px !important}}
+@media (max-width:640px){[data-dash-pad]{padding:20px 16px 100px !important}[data-invoice-row]{grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;font-size:12px !important}[data-invoice-row] span:nth-child(2){display:none !important}}
+</style>
+</helmet>
+<div dir="rtl" style="fontFamily:'Cairo',sans-serif;background:#FAF9FB;color:#1F1B29;minHeight:100vh">
+<dc-import name="Header" is-logged-in="{{true}}" hint-size="100%,64px"></dc-import>
+
+<div data-dash-pad="true" style="maxWidth:1440px;margin:0 auto;padding:32px 40px 100px">
+  <div data-dash-grid="true" style="display:grid;gridTemplateColumns:240px minmax(0,1fr);gap:40px">
+    <div>
+      <div style="display:flex;alignItems:center;gap:12px;marginBottom:24px">
+        <div style="width:48px;height:48px;borderRadius:50%;overflow:hidden"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&crop=faces&q=80&auto=format" alt="سارة أحمد" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+        <div><div style="fontSize:15px;fontWeight:700">سارة أحمد</div><div style="fontSize:12px;color:#6B667A">sara@example.com</div></div>
+      </div>
+      <div data-dash-nav="true" style="display:flex;flexDirection:column;gap:4px;fontSize:14px;fontWeight:600">
+        <span style="padding:11px 14px;borderRadius:8px;background:#F4F0FC;color:#3A1078">حجوزاتي</span>
+        <span style="padding:11px 14px;borderRadius:8px;color:#6B667A">دوراتي</span>
+        <span style="padding:11px 14px;borderRadius:8px;color:#6B667A">كتبي</span>
+        <span style="padding:11px 14px;borderRadius:8px;color:#6B667A">فواتيري</span>
+        <span style="padding:11px 14px;borderRadius:8px;color:#6B667A">الإشعارات</span>
+        <span style="padding:11px 14px;borderRadius:8px;color:#6B667A">ملفي الشخصي</span>
+      </div>
+    </div>
+    <div>
+      <h1 style="fontSize:22px;fontWeight:800;margin:0 0 20px">حجوزاتي</h1>
+      <sc-for list="{{bookings}}" as="b" hint-placeholder-count="2">
+        <div style="border:1px solid #E7E3ED;borderRadius:12px;padding:18px 20px;display:flex;justifyContent:space-between;alignItems:center;marginBottom:12px">
+          <div style="display:flex;alignItems:center;gap:14px">
+            <div style="width:44px;height:44px;borderRadius:50%;overflow:hidden"><img src="{{b.img}}" alt="{{b.specialist}}" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+            <div><div style="fontSize:14px;fontWeight:700">{{b.specialist}}</div><div style="fontSize:12px;color:#6B667A">{{b.date}} · {{b.time}}</div></div>
+          </div>
+          <span style="fontSize:11px;padding:4px 12px;borderRadius:999px;fontWeight:700;background:{{b.badgeBg}};color:{{b.badgeColor}}">{{b.status}}</span>
+        </div>
+      </sc-for>
+      <h2 style="fontSize:16px;fontWeight:700;margin:28px 0 14px">آخر الفواتير</h2>
+      <div style="border:1px solid #E7E3ED;borderRadius:12px;overflow:hidden">
+        <div style="display:grid;gridTemplateColumns:1fr 1fr 1fr;background:#F1EEF6;padding:10px 16px;fontSize:12px;color:#6B667A"><span>الوصف</span><span>التاريخ</span><span>المبلغ</span></div>
+        <sc-for list="{{invoices}}" as="inv" hint-placeholder-count="2">
+          <div data-invoice-row="true" style="display:grid;gridTemplateColumns:1fr 1fr 1fr;padding:14px 16px;fontSize:13px;borderTop:1px solid #E7E3ED"><span>{{inv.desc}}</span><span style="color:#6B667A">{{inv.date}}</span><span style="fontWeight:700">{{inv.amount}}</span></div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+
+<dc-import name="Footer" hint-size="100%,300px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      bookings: [
+        { id: "bk-1", specialist: "د. فهد المطيري", date: "10 أغسطس", time: "11:00 ص", status: "مؤكد", badgeBg: "#E7F6EE", badgeColor: "#166B44", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&h=120&fit=crop&crop=faces&q=80&auto=format" },
+        { id: "bk-2", specialist: "د. نورة الحربي", date: "3 أغسطس", time: "05:00 م", status: "منتهي", badgeBg: "#F1EEF6", badgeColor: "#6B667A", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=120&h=120&fit=crop&crop=faces&q=80&auto=format" },
+      ],
+      invoices: [
+        { desc: "جلسة استشارية — د. فهد المطيري", date: "10 أغسطس", amount: "600 ج.م" },
+        { desc: "دورة: التعامل مع القلق", date: "2 أغسطس", amount: "579 ج.م" },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

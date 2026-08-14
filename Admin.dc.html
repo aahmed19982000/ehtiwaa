@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+<style>
+@media (max-width:900px){
+  [data-admin-root]{flex-direction:column !important}
+  [data-admin-sidebar]{width:100% !important;padding:16px !important}
+  [data-admin-nav]{flex-direction:row !important;overflow-x:auto !important;gap:6px !important;margin-bottom:0 !important}
+  [data-admin-stats]{grid-template-columns:minmax(0,1fr) !important}
+  [data-admin-content]{padding:20px 16px !important}
+  [data-table-scroll]{overflow-x:auto !important}
+  [data-table-scroll] [data-table-row]{min-width:600px !important}
+}
+</style>
+</helmet>
+<div dir="rtl" data-admin-root="true" style="fontFamily:'Cairo',sans-serif;background:#FAF9FB;color:#1F1B29;minHeight:100vh;display:flex">
+  <div data-admin-sidebar="true" style="width:240px;background:#1E0740;color:#D9CFF0;padding:24px 18px;flexShrink:0">
+    <img src="uploads/logo-1786385021537-76qk.png" alt="احتواء" style="height:26px;marginBottom:28px;filter:brightness(0) invert(1)"/>
+    <div style="fontSize:11px;color:#8C7BB0;marginBottom:8px;paddingRight:10px">الإدارة</div>
+    <div data-admin-nav="true" style="display:flex;flexDirection:column;gap:4px;fontSize:14px;fontWeight:600;marginBottom:24px">
+      <span style="padding:10px 12px;borderRadius:8px;background:#3A1078;color:#fff">لوحة المؤشرات</span>
+      <sc-if value="{{canSeeUsers}}" hint-placeholder-val="{{true}}"><span style="padding:10px 12px;borderRadius:8px;color:#D9CFF0">المستخدمون</span></sc-if>
+      <sc-if value="{{canSeeContent}}" hint-placeholder-val="{{true}}"><span style="padding:10px 12px;borderRadius:8px;color:#D9CFF0">المقالات والدورات</span></sc-if>
+      <sc-if value="{{canSeeBookings}}" hint-placeholder-val="{{true}}"><span style="padding:10px 12px;borderRadius:8px;color:#D9CFF0">الحجوزات</span></sc-if>
+      <span style="padding:10px 12px;borderRadius:8px;color:#D9CFF0">المدفوعات</span>
+      <sc-if value="{{canSeeReports}}" hint-placeholder-val="{{true}}"><span style="padding:10px 12px;borderRadius:8px;color:#D9CFF0">التقارير</span></sc-if>
+    </div>
+    <div style="fontSize:11px;color:#8C7BB0;paddingRight:10px;marginBottom:8px">الدور الحالي</div>
+    <div style="fontSize:13px;fontWeight:700;color:#fff;paddingRight:10px">{{roleLabel}}</div>
+  </div>
+
+  <div data-admin-content="true" style="flex:1;padding:32px 40px;overflowY:auto">
+    <h1 style="fontSize:22px;fontWeight:800;margin:0 0 24px">لوحة المدفوعات</h1>
+    <div data-admin-stats="true" style="display:grid;gridTemplateColumns:repeat(3,1fr);gap:16px;marginBottom:32px">
+      <div style="border:1px solid #E7E3ED;borderRadius:12px;padding:20px;background:#fff"><div style="fontSize:12px;color:#6B667A;marginBottom:8px">إجمالي المدفوعات هذا الشهر</div><div style="fontSize:24px;fontWeight:800">132,850 ج.م</div></div>
+      <div style="border:1px solid #E7E3ED;borderRadius:12px;padding:20px;background:#fff"><div style="fontSize:12px;color:#6B667A;marginBottom:8px">طلبات استرداد معلّقة</div><div style="fontSize:24px;fontWeight:800">4</div></div>
+      <div style="border:1px solid #E7E3ED;borderRadius:12px;padding:20px;background:#fff"><div style="fontSize:12px;color:#6B667A;marginBottom:8px">أخصائيون بانتظار الاعتماد</div><div style="fontSize:24px;fontWeight:800">3</div></div>
+    </div>
+
+    <sc-if value="{{canSeeApprovals}}" hint-placeholder-val="{{true}}">
+      <div style="fontSize:16px;fontWeight:700;marginBottom:14px">طلبات اعتماد أخصائيين</div>
+      <div data-table-scroll="true" style="border:1px solid #E7E3ED;borderRadius:12px;overflow:hidden;marginBottom:32px">
+        <div data-table-row="true" style="display:grid;gridTemplateColumns:1fr 1fr 1fr 0.8fr;background:#F1EEF6;padding:10px 16px;fontSize:12px;color:#6B667A"><span>الاسم</span><span>التخصص</span><span>تاريخ التقديم</span><span>إجراء</span></div>
+        <sc-for list="{{specialists}}" as="s" hint-placeholder-count="3">
+          <div data-table-row="true" style="display:grid;gridTemplateColumns:1fr 1fr 1fr 0.8fr;padding:14px 16px;fontSize:13px;borderTop:1px solid #E7E3ED;alignItems:center">
+            <span>{{s.name}}</span><span style="color:#6B667A">{{s.specialty}}</span><span style="color:#6B667A">{{s.date}}</span>
+            <div style="display:flex;gap:6px"><button style="background:#1E8E5A;color:#fff;border:none;padding:6px 12px;borderRadius:6px;fontSize:12px;fontFamily:Cairo;fontWeight:700">قبول</button><button style="background:#D8352F;color:#fff;border:none;padding:6px 12px;borderRadius:6px;fontSize:12px;fontFamily:Cairo;fontWeight:700">رفض</button></div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <div style="fontSize:16px;fontWeight:700;marginBottom:14px">أحدث المدفوعات</div>
+    <div data-table-scroll="true" style="border:1px solid #E7E3ED;borderRadius:12px;overflow:hidden">
+      <div data-table-row="true" style="display:grid;gridTemplateColumns:1fr 1fr 1fr 0.8fr;background:#F1EEF6;padding:10px 16px;fontSize:12px;color:#6B667A"><span>المستخدم</span><span>النوع</span><span>التاريخ</span><span>المبلغ</span></div>
+      <sc-for list="{{payments}}" as="p" hint-placeholder-count="4">
+        <div data-table-row="true" style="display:grid;gridTemplateColumns:1fr 1fr 1fr 0.8fr;padding:14px 16px;fontSize:13px;borderTop:1px solid #E7E3ED">
+          <span>{{p.user}}</span><span style="color:#6B667A">{{p.type}}</span><span style="color:#6B667A">{{p.date}}</span><span style="fontWeight:700">{{p.amount}}</span>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{isFinance}}" hint-placeholder-val="{{false}}">
+      <div style="background:#F1EEF6;borderRadius:10px;padding:14px 16px;fontSize:13px;color:#6B667A;marginTop:20px">بصفتك مديراً مالياً، بيانات جلسات المستخدمين وملاحظاتها الحساسة غير ظاهرة لك — هذا القسم يعرض المدفوعات فقط.</div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;role&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;مدير عام&quot;,&quot;options&quot;:[&quot;مدير عام&quot;,&quot;مدير مالي&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const isFinance = (this.props.role ?? "مدير عام") === "مدير مالي";
+    return {
+      isFinance,
+      roleLabel: isFinance ? "مدير مالي" : "مدير عام",
+      canSeeUsers: !isFinance, canSeeContent: !isFinance, canSeeBookings: !isFinance,
+      canSeeReports: !isFinance, canSeeApprovals: !isFinance,
+      specialists: [
+        { name: "د. عبدالله السالم", specialty: "قلق واكتئاب", date: "5 أغسطس" },
+        { name: "أ. ريم القحطاني", specialty: "علاقات وأسرة", date: "3 أغسطس" },
+        { name: "د. تركي الدوسري", specialty: "اضطرابات النوم", date: "1 أغسطس" },
+      ],
+      payments: [
+        { user: "سارة أحمد", type: "دورة", date: "10 أغسطس", amount: "579 ج.م" },
+        { user: "محمد علي", type: "جلسة", date: "10 أغسطس", amount: "600 ج.م" },
+        { user: "خالد يوسف", type: "منتج", date: "9 أغسطس", amount: "144 ج.م" },
+        { user: "منى الشهري", type: "جلسة", date: "8 أغسطس", amount: "600 ج.م" },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

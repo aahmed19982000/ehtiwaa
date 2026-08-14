@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+<style>
+@media (max-width:640px){[data-article-pad]{padding:28px 16px 100px !important}[data-related-grid]{grid-template-columns:minmax(0,1fr) !important}[data-article-hero]{height:220px !important}}
+</style>
+</helmet>
+<div dir="rtl" style="fontFamily:'Cairo',sans-serif;background:#FAF9FB;color:#1F1B29;minHeight:100vh">
+<dc-import name="Header" hint-size="100%,64px"></dc-import>
+
+<div data-article-pad="true" style="maxWidth:760px;margin:0 auto;padding:48px 24px 100px">
+  <span style="fontSize:12px;background:#FFE3BF;color:#8A4700;padding:4px 12px;borderRadius:999px;fontWeight:700">الصحة النفسية</span>
+  <h1 style="fontSize:32px;fontWeight:800;margin:16px 0 12px">كيف تتعامل مع نوبات القلق في العمل</h1>
+  <div style="display:flex;alignItems:center;gap:10px;fontSize:13px;color:#6B667A;marginBottom:24px">
+    <div style="width:28px;height:28px;borderRadius:50%;overflow:hidden"><img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=100&h=100&fit=crop&crop=faces&q=80&auto=format" alt="د. سلمى العتيبي" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+    <span>د. سلمى العتيبي</span><span>· منذ 3 أيام · 6 دقائق قراءة</span>
+  </div>
+  <div data-article-hero="true" style="height:380px;borderRadius:12px;overflow:hidden;marginBottom:28px"><img src="https://images.unsplash.com/photo-1541199249251-f713e6145474?w=1200&h=800&fit=crop&q=80&auto=format" alt="صورة المقال الرئيسية" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+  <p style="fontSize:16px;lineHeight:1.9;margin:0 0 20px">نوبة القلق أثناء العمل غالباً ما تبدأ بإحساس مفاجئ بضيق التنفس أو تسارع القلب. أول خطوة عملية هي تسمية الشعور بصوت هادئ داخلي، ثم اللجوء إلى تنفس بطيء لعشر ثوانٍ.</p>
+  <div style="background:#F1EEF6;borderRadius:12px;padding:22px 26px;fontSize:19px;fontWeight:600;lineHeight:1.7;margin:0 0 20px">"القلق لا يُختفى بالمقاومة، بل بالتعرف عليه بهدوء."</div>
+  <p style="fontSize:16px;lineHeight:1.9;margin:0 0 32px">إذا تكررت النوبات أكثر من مرتين أسبوعياً، فمن المفيد استشارة أخصائي لوضع خطة تعامل مخصصة تشمل تمارين يومية ومتابعة أسبوعية.</p>
+  <div style="display:flex;gap:8px;marginBottom:32px"><span style="fontSize:12px;background:#F1EEF6;padding:4px 12px;borderRadius:999px">قلق</span><span style="fontSize:12px;background:#F1EEF6;padding:4px 12px;borderRadius:999px">العمل</span></div>
+  <div style="display:flex;gap:16px;alignItems:center;border:1px solid #E7E3ED;borderRadius:14px;padding:20px;marginBottom:40px">
+    <div style="width:56px;height:56px;borderRadius:50%;overflow:hidden;flexShrink:0"><img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=140&h=140&fit=crop&crop=faces&q=80&auto=format" alt="د. سلمى العتيبي" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+    <div style="flex:1"><div style="fontSize:15px;fontWeight:700;marginBottom:4px">د. سلمى العتيبي</div><div style="fontSize:13px;color:#6B667A">أخصائية نفسية، 12 عاماً في العلاج المعرفي السلوكي</div></div>
+    <button style="background:transparent;color:#3A1078;padding:10px 22px;borderRadius:8px;border:1.5px solid #3A1078;fontWeight:700;fontSize:13px;fontFamily:Cairo;whiteSpace:nowrap">عرض الملف</button>
+  </div>
+  <div style="fontSize:16px;fontWeight:700;marginBottom:16px">مقالات ذات صلة</div>
+  <div data-related-grid="true" style="display:grid;gridTemplateColumns:repeat(3,1fr);gap:16px">
+    <sc-for list="{{relatedArticles}}" as="a" hint-placeholder-count="3">
+      <div style="border:1px solid #E7E3ED;borderRadius:10px;overflow:hidden">
+        <div style="height:110px"><img src="{{a.img}}" alt="{{a.title}}" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+        <div style="padding:12px"><div style="fontSize:13px;fontWeight:700;marginBottom:4px">{{a.title}}</div><div style="fontSize:11px;color:#6B667A">{{a.cat}} · {{a.read}}</div></div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+
+<dc-import name="Footer" hint-size="100%,300px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  renderVals() {
+    return { relatedArticles: [
+      { id: "rel-1", title: "كيف تتعامل مع نوبات القلق في العمل", cat: "الصحة النفسية", read: "5 دقائق", img: "https://images.unsplash.com/photo-1541199249251-f713e6145474?w=400&h=260&fit=crop&q=80&auto=format" },
+      { id: "rel-2", title: "سبع عادات لتحسين جودة النوم", cat: "نمط الحياة", read: "7 دقائق", img: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=400&h=260&fit=crop&q=80&auto=format" },
+      { id: "rel-3", title: "متى تحتاج لاستشارة مختص؟", cat: "إرشاد", read: "4 دقائق", img: "https://images.unsplash.com/photo-1516302752625-fcc3c50ae61f?w=400&h=260&fit=crop&q=80&auto=format" },
+    ]};
+  }
+}
+</script>
+</body>
+</html>

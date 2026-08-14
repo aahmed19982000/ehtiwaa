@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+<style>
+@media (max-width:900px){[data-hero-grid]{grid-template-columns:minmax(0,1fr) !important}[data-hero-grid]>div:last-child{order:-1;height:260px !important}}
+@media (max-width:900px){[data-steps-grid]{grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important}[data-stats-grid]{grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important}[data-articles-grid]{grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important}[data-videos-grid]{grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important}[data-small-ads-grid]{grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important}[data-testimonials-grid]{grid-template-columns:minmax(0,1fr) !important}[data-ad-banner]{height:auto !important;padding:24px !important;flex-direction:column !important;align-items:flex-start !important;gap:16px !important}}
+@media (max-width:640px){[data-home-section]{padding:40px 20px !important}[data-hero-grid]{padding:32px 20px !important}[data-steps-grid]{grid-template-columns:minmax(0,1fr) !important}[data-articles-grid]{grid-template-columns:minmax(0,1fr) !important}[data-videos-grid]{grid-template-columns:minmax(0,1fr) !important}[data-small-ads-grid]{grid-template-columns:minmax(0,1fr) !important}[data-ad-wrap]{padding:0 20px !important}}
+[data-hover-card]{transition:transform .18s ease,box-shadow .18s ease}
+[data-hover-card]:hover{transform:translateY(-3px);box-shadow:0 16px 32px -12px #3A107829}
+</style>
+</helmet>
+<div dir="rtl" style="fontFamily:'Cairo',sans-serif;background:#FAF9FB;color:#1F1B29;minHeight:100vh">
+<dc-import name="Header" hint-size="100%,64px"></dc-import>
+
+<div data-hero-grid="true" style="maxWidth:1440px;margin:0 auto;padding:64px 40px;display:grid;gridTemplateColumns:minmax(0,1fr) 460px;gap:56px;alignItems:center">
+  <div>
+    <h1 style="fontSize:44px;fontWeight:800;lineHeight:1.3;margin:0 0 20px">محتوى موثوق، دورات، واستشارات متخصصة في مكان واحد</h1>
+    <p style="fontSize:17px;lineHeight:1.8;color:#6B667A;margin:0 0 32px;maxWidth:520px">منصة عربية تجمع المقالات التوعوية والدورات التدريبية والجلسات الاستشارية مع أخصائيين معتمدين، بخطوات واضحة من الاختيار إلى الحجز.</p>
+    <div style="display:flex;gap:14px">
+      <a href="Booking.dc.html" style="background:#FF8A00;color:#fff;padding:15px 32px;borderRadius:10px;fontWeight:700;fontSize:15px;textDecoration:none">احجز استشارتك الأولى</a>
+      <a href="Course.dc.html" style="background:transparent;color:#3A1078;padding:14px 32px;borderRadius:10px;border:1.5px solid #3A1078;fontWeight:700;fontSize:15px;textDecoration:none">استكشف الدورات</a>
+    </div>
+  </div>
+  <div style="height:420px;borderRadius:20px;overflow:hidden;boxShadow:0 20px 40px -16px #3A107833"><img src="https://images.unsplash.com/photo-1573497491208-6b1acb260507?w=1000&h=900&fit=crop&q=80&auto=format" alt="صورة توضيحية للمنصة" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+</div>
+
+<div data-ad-wrap="true" style="maxWidth:1440px;margin:0 auto;padding:0 40px 24px">
+  <a href="{{ad.link}}" data-ad-banner="true" style="position:relative;borderRadius:16px;overflow:hidden;height:140px;display:flex;alignItems:center;justifyContent:space-between;padding:0 40px;background:linear-gradient(90deg,#3A1078,#6C3FC5);textDecoration:none">
+    <img src="{{ad.img}}" alt="" style="position:absolute;inset:0;width:100%;height:100%;objectFit:cover;opacity:0.25;zIndex:0"/>
+    <div style="position:relative;zIndex:1">
+      <span style="fontSize:11px;background:#ffffff33;color:#fff;padding:3px 10px;borderRadius:999px;fontWeight:700">إعلان</span>
+      <div style="fontSize:20px;fontWeight:800;color:#fff;margin:8px 0 4px">{{ad.title}}</div>
+      <div style="fontSize:13px;color:#E6DBF7">{{ad.desc}}</div>
+    </div>
+    <span style="position:relative;zIndex:1;background:#FF8A00;color:#fff;padding:12px 26px;borderRadius:10px;fontWeight:700;fontSize:14px;whiteSpace:nowrap">{{ad.cta}}</span>
+  </a>
+</div>
+
+<div data-home-section="true" style="background:#fff;borderTop:1px solid #E7E3ED;borderBottom:1px solid #E7E3ED;padding:64px 40px">
+  <div style="maxWidth:1440px;margin:0 auto">
+    <h2 style="fontSize:26px;fontWeight:800;textAlign:center;margin:0 0 40px">كيف تعمل المنصة</h2>
+    <div data-steps-grid="true" style="display:grid;gridTemplateColumns:repeat(4,1fr);gap:32px">
+      <sc-for list="{{steps}}" as="s" hint-placeholder-count="4">
+        <div>
+          <div style="fontSize:32px;fontWeight:800;color:#E6DBF7;marginBottom:10px">{{s.n}}</div>
+          <div style="fontSize:16px;fontWeight:700;marginBottom:8px">{{s.title}}</div>
+          <div style="fontSize:13px;color:#6B667A;lineHeight:1.7">{{s.desc}}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+
+<div style="maxWidth:1440px;margin:0 auto;padding:64px 40px">
+  <div style="display:flex;gap:28px;marginBottom:32px">
+    <span style="fontSize:20px;fontWeight:800;color:#3A1078;paddingBottom:12px;borderBottom:2px solid #3A1078;marginBottom:-1px">أبرز الأخصائيين</span>
+    <span style="fontSize:20px;fontWeight:800;color:#6B667A;paddingBottom:12px">أبرز الدورات</span>
+  </div>
+  <div style="display:flex;gap:20px;overflowX:auto;paddingBottom:8px">
+    <sc-for list="{{specialists}}" as="sp" hint-placeholder-count="4">
+      <div data-hover-card="true" style="minWidth:220px;border:1px solid #E7E3ED;borderRadius:14px;padding:20px;background:#fff;textAlign:center">
+        <div style="width:64px;height:64px;borderRadius:50%;overflow:hidden;margin:0 auto 12px"><img src="{{sp.img}}" alt="{{sp.name}}" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+        <div style="fontSize:14px;fontWeight:700;marginBottom:4px">{{sp.name}}</div>
+        <div style="fontSize:12px;color:#6B667A;marginBottom:6px">{{sp.specialty}}</div>
+        <div style="fontSize:12px;color:#B85F00;fontWeight:600">★★★★★ {{sp.rating}}</div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+
+<div data-home-section="true" style="background:#fff;borderTop:1px solid #E7E3ED;borderBottom:1px solid #E7E3ED;padding:56px 40px">
+  <div data-stats-grid="true" style="maxWidth:1440px;margin:0 auto;display:grid;gridTemplateColumns:repeat(4,1fr);gap:24px;textAlign:center">
+    <div><div style="fontSize:36px;fontWeight:800;color:#3A1078">120+</div><div style="fontSize:13px;color:#6B667A;marginTop:6px">أخصائي معتمد</div></div>
+    <div><div style="fontSize:36px;fontWeight:800;color:#3A1078">40,000+</div><div style="fontSize:13px;color:#6B667A;marginTop:6px">مستخدم</div></div>
+    <div><div style="fontSize:36px;fontWeight:800;color:#3A1078">18,500+</div><div style="fontSize:13px;color:#6B667A;marginTop:6px">جلسة ودورة مكتملة</div></div>
+    <div><div style="fontSize:36px;fontWeight:800;color:#3A1078">4.8</div><div style="fontSize:13px;color:#6B667A;marginTop:6px">متوسط التقييم</div></div>
+  </div>
+</div>
+
+<div data-home-section="true" style="maxWidth:1440px;margin:0 auto;padding:40px 40px 0">
+  <div style="fontSize:13px;color:#6B667A;fontWeight:700;marginBottom:16px">شركاء وإعلانات</div>
+  <div data-small-ads-grid="true" style="display:grid;gridTemplateColumns:repeat(3,1fr);gap:16px">
+    <sc-for list="{{smallAds}}" as="sa" hint-placeholder-count="3">
+      <a href="{{sa.link}}" style="position:relative;display:flex;alignItems:center;gap:12px;border:1px solid #E7E3ED;borderRadius:12px;padding:14px 16px;background:#fff;textDecoration:none;color:inherit">
+        <span style="position:absolute;top:8px;insetInlineStart:8px;fontSize:9px;background:#F4F0FC;color:#6B667A;padding:2px 8px;borderRadius:999px;fontWeight:700">إعلان</span>
+        <div style="width:48px;height:48px;borderRadius:10px;overflow:hidden;flexShrink:0"><img src="{{sa.img}}" alt="{{sa.name}}" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+        <div>
+          <div style="fontSize:13px;fontWeight:700;color:#1F1B29;marginBottom:2px">{{sa.name}}</div>
+          <div style="fontSize:11px;color:#6B667A">{{sa.tagline}}</div>
+        </div>
+      </a>
+    </sc-for>
+  </div>
+</div>
+
+<div data-home-section="true" style="maxWidth:1440px;margin:0 auto;padding:64px 40px">
+  <h2 style="fontSize:26px;fontWeight:800;margin:0 0 32px">أحدث المقالات</h2>
+  <div data-articles-grid="true" style="display:grid;gridTemplateColumns:repeat(4,1fr);gap:20px">
+    <sc-for list="{{articles}}" as="a" hint-placeholder-count="4">
+      <div data-hover-card="true" style="border:1px solid #E7E3ED;borderRadius:12px;overflow:hidden;background:#fff">
+        <div style="height:130px"><img src="{{a.img}}" alt="{{a.title}}" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+        <div style="padding:16px">
+          <span style="fontSize:11px;background:#FFE3BF;color:#8A4700;padding:3px 10px;borderRadius:999px;fontWeight:700">{{a.cat}}</span>
+          <div style="fontSize:14px;fontWeight:700;margin:10px 0 4px">{{a.title}}</div>
+          <div style="fontSize:12px;color:#6B667A">{{a.read}}</div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+
+<div data-home-section="true" style="maxWidth:1440px;margin:0 auto;padding:64px 40px">
+  <h2 style="fontSize:26px;fontWeight:800;margin:0 0 32px">فيديوهات تعليمية</h2>
+  <div data-videos-grid="true" style="display:grid;gridTemplateColumns:repeat(4,1fr);gap:20px">
+    <sc-for list="{{videos}}" as="v" hint-placeholder-count="4">
+      <div data-hover-card="true" style="border:1px solid #E7E3ED;borderRadius:12px;overflow:hidden;background:#fff;cursor:pointer">
+        <div style="height:150px;position:relative">
+          <img src="{{v.img}}" alt="{{v.title}}" style="width:100%;height:100%;objectFit:cover;display:block"/>
+          <div style="position:absolute;inset:0;display:flex;alignItems:center;justifyContent:center;background:#00000022">
+            <span style="width:48px;height:48px;borderRadius:50%;background:#ffffffcc;display:flex;alignItems:center;justifyContent:center;fontSize:16px;color:#3A1078">▶</span>
+          </div>
+          <span style="position:absolute;bottom:8px;insetInlineStart:8px;background:#000000aa;color:#fff;fontSize:11px;padding:2px 8px;borderRadius:6px">{{v.duration}}</span>
+        </div>
+        <div style="padding:16px">
+          <span style="fontSize:11px;background:#E6DBF7;color:#3A1078;padding:3px 10px;borderRadius:999px;fontWeight:700">{{v.cat}}</span>
+          <div style="fontSize:14px;fontWeight:700;margin:10px 0 4px">{{v.title}}</div>
+          <div style="fontSize:12px;color:#6B667A">{{v.views}}</div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+
+<div data-home-section="true" style="background:#F4F0FC;padding:64px 40px">
+  <div style="maxWidth:1440px;margin:0 auto">
+    <h2 style="fontSize:26px;fontWeight:800;textAlign:center;margin:0 0 32px">آراء المستخدمين</h2>
+    <div data-testimonials-grid="true" style="display:grid;gridTemplateColumns:repeat(3,1fr);gap:24px">
+      <sc-for list="{{testimonials}}" as="t" hint-placeholder-count="3">
+        <div style="background:#fff;borderRadius:14px;padding:24px">
+          <div style="fontSize:13px;color:#B85F00;fontWeight:600;marginBottom:12px">★★★★★</div>
+          <p style="fontSize:14px;lineHeight:1.8;margin:0 0 16px">{{t.text}}</p>
+          <div style="display:flex;alignItems:center;gap:10px">
+            <div style="width:36px;height:36px;borderRadius:50%;overflow:hidden"><img src="{{t.img}}" alt="{{t.name}}" style="width:100%;height:100%;objectFit:cover;display:block"/></div>
+            <span style="fontSize:13px;fontWeight:700">{{t.name}}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+
+<dc-import name="Footer" hint-size="100%,300px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      steps: [
+        { n: "1", title: "اختر الخدمة", desc: "استشارة، دورة، أو مقال — حسب ما تحتاجه الآن." },
+        { n: "2", title: "اختر الأخصائي أو الدورة", desc: "تصفّح الملفات والتخصصات وابدأ بالمناسب لك." },
+        { n: "3", title: "احجز وادفع بأمان", desc: "خطوات دفع قليلة، وسياسة استرداد واضحة قبل الشراء." },
+        { n: "4", title: "ابدأ رحلتك", desc: "جلستك الأولى، أول درس في الدورة، أو مقال يفتح لك بداية." },
+      ],
+      specialists: [
+        { id: "home-sp-1", name: "د. فهد المطيري", specialty: "علاقات وأسرة", rating: "4.9", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces&q=80&auto=format" },
+        { id: "home-sp-2", name: "د. نورة الحربي", specialty: "قلق واكتئاب", rating: "4.8", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=faces&q=80&auto=format" },
+        { id: "home-sp-3", name: "أ. ريم القحطاني", specialty: "اضطرابات النوم", rating: "4.7", img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=faces&q=80&auto=format" },
+        { id: "home-sp-4", name: "د. تركي الدوسري", specialty: "إدمان سلوكي", rating: "4.9", img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=faces&q=80&auto=format" },
+      ],
+      articles: [
+        { id: "home-art-1", cat: "الصحة النفسية", title: "كيف تتعامل مع نوبات القلق في العمل", read: "6 دقائق", img: "https://images.unsplash.com/photo-1541199249251-f713e6145474?w=500&h=300&fit=crop&q=80&auto=format" },
+        { id: "home-art-2", cat: "نمط الحياة", title: "سبع عادات لتحسين جودة النوم", read: "7 دقائق", img: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=500&h=300&fit=crop&q=80&auto=format" },
+        { id: "home-art-3", cat: "إرشاد", title: "متى تحتاج لاستشارة مختص؟", read: "4 دقائق", img: "https://images.unsplash.com/photo-1516302752625-fcc3c50ae61f?w=500&h=300&fit=crop&q=80&auto=format" },
+        { id: "home-art-4", cat: "علاقات", title: "التواصل الفعّال داخل الأسرة", read: "5 دقائق", img: "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=500&h=300&fit=crop&q=80&auto=format" },
+      ],
+      ad: {
+        title: "باقة اشتراك سنوية بخصم 30%",
+        desc: "استفد من جميع الدورات والاستشارات بسعر مخفض لفترة محدودة.",
+        cta: "اعرف أكثر",
+        link: "Checkout.dc.html",
+        img: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=400&fit=crop&q=80&auto=format",
+      },
+      smallAds: [
+        { id: "home-sad-1", name: "شركة بيت الصحة النفسية", tagline: "عيادات متخصصة في 5 مدن", link: "#", img: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=150&h=150&fit=crop&q=80&auto=format" },
+        { id: "home-sad-2", name: "د. منى الشهري", tagline: "استشارات أسرية عن بُعد", link: "#", img: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=faces&q=80&auto=format" },
+        { id: "home-sad-3", name: "تطبيق نبض", tagline: "تتبّع مزاجك اليومي بسهولة", link: "#", img: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=150&h=150&fit=crop&q=80&auto=format" },
+      ],
+      videos: [
+        { id: "home-vid-1", cat: "الصحة النفسية", title: "5 دقائق لتهدئة نوبة القلق", views: "12 ألف مشاهدة", duration: "5:12", img: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&h=300&fit=crop&q=80&auto=format" },
+        { id: "home-vid-2", cat: "نمط الحياة", title: "روتين مسائي لنوم أعمق", views: "8.4 ألف مشاهدة", duration: "7:40", img: "https://images.unsplash.com/photo-1489619243109-4e0ea59cfe10?w=500&h=300&fit=crop&q=80&auto=format" },
+        { id: "home-vid-3", cat: "إرشاد", title: "كيف تختار الأخصائي المناسب لك", views: "6.1 ألف مشاهدة", duration: "4:55", img: "https://images.unsplash.com/photo-1557425955-df376b5903c8?w=500&h=300&fit=crop&q=80&auto=format" },
+        { id: "home-vid-4", cat: "علاقات", title: "حوار صحي مع شريك الحياة", views: "9.7 ألف مشاهدة", duration: "6:20", img: "https://images.unsplash.com/photo-1516534775068-ba3e7458af70?w=500&h=300&fit=crop&q=80&auto=format" },
+      ],
+      testimonials: [
+        { id: "home-t-1", name: "س. أحمد", text: "الحجز كان سريعاً والأخصائي فهم حالتي من الجلسة الأولى.", img: "https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=150&h=150&fit=crop&crop=faces&q=80&auto=format" },
+        { id: "home-t-2", name: "م. علي", text: "دورة التعامل مع القلق غيرت طريقة تعاملي مع ضغط العمل.", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop&crop=faces&q=80&auto=format" },
+        { id: "home-t-3", name: "خ. يوسف", text: "المقالات فعلاً مفيدة، وسهل إني أرجع لها وقت الحاجة.", img: "https://images.unsplash.com/photo-1508341591423-4347099e1f19?w=150&h=150&fit=crop&crop=faces&q=80&auto=format" },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

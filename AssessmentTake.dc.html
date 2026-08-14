@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="./image-slot.js"></script>
+</helmet>
+<div dir="rtl" style="fontFamily:'Cairo',sans-serif;background:#FAF9FB;color:#1F1B29;minHeight:100vh">
+<dc-import name="Header" hint-size="100%,64px"></dc-import>
+
+<div style="maxWidth:720px;margin:0 auto;padding:32px 40px 100px">
+  <div style="background:#F4F0FC;border:1px solid #E6DBF7;borderRadius:14px;padding:16px 20px;display:flex;gap:12px;alignItems:flex-start;marginBottom:28px">
+    <span style="width:24px;height:24px;borderRadius:50%;background:#3A1078;color:#fff;display:flex;alignItems:center;justifyContent:center;fontSize:12px;fontWeight:800;flexShrink:0">i</span>
+    <span style="fontSize:13px;fontWeight:700;color:#3A1078;lineHeight:1.7">هذه الاختبارات أداة إرشادية أولية، ولا تُغني عن استشارة أخصائي مختص. النتيجة ليست تشخيصاً طبياً.</span>
+  </div>
+
+  <sc-if value="{{isQuestion}}" hint-placeholder-val="{{true}}">
+    <div style="marginBottom:24px">
+      <div style="display:flex;justifyContent:space-between;fontSize:13px;color:#6B667A;marginBottom:8px"><span>سؤال 3 من 15</span><span>مقياس القلق</span></div>
+      <div style="height:8px;background:#F1EEF6;borderRadius:999px;overflow:hidden"><div style="width:20%;height:100%;background:#3A1078"></div></div>
+    </div>
+    <h1 style="fontSize:20px;fontWeight:800;lineHeight:1.6;margin:0 0 24px">خلال الأسبوعين الماضيين، كم مرة شعرت بصعوبة في التركيز بسبب القلق؟</h1>
+    <div style="display:flex;flexDirection:column;gap:10px;marginBottom:32px">
+      <sc-for list="{{options}}" as="o" hint-placeholder-count="5">
+        <label onClick="{{o.onClick}}" style="display:flex;alignItems:center;gap:14px;border:1.5px solid {{o.border}};background:{{o.bg}};borderRadius:12px;padding:16px 20px;cursor:pointer">
+          <input type="radio" checked="{{o.checked}}" name="q3" style="width:18px;height:18px" readOnly/>
+          <span style="fontSize:15px;fontWeight:600">{{o.label}}</span>
+        </label>
+      </sc-for>
+    </div>
+    <div style="display:flex;justifyContent:space-between">
+      <button onClick="{{goPrev}}" style="background:transparent;color:#3A1078;padding:12px 28px;borderRadius:10px;border:1.5px solid #3A1078;fontWeight:700;fontSize:14px;fontFamily:Cairo">السابق</button>
+      <button onClick="{{goNext}}" style="background:#3A1078;color:#fff;padding:12px 32px;borderRadius:10px;border:none;fontWeight:700;fontSize:14px;fontFamily:Cairo">التالي</button>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isResult}}" hint-placeholder-val="{{false}}">
+    <div style="textAlign:center;marginBottom:8px">
+      <div style="fontSize:13px;color:#6B667A;marginBottom:8px">نتيجة مقياس القلق</div>
+      <div style="display:inline-block;padding:8px 24px;borderRadius:999px;background:{{levelBg}};color:{{levelColor}};fontSize:16px;fontWeight:800;marginBottom:20px">مستوى {{levelLabel}}</div>
+      <p style="fontSize:15px;lineHeight:1.9;color:#1F1B29;maxWidth:520px;margin:0 auto 24px">{{levelDesc}}</p>
+    </div>
+    <div style="background:#F1EEF6;border:1px solid #E7E3ED;borderRadius:14px;padding:18px 22px;fontSize:14px;color:#3A1078;fontWeight:600;lineHeight:1.8;marginBottom:28px;textAlign:center">هذه النتيجة إرشادية فقط ولا تمثل تشخيصاً. للحصول على تقييم دقيق، يُنصح بالتحدث مع أخصائي.</div>
+    <div style="display:flex;flexDirection:column;gap:12px;alignItems:center">
+      <a href="Booking.dc.html" style="background:#FF8A00;color:#fff;padding:15px 40px;borderRadius:10px;fontWeight:700;fontSize:15px;textDecoration:none">احجز استشارة مع أخصائي</a>
+      <div style="display:flex;gap:16px">
+        <div onClick="{{restart}}" style="color:#3A1078;fontSize:13px;fontWeight:700;textDecoration:none;cursor:pointer">أعد الاختبار</div>
+        <span style="color:#3A1078;fontSize:13px;fontWeight:700;cursor:pointer">شارك النتيجة</span>
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+<dc-import name="Footer" hint-size="100%,300px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;سؤال&quot;,&quot;options&quot;:[&quot;سؤال&quot;,&quot;نتيجة&quot;],&quot;tsType&quot;:&quot;string&quot;},&quot;resultLevel&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;متوسط&quot;,&quot;options&quot;:[&quot;منخفض&quot;,&quot;متوسط&quot;,&quot;مرتفع&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = {
+    view: "",
+    selectedOptionIndex: 2
+  };
+  renderVals() {
+    const view = this.state.view || (this.props.view ?? "سؤال");
+    const isResult = view === "نتيجة";
+    const selectedOptionIndex = this.state.selectedOptionIndex;
+    const selectOption = (index) => this.setState({ selectedOptionIndex: index });
+    const goNext = () => this.setState({ view: "نتيجة" });
+    const goPrev = () => this.setState({ view: "سؤال" });
+    const restart = () => this.setState({ view: "سؤال", selectedOptionIndex: 2 });
+    const level = this.props.resultLevel ?? "متوسط";
+    const levels = {
+      "منخفض": { bg: "#E7F6EE", color: "#166B44", desc: "أعراض القلق التي وصفتها محدودة حالياً. الاستمرار في عادات مثل النوم المنتظم والتنفس الواعي يساعد على المحافظة على هذا المستوى." },
+      "متوسط": { bg: "#FBF1DF", color: "#82590A", desc: "تظهر إجاباتك مستوى متوسطاً من أعراض القلق قد يؤثر على تركيزك أحياناً. قد تستفيد من متابعة أخصائي لوضع خطة تعامل مناسبة." },
+      "مرتفع": { bg: "#FCEAE9", color: "#A82520", desc: "تشير إجاباتك إلى مستوى مرتفع من أعراض القلق قد يستفيد من متابعة مختص في وقت قريب لفهم أسبابه ووضع خطة تعامل." },
+    };
+    const l = levels[level] ?? levels["متوسط"];
+    const options = ["أبداً", "نادراً", "أحياناً", "غالباً", "دائماً"].map((label, i) => {
+      const active = selectedOptionIndex === i;
+      return {
+        label,
+        border: active ? "#3A1078" : "#E7E3ED",
+        bg: active ? "#F4F0FC" : "#fff",
+        checked: active,
+        onClick: () => selectOption(i)
+      };
+    });
+    return {
+      isQuestion: !isResult, isResult, options, levelLabel: level, levelBg: l.bg, levelColor: l.color, levelDesc: l.desc,
+      goNext, goPrev, restart
+    };
+  }
+}
+</script>
+</body>
+</html>
