@@ -6,8 +6,10 @@ from . import views
 app_name = "accounts"
 
 urlpatterns = [
-    path("welcome/", views.WelcomeView.as_view(), name="welcome"),
-    path("signup/", views.SignupView.as_view(), name="signup"),
+    # Short, root-level paths (no /accounts/ prefix) — e.g. /signup/ instead
+    # of /accounts/welcome/, matching the shorter URL shape used elsewhere.
+    path("signup/", views.WelcomeView.as_view(), name="welcome"),
+    path("signup/account/", views.SignupView.as_view(), name="signup"),
     path("signup/check-email/", views.SignupCheckEmailView.as_view(), name="signup-check-email"),
     path("verify-email/<str:token>/", views.VerifyEmailView.as_view(), name="verify-email"),
     path("login/", views.LoginView.as_view(), name="login"),

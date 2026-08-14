@@ -13,7 +13,12 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", TemplateView.as_view(template_name="base.html"), name="home"),
     path("", include("apps.core.urls", namespace="core")),
-    path("accounts/", include("apps.accounts.urls", namespace="accounts")),
+    # Mounted at root (not /accounts/) for short user-facing URLs — /signup/,
+    # /login/, /profile/, etc.
+    path("", include("apps.accounts.urls", namespace="accounts")),
+    # OAuth callback paths stay under /accounts/social/ — this exact prefix is
+    # already registered as the Allowed Callback URL in the Auth0/Google
+    # dashboards, so it must not change independently of those.
     # allauth.socialaccount.urls alone only has the generic cancel/error/signup
     # views — the actual per-provider login/callback URLs (google_login,
     # auth0_login, ...) are built separately and normally only wired up via
