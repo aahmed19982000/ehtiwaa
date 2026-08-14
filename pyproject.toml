@@ -1,0 +1,12 @@
+[tool.ruff]
+line-length = 100
+exclude = ["migrations", "design_reference", ".venv"]
+
+[tool.ruff.lint]
+# RUF012: Django CHOICES lists and Meta options are idiomatic mutable class
+# attributes, not the accidental-shared-state bug this rule targets.
+ignore = ["RUF012"]
+
+[tool.black]
+line-length = 100
+extend-exclude = "migrations|design_reference"

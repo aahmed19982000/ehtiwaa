@@ -1,0 +1,57 @@
+{% load static %}
+<header class="site-header">
+  <div class="site-header__inner">
+    <div class="site-header__brand">
+      <a href="{% url 'home' %}">
+        <img class="site-header__logo" src="{% static 'img/logo.png' %}" alt="احتواء">
+      </a>
+      <ul class="nav-desktop" data-nav-desktop>
+        <li><a href="#">الرئيسية</a></li>
+        <li class="nav-dropdown" data-nav-dropdown>
+          <a href="#">الاستشارات</a>
+          <div class="nav-dropdown__menu" data-dropdown-menu>
+            <a href="#">دليل الأخصائيين</a>
+            <a href="#">حجز استشارة</a>
+            <a href="#">محرك المطابقة</a>
+          </div>
+        </li>
+        <li><a href="#">الدورات</a></li>
+        <li><a href="#">المقالات</a></li>
+        <li><a href="#">المتجر</a></li>
+        <li><a href="#">المنتدى</a></li>
+      </ul>
+    </div>
+
+    <div class="header-actions">
+      <button type="button" class="header-icon-btn" aria-label="بحث">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+      <a href="#" class="header-icon-btn" aria-label="المساعدة">؟</a>
+
+      {# No auth flow yet (Phase 1.2) — logged-out state rendered unconditionally for now. #}
+      {# Once accounts auth lands: {% if user.is_authenticated %} avatar+name -> dashboard {% else %} the buttons below {% endif %} #}
+      <a href="#" class="btn btn-outline">تسجيل الدخول</a>
+      <a href="#" class="btn btn-primary">إنشاء حساب</a>
+
+      <button type="button" class="hamburger-btn" data-hamburger-btn aria-label="القائمة">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <nav class="mobile-nav" data-mobile-nav>
+    <a href="#">الرئيسية</a>
+    <a href="#">دليل الأخصائيين</a>
+    <a href="#">الدورات</a>
+    <a href="#">المقالات</a>
+    <a href="#">المتجر</a>
+    <a href="#">المنتدى</a>
+  </nav>
+</header>
