@@ -13,8 +13,10 @@
 
     {% if auth0_enabled %}
     <div class="auth-social">
-      {# Routed through Auth0, but with connection=google-oauth2 so Auth0 skips
-         its own chooser page and redirects straight to Google's real login. #}
+      {% comment %}
+      Routed through Auth0, but with connection=google-oauth2 so Auth0 skips
+      its own chooser page and redirects straight to Google's real login.
+      {% endcomment %}
       <a href="{% provider_login_url 'auth0' process='login' auth_params='connection=google-oauth2' %}" class="btn-social">
         {% include "partials/icons/google.html" %}
         <span>المتابعة باستخدام Google</span>
