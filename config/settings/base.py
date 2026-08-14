@@ -110,6 +110,9 @@ AUTH0_CLIENT_SECRET = env("AUTH0_CLIENT_SECRET", default="")
 
 SOCIALACCOUNT_ADAPTER = "apps.accounts.adapters.EhtiwaaSocialAccountAdapter"
 SOCIALACCOUNT_AUTO_SIGNUP = True
+# Skip allauth's "you're about to log in with a third-party account" interstitial
+# — clicking the button goes straight to the provider (still full OAuth underneath).
+SOCIALACCOUNT_LOGIN_ON_GET = True
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "APPS": (
