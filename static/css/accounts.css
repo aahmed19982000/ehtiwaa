@@ -60,6 +60,10 @@
   font-size: 0.9rem;
 }
 
+.btn-social__icon {
+  flex-shrink: 0;
+}
+
 .auth-divider {
   display: flex;
   align-items: center;
