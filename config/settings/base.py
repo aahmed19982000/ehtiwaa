@@ -113,6 +113,13 @@ SOCIALACCOUNT_AUTO_SIGNUP = True
 # Skip allauth's "you're about to log in with a third-party account" interstitial
 # — clicking the button goes straight to the provider (still full OAuth underneath).
 SOCIALACCOUNT_LOGIN_ON_GET = True
+# We don't include allauth.account.urls (we use our own local signup/login/
+# verification flow, not allauth's). Without this, allauth's account app
+# tries to send its own confirmation email on social signup and fails with
+# NoReverseMatch on 'account_confirm_email', which doesn't exist in our
+# URLconf. The provider (Google/Auth0) already verified the email, so
+# allauth's own verification step is redundant here regardless.
+ACCOUNT_EMAIL_VERIFICATION = "none"
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "APPS": (
