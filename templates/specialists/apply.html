@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}انضم كمعالج — احتواء{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+<link rel="stylesheet" href="{% static 'css/specialists.css' %}">
+{% endblock %}
+{% block content %}
+<div class="apply-shell">
+  <a href="{% url 'accounts:welcome' %}" class="auth-card__back">→ رجوع</a>
+  <h1>نموذج طلب انضمام كمعالج لفريق احتواء</h1>
+
+  <div class="requirements-box">
+    <h3>المعايير المطلوبة لكل فئة</h3>
+    <div>
+      <strong>طبيب نفسي</strong>
+      <ol>
+        <li>شهادة التخرج</li>
+        <li>رخصة مزاولة المهنة</li>
+        <li>شهادة نقابة الأطباء</li>
+        <li>شهادة الدراسات العليا (ماجستير أو دكتوراه)</li>
+      </ol>
+    </div>
+    <div>
+      <strong>معالج نفسي اكلينيكي</strong>
+      <ol>
+        <li>ماجستير العلوم أو الآداب في علم النفس الاكلينيكي</li>
+        <li>خمس سنوات خبرة اكلينيكية</li>
+        <li>إثبات وثيقة الإشراف</li>
+      </ol>
+    </div>
+    <div>
+      <strong>مرشد نفسي</strong>
+      <ol>
+        <li>ماجستير العلوم أو الآداب في علم النفس</li>
+        <li>خمس سنوات خبرة إرشاد نفسي</li>
+        <li>إثبات وثيقة الإشراف</li>
+      </ol>
+    </div>
+  </div>
+
+  {% if form.non_field_errors %}
+  <div class="alert alert-error">{{ form.non_field_errors.0 }}</div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    <h2 class="form-section-title">الفئة</h2>
+    <div class="category-radio-group">
+      {% for radio in form.category %}
+      <label class="category-radio-option">
+        {{ radio.tag }}
+        {{ radio.choice_label }}
+      </label>
+      {% endfor %}
+    </div>
+    {{ form.category.errors }}
+
+    <h2 class="form-section-title">المعلومات الشخصية</h2>
+    <div class="field-row">
+      <div class="form-field">
+        <label for="{{ form.full_name_ar.id_for_label }}">{{ form.full_name_ar.label }}</label>
+        {{ form.full_name_ar }}
+        {{ form.full_name_ar.errors }}
+      </div>
+      <div class="form-field">
+        <label for="{{ form.full_name_en.id_for_label }}">{{ form.full_name_en.label }}</label>
+        {{ form.full_name_en }}
+        {{ form.full_name_en.errors }}
+      </div>
+    </div>
+    <div class="form-field">
+      <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+      {{ form.title }}
+      {{ form.title.errors }}
+    </div>
+    <div class="form-field">
+      <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+      {{ form.email }}
+      {{ form.email.errors }}
+    </div>
+    <div class="form-field">
+      <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+      <div class="phone-field">
+        {{ form.country_code }}
+        {{ form.phone }}
+      </div>
+      {{ form.phone.errors }}
+    </div>
+    <div class="form-field">
+      <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+      {{ form.username }}
+      {{ form.username.errors }}
+    </div>
+    <div class="form-field">
+      <label for="{{ form.birth_year.id_for_label }}">{{ form.birth_year.label }}</label>
+      {{ form.birth_year }}
+      {{ form.birth_year.errors }}
+    </div>
+    <div class="form-field">
+      <label for="{{ form.gender.id_for_label }}">{{ form.gender.label }}</label>
+      {{ form.gender }}
+      {{ form.gender.errors }}
+    </div>
+    <div class="form-field">
+      <label for="{{ form.nationality.id_for_label }}">{{ form.nationality.label }}</label>
+      {{ form.nationality }}
+      {{ form.nationality.errors }}
+    </div>
+    <div class="form-field">
+      <label for="{{ form.country_of_residence.id_for_label }}">{{ form.country_of_residence.label }}</label>
+      {{ form.country_of_residence }}
+      {{ form.country_of_residence.errors }}
+    </div>
+    <div class="form-field">
+      <label for="{{ form.languages.id_for_label }}">{{ form.languages.label }}</label>
+      {{ form.languages }}
+      <p class="help-text">اضغط مع الاستمرار على Ctrl (أو Cmd) لاختيار أكثر من لغة</p>
+      {{ form.languages.errors }}
+    </div>
+
+    <h2 class="form-section-title">المستندات المطلوبة</h2>
+
+    {% comment %}
+    Every field/file input below is rendered exactly once in the DOM (never
+    duplicated across groups, which would create clashing ids/names) —
+    category-specific pieces (extra label text, extra fields) are toggled
+    via the comma-separated data-category-group list on wrapper elements.
+    {% endcomment %}
+    <div class="form-field">
+      <label class="category-group" data-category-group="psychiatrist" for="{{ form.degree_certificate.id_for_label }}">شهادة التخرج</label>
+      <label class="category-group" data-category-group="clinical_psychologist,counselor" for="{{ form.degree_certificate.id_for_label }}">شهادة الماجستير (علم النفس الاكلينيكي أو علم النفس)</label>
+      {{ form.degree_certificate }}
+      {{ form.degree_certificate.errors }}
+    </div>
+
+    <div class="category-group" data-category-group="psychiatrist">
+      <div class="form-field">
+        <label for="{{ form.license_file.id_for_label }}">{{ form.license_file.label }}</label>
+        {{ form.license_file }}
+        {{ form.license_file.errors }}
+      </div>
+      <div class="form-field">
+        <label for="{{ form.syndicate_card.id_for_label }}">{{ form.syndicate_card.label }}</label>
+        {{ form.syndicate_card }}
+        {{ form.syndicate_card.errors }}
+      </div>
+      <div class="form-field">
+        <label for="{{ form.postgraduate_certificate.id_for_label }}">{{ form.postgraduate_certificate.label }}</label>
+        {{ form.postgraduate_certificate }}
+        {{ form.postgraduate_certificate.errors }}
+      </div>
+    </div>
+
+    <div class="category-group" data-category-group="clinical_psychologist,counselor">
+      <div class="form-field">
+        <label for="{{ form.years_of_experience.id_for_label }}">{{ form.years_of_experience.label }}</label>
+        {{ form.years_of_experience }}
+        {{ form.years_of_experience.errors }}
+      </div>
+      <div class="form-field">
+        <label for="{{ form.supervision_proof.id_for_label }}">{{ form.supervision_proof.label }}</label>
+        {{ form.supervision_proof }}
+        {{ form.supervision_proof.errors }}
+      </div>
+    </div>
+
+    <h2 class="form-section-title">كلمة المرور</h2>
+    <div class="form-field">
+      <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+      {{ form.password1 }}
+      {{ form.password1.errors }}
+    </div>
+    <div class="form-field">
+      <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+      {{ form.password2 }}
+      {{ form.password2.errors }}
+    </div>
+
+    <div class="terms-checkbox">
+      {{ form.agree_terms }}
+      <label for="{{ form.agree_terms.id_for_label }}">
+        أوافق على <a href="{% url 'core:terms' %}" target="_blank">الشروط والأحكام</a>
+        و<a href="{% url 'core:privacy' %}" target="_blank">سياسة الخصوصية</a>
+      </label>
+    </div>
+    {{ form.agree_terms.errors }}
+
+    <button type="submit" class="btn btn-primary">إرسال الطلب</button>
+  </form>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/specialists.js' %}"></script>
+{% endblock %}

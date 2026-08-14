@@ -25,6 +25,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
+    "django.contrib.sites",
+    # Social login only (Google, Auth0) — local email/phone+password auth is
+    # hand-rolled in apps.accounts, not allauth's own account flows.
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.auth0",
     # Local apps
     "apps.core",
     "apps.accounts",
@@ -52,6 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -79,6 +88,58 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = "accounts.User"
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    "apps.accounts.backends.EmailOrPhoneBackend",
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+LOGIN_URL = "accounts:login"
+LOGIN_REDIRECT_URL = "accounts:profile"
+LOGOUT_REDIRECT_URL = "home"
+
+# Social login (Google, Auth0) — buttons only render once these are set;
+# see docs/social-login-setup.md for how to obtain them.
+GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID", default="")
+GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET", default="")
+AUTH0_DOMAIN = env("AUTH0_DOMAIN", default="")
+AUTH0_CLIENT_ID = env("AUTH0_CLIENT_ID", default="")
+AUTH0_CLIENT_SECRET = env("AUTH0_CLIENT_SECRET", default="")
+
+SOCIALACCOUNT_ADAPTER = "apps.accounts.adapters.EhtiwaaSocialAccountAdapter"
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APPS": (
+            [
+                {
+                    "client_id": GOOGLE_CLIENT_ID,
+                    "secret": GOOGLE_CLIENT_SECRET,
+                    "key": "",
+                }
+            ]
+            if GOOGLE_CLIENT_ID
+            else []
+        ),
+        "SCOPE": ["profile", "email"],
+    },
+    "auth0": {
+        "AUTH0_URL": f"https://{AUTH0_DOMAIN}" if AUTH0_DOMAIN else "",
+        "APPS": (
+            [
+                {
+                    "client_id": AUTH0_CLIENT_ID,
+                    "secret": AUTH0_CLIENT_SECRET,
+                    "key": "",
+                }
+            ]
+            if AUTH0_DOMAIN and AUTH0_CLIENT_ID
+            else []
+        ),
+    },
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -110,3 +171,10 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="no-reply@ehtiwaa.example")
+
+# No SMTP host configured (typical for local dev) -> print emails to the
+# runserver console instead of failing to send.
+if EMAIL_HOST:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

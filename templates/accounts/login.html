@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load socialaccount static %}
+{% block title %}تسجيل الدخول — احتواء{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+{% endblock %}
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-card">
+    <a href="{% url 'home' %}" class="auth-card__back">→ رجوع</a>
+    <h1>تسجيل الدخول</h1>
+    <p class="auth-card__subtitle">مرحبًا بعودتك إلى احتواء</p>
+
+    {% if form.non_field_errors %}
+    <div class="alert alert-error">{{ form.non_field_errors.0 }}</div>
+    {% endif %}
+
+    {% if google_enabled or auth0_enabled %}
+    <div class="auth-social">
+      {% if google_enabled %}
+      <a href="{% provider_login_url 'google' process='login' %}" class="btn-social">تسجيل الدخول عبر Google</a>
+      {% endif %}
+      {% if auth0_enabled %}
+      <a href="{% provider_login_url 'auth0' process='login' %}" class="btn-social">تسجيل الدخول عبر Auth0</a>
+      {% endif %}
+    </div>
+    <div class="auth-divider">أو</div>
+    {% endif %}
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="form-field">
+        <label for="{{ form.identifier.id_for_label }}">{{ form.identifier.label }}</label>
+        {{ form.identifier }}
+        {{ form.identifier.errors }}
+      </div>
+      <div class="form-field">
+        <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+        {{ form.password }}
+        {{ form.password.errors }}
+      </div>
+      <p><a href="{% url 'accounts:password-reset' %}">نسيت كلمة المرور؟</a></p>
+      <div class="auth-actions">
+        <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
+      </div>
+    </form>
+
+    <p class="auth-footer-link">
+      ليس لديك حساب؟ <a href="{% url 'accounts:welcome' %}">إنشاء حساب جديد</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

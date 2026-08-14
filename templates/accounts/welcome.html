@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load socialaccount static %}
+{% block title %}مرحبًا بك في احتواء{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+{% endblock %}
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-card">
+    <a href="{% url 'home' %}" class="auth-card__back">→ رجوع</a>
+    <h1>مرحبًا في احتواء</h1>
+    <p class="auth-card__subtitle">اختر طريقة التسجيل المفضلة لديك، وابدأ رحلتك في ثوانٍ معدودة</p>
+
+    {% if google_enabled or auth0_enabled %}
+    <div class="auth-social">
+      {% if google_enabled %}
+      <a href="{% provider_login_url 'google' process='login' %}" class="btn-social">تسجيل الدخول عبر Google</a>
+      {% endif %}
+      {% if auth0_enabled %}
+      <a href="{% provider_login_url 'auth0' process='login' %}" class="btn-social">تسجيل الدخول عبر Auth0</a>
+      {% endif %}
+    </div>
+    <div class="auth-divider">أو</div>
+    {% endif %}
+
+    <div class="auth-actions">
+      <a href="{% url 'accounts:signup' %}" class="btn btn-primary">إنشاء حساب جديد</a>
+      <a href="{% url 'specialists:apply' %}" class="btn btn-outline">انضم كمعالج</a>
+    </div>
+
+    <p class="auth-footer-link">
+      لديك حساب بالفعل؟ <a href="{% url 'accounts:login' %}">تسجيل الدخول</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

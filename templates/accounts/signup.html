@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}إنشاء حساب — احتواء{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+{% endblock %}
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-card">
+    <a href="{% url 'accounts:welcome' %}" class="auth-card__back">→ رجوع</a>
+
+    <div class="step-indicator">
+      <span class="step-indicator__dot is-active" data-step-dot="1">1</span>
+      <span class="step-indicator__line"></span>
+      <span class="step-indicator__dot" data-step-dot="2">2</span>
+    </div>
+
+    <h1>إنشاء حساب جديد</h1>
+    <p class="auth-card__subtitle">الخطوة الأولى: بياناتك الأساسية</p>
+
+    {% if form.non_field_errors %}
+    <div class="alert alert-error">{{ form.non_field_errors.0 }}</div>
+    {% endif %}
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <div data-signup-step="1" class="signup-step is-active">
+        <div class="form-field">
+          <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
+          {{ form.full_name }}
+          {{ form.full_name.errors }}
+        </div>
+        <div class="form-field">
+          <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+          {{ form.email }}
+          {{ form.email.errors }}
+        </div>
+        <div class="form-field">
+          <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+          <div class="phone-field">
+            {{ form.country_code }}
+            {{ form.phone }}
+          </div>
+          {{ form.country_code.errors }}
+          {{ form.phone.errors }}
+        </div>
+        <button type="button" class="btn btn-primary" data-signup-next>التالي</button>
+      </div>
+
+      <div data-signup-step="2" class="signup-step">
+        <div class="form-field">
+          <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+          {{ form.password1 }}
+          <div class="password-strength">
+            <div class="password-strength__bar" data-password-strength-bar></div>
+          </div>
+          <div class="password-strength__label" data-password-strength-label></div>
+          {{ form.password1.errors }}
+        </div>
+        <div class="form-field">
+          <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+          {{ form.password2 }}
+          {{ form.password2.errors }}
+        </div>
+        <div class="terms-checkbox">
+          {{ form.agree_terms }}
+          <label for="{{ form.agree_terms.id_for_label }}">
+            أوافق على <a href="{% url 'core:terms' %}" target="_blank">الشروط والأحكام</a>
+            و<a href="{% url 'core:privacy' %}" target="_blank">سياسة الخصوصية</a>
+          </label>
+        </div>
+        {{ form.agree_terms.errors }}
+        <div class="auth-actions">
+          <button type="submit" class="btn btn-primary">إنشاء حساب</button>
+          <button type="button" class="btn btn-outline" data-signup-back>رجوع</button>
+        </div>
+      </div>
+    </form>
+
+    <p class="auth-footer-link">
+      لديك حساب بالفعل؟ <a href="{% url 'accounts:login' %}">تسجيل الدخول</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/accounts.js' %}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var passwordInput = document.getElementById("{{ form.password1.id_for_label }}");
+    if (passwordInput) passwordInput.setAttribute("data-password-strength-input", "");
+  });
+</script>
+{% endblock %}
