@@ -26,7 +26,7 @@ urlpatterns = [
     # allauth.account's own login/signup pages, which we don't use).
     path("accounts/social/", include("allauth.socialaccount.urls")),
     path("accounts/social/", include(build_provider_urlpatterns())),
-    path("specialists/", include("apps.specialists.urls", namespace="specialists")),
+    path("join/", include("apps.specialists.urls", namespace="specialists")),
 ]
 
 if settings.DEBUG:
