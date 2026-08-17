@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{{ product.name }} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/store.css' %}">
+<link rel="stylesheet" href="{% static 'css/reviews.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container product-detail">
+  <a href="{% url 'store:list' %}" class="course-back-link">{% trans "→ رجوع للمتجر" %}</a>
+
+  <div class="product-detail__grid">
+    <div class="product-gallery" data-product-gallery>
+      <div class="product-gallery__main">
+        {% if product.image %}
+        <img data-gallery-main src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% elif product.images.all %}
+        <img data-gallery-main src="{{ product.images.all.0.image.url }}" alt="{{ product.name }}">
+        {% else %}
+        <span class="product-gallery__placeholder">{{ product.name|first }}</span>
+        {% endif %}
+      </div>
+      {% if product.images.all %}
+      <div class="product-gallery__thumbs">
+        {% if product.image %}
+        <button type="button" class="product-gallery__thumb is-active" data-gallery-thumb data-full="{{ product.image.url }}">
+          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        </button>
+        {% endif %}
+        {% for img in product.images.all %}
+        <button type="button" class="product-gallery__thumb{% if not product.image and forloop.first %} is-active{% endif %}" data-gallery-thumb data-full="{{ img.image.url }}">
+          <img src="{{ img.image.url }}" alt="{{ product.name }}">
+        </button>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="product-detail__info">
+      <h1>{{ product.name }}</h1>
+      {% if product.average_rating %}
+      <div class="rating-badge product-detail__rating">★ {{ product.average_rating }} {% blocktrans with count=product.reviews_count %}({{ count }} تقييم){% endblocktrans %}</div>
+      {% endif %}
+
+      <div class="price-row">
+        <span class="price-row__current">{% blocktrans with price=product.price %}{{ price }} ج.م{% endblocktrans %}</span>
+        {% if product.original_price %}
+        <span class="price-row__original">{% blocktrans with price=product.original_price %}{{ price }} ج.م{% endblocktrans %}</span>
+        <span class="badge badge--discount">{% blocktrans with percent=product.discount_percent %}وفّر {{ percent }}%{% endblocktrans %}</span>
+        {% endif %}
+      </div>
+
+      {% if product.is_in_stock %}
+      <span class="badge badge--success product-detail__stock">{% trans "متوفر" %}</span>
+      {% else %}
+      <span class="badge badge--locked product-detail__stock">{% trans "غير متوفر" %}</span>
+      {% endif %}
+
+      {% if product.description %}<p class="product-detail__description">{{ product.description }}</p>{% endif %}
+
+      {% if product.is_in_stock %}
+      <form method="post" action="{% url 'store:cart-add' product.slug %}" class="product-detail__add-form">
+        {% csrf_token %}
+        <div class="qty-stepper" data-qty-stepper>
+          <button type="button" data-qty-decrease aria-label="{% trans "إنقاص الكمية" %}">−</button>
+          <input type="number" name="quantity" value="1" min="1" max="{{ product.stock_quantity }}" data-qty-input>
+          <button type="button" data-qty-increase aria-label="{% trans "زيادة الكمية" %}">+</button>
+        </div>
+        <button type="submit" class="btn btn-accent">{% trans "أضف للسلة" %}</button>
+      </form>
+      {% endif %}
+
+      {% if user.is_authenticated %}
+      <form method="post" action="{% url 'dashboard:wishlist-toggle-product' product.pk %}" class="product-detail__wishlist-form">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline">
+          {% if is_wishlisted %}{% trans "إزالة من المفضلة ★" %}{% else %}{% trans "أضف للمفضلة ☆" %}{% endif %}
+        </button>
+      </form>
+      {% endif %}
+
+      <div class="product-detail__note">{% trans "شحن مجاني للطلبات فوق 250 ج.م، إرجاع مجاني خلال 14 يوماً." %}</div>
+    </div>
+  </div>
+
+  <div class="mini-cart">
+    <div class="mini-cart__title">{% trans "سلة التسوق" %}</div>
+    {% if cart_items %}
+    {% for item in cart_items %}
+    <div class="mini-cart__item">
+      {% if item.product.image %}<img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">{% endif %}
+      <div class="mini-cart__item-info">
+        <div class="mini-cart__item-name">{{ item.product.name }}</div>
+        <div class="mini-cart__item-qty">{% blocktrans with qty=item.quantity %}الكمية: {{ qty }}{% endblocktrans %}</div>
+      </div>
+      <span class="mini-cart__item-price">{% blocktrans with price=item.line_total %}{{ price }} ج.م{% endblocktrans %}</span>
+    </div>
+    {% endfor %}
+    <a href="{% url 'store:cart' %}" class="btn btn-primary mini-cart__cta">{% trans "إتمام الشراء" %}</a>
+    {% else %}
+    <div class="mini-cart__empty">
+      <div class="mini-cart__empty-title">{% trans "سلتك فارغة" %}</div>
+      <div class="mini-cart__empty-note">{% trans "أضف منتجات من المتجر لتظهر هنا." %}</div>
+    </div>
+    {% endif %}
+  </div>
+
+  <section class="product-detail__reviews">
+    <h2>{% trans "التقييمات" %}</h2>
+    {% if user.is_authenticated %}
+    <div class="review-form-box">
+      <h3>{% trans "أضف تقييمك" %}</h3>
+      <form method="post" action="{% url 'reviews:product-review' product.pk %}">
+        {% csrf_token %}
+        <div class="rating-picker">
+          {% for value in "12345" %}
+          <label><input type="radio" name="rating" value="{{ value }}" required>★ {{ value }}</label>
+          {% endfor %}
+        </div>
+        <textarea name="comment" rows="3" placeholder="{% trans 'تعليقك (اختياري)' %}"></textarea>
+        <button type="submit" class="btn btn-primary">{% trans "إرسال التقييم" %}</button>
+      </form>
+    </div>
+    {% endif %}
+    {% if reviews %}
+    <div class="review-list">
+      {% for review in reviews %}
+      <div class="review-item">
+        <div class="review-item__head">
+          <strong>{{ review.user.first_name|default:review.user.email }}</strong>
+          <span class="rating-badge">★ {{ review.rating }}</span>
+        </div>
+        {% if review.comment %}<p>{{ review.comment }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>{% trans "لا توجد تقييمات بعد." %}</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/store.js' %}"></script>
+{% endblock %}

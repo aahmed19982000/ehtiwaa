@@ -12,13 +12,14 @@
           <div class="nav-dropdown__menu" data-dropdown-menu>
             <a href="{% url 'specialists:directory' %}">{% trans "دليل الأخصائيين" %}</a>
             <a href="#">{% trans "حجز استشارة" %}</a>
-            <a href="#">{% trans "محرك المطابقة" %}</a>
+            <a href="{% url 'matchfinder:intro' %}">{% trans "محرك المطابقة" %}</a>
+            <a href="{% url 'assessments:list' %}">{% trans "اختبارات ومقاييس نفسية ذاتية" %}</a>
           </div>
         </li>
-        <li><a href="#">{% trans "الدورات" %}</a></li>
-        <li><a href="#">{% trans "المقالات" %}</a></li>
-        <li><a href="#">{% trans "المتجر" %}</a></li>
-        <li><a href="#">{% trans "المنتدى" %}</a></li>
+        <li><a href="{% url 'courses:list' %}">{% trans "الدورات" %}</a></li>
+        <li><a href="{% url 'content:list' %}">{% trans "المقالات" %}</a></li>
+        <li><a href="{% url 'store:list' %}">{% trans "المتجر" %}</a></li>
+        <li><a href="{% url 'forum:list' %}">{% trans "المنتدى" %}</a></li>
       </ul>
     </div>
 
@@ -34,17 +35,25 @@
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
       </button>
-      <a href="#" class="header-icon-btn" aria-label="{% trans "المساعدة" %}">
+      <a href="{% url 'support:home' %}" class="header-icon-btn" aria-label="{% trans "المساعدة" %}">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"></circle>
           <path d="M9.5 9a2.5 2.5 0 0 1 4.9.8c0 1.7-2.4 2-2.4 3.7" stroke-linecap="round" stroke-linejoin="round"></path>
           <circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none"></circle>
         </svg>
       </a>
+      <a href="{% url 'store:cart' %}" class="header-icon-btn header-icon-btn--cart" aria-label="{% trans "سلة التسوق" %}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="19" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        {% if CART_ITEMS_COUNT %}<span class="header-icon-btn__badge">{{ CART_ITEMS_COUNT }}</span>{% endif %}
+      </a>
 
       {% if user.is_authenticated %}
       <div class="nav-dropdown header-user-dropdown" data-nav-dropdown>
-        <a href="{% url 'accounts:profile' %}" class="header-user-link">
+        <a href="{% url 'dashboard:index' %}" class="header-user-link">
           {% if user.profile.avatar %}
           <img class="header-user-link__avatar" src="{{ user.profile.avatar.url }}" alt="{{ user.first_name }}">
           {% else %}
@@ -53,8 +62,9 @@
           <span>{{ user.first_name|default:user.email }}</span>
         </a>
         <div class="nav-dropdown__menu" data-dropdown-menu>
+          <a href="{% url 'dashboard:bookings' %}">{% trans "حجوزاتي" %}</a>
+          <a href="{% url 'dashboard:courses' %}">{% trans "دوراتي" %}</a>
           <a href="{% url 'accounts:profile' %}">{% trans "الملف الشخصي" %}</a>
-          <a href="{% url 'bookings:list' %}">{% trans "حجوزاتي" %}</a>
           <form method="post" action="{% url 'accounts:logout' %}">
             {% csrf_token %}
             <button type="submit" class="nav-dropdown__menu-btn">{% trans "تسجيل الخروج" %}</button>
@@ -79,10 +89,10 @@
   <nav class="mobile-nav" data-mobile-nav>
     <a href="#">{% trans "الرئيسية" %}</a>
     <a href="{% url 'specialists:directory' %}">{% trans "دليل الأخصائيين" %}</a>
-    <a href="#">{% trans "الدورات" %}</a>
-    <a href="#">{% trans "المقالات" %}</a>
-    <a href="#">{% trans "المتجر" %}</a>
-    <a href="#">{% trans "المنتدى" %}</a>
+    <a href="{% url 'courses:list' %}">{% trans "الدورات" %}</a>
+    <a href="{% url 'content:list' %}">{% trans "المقالات" %}</a>
+    <a href="{% url 'store:list' %}">{% trans "المتجر" %}</a>
+    <a href="{% url 'forum:list' %}">{% trans "المنتدى" %}</a>
     <div class="lang-switcher">
       <a href="{{ LANGUAGE_URLS.ar }}" class="lang-switcher__btn{% if LANGUAGE_CODE == 'ar' %} is-active{% endif %}">AR</a>
       <a href="{{ LANGUAGE_URLS.en }}" class="lang-switcher__btn{% if LANGUAGE_CODE == 'en' %} is-active{% endif %}">EN</a>
