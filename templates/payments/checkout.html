@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "تأكيد الدفع" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/payments.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container checkout-page">
+  <h1>{% trans "تأكيد الدفع" %}</h1>
+
+  {% if last_payment_failed %}
+  <div class="alert alert-error checkout-page__failed-banner">
+    {% trans "تم رفض البطاقة من البنك المُصدر. تحقق من البيانات أو استخدم بطاقة أخرى، أو جرّب التحويل البنكي." %}
+    {% if last_payment.failure_reason %}<div class="checkout-page__failure-reason">{{ last_payment.failure_reason }}</div>{% endif %}
+  </div>
+  {% endif %}
+
+  <form method="post" class="checkout-grid">
+    {% csrf_token %}
+    <div class="checkout-grid__methods">
+      <div class="checkout-page__label">{% trans "طريقة الدفع" %}</div>
+      <div class="payment-method-list">
+        <label class="payment-method-option{% if not card_available %} is-disabled{% endif %}">
+          <input type="radio" name="method" value="card" {% if not card_available %}disabled{% else %}checked{% endif %}>
+          <span>{% trans "بطاقة ائتمان (فيزا / ماستركارد)" %}</span>
+          {% if not card_available %}<span class="payment-method-option__note">{% trans "غير مُفعّل حاليًا" %}</span>{% endif %}
+        </label>
+        <label class="payment-method-option">
+          <input type="radio" name="method" value="bank_transfer" {% if not card_available %}checked{% endif %}>
+          <span>{% trans "تحويل بنكي" %}</span>
+        </label>
+      </div>
+      {% if not card_available %}
+      <p class="checkout-page__note">{% trans "الدفع بالبطاقة قيد الإعداد — يمكنك إتمام الطلب الآن عبر التحويل البنكي." %}</p>
+      {% endif %}
+    </div>
+
+    <div class="order-summary-box">
+      <div class="order-summary-box__title">{% trans "ملخص الطلب" %}</div>
+      {% for item in order.items.all %}
+      <div class="order-summary-box__row">
+        <span>{{ item.item }}{% if item.quantity > 1 %} × {{ item.quantity }}{% endif %}</span>
+        <span>{% blocktrans with price=item.line_total %}{{ price }} ج.م{% endblocktrans %}</span>
+      </div>
+      {% endfor %}
+      <div class="order-summary-box__row">
+        <span>{% trans "الإجمالي الفرعي" %}</span>
+        <span>{% blocktrans with price=order.subtotal %}{{ price }} ج.م{% endblocktrans %}</span>
+      </div>
+      <div class="order-summary-box__row">
+        <span>{% trans "ضريبة القيمة المضافة (14%)" %}</span>
+        <span>{% blocktrans with price=order.vat_amount %}{{ price }} ج.م{% endblocktrans %}</span>
+      </div>
+      <div class="order-summary-box__row order-summary-box__row--total">
+        <span>{% trans "الإجمالي" %}</span>
+        <span>{% blocktrans with price=order.total %}{{ price }} ج.م{% endblocktrans %}</span>
+      </div>
+      <div class="order-summary-box__refund-note">{% trans "استرداد كامل خلال 7 أيام من الشراء دون رسوم." %}</div>
+      <button type="submit" class="btn btn-accent order-summary-box__cta">{% trans "أكمل الدفع" %}</button>
+      <div class="order-summary-box__secure-note">{% trans "معاملتك مشفّرة بالكامل" %}</div>
+    </div>
+  </form>
+</div>
+{% endblock %}

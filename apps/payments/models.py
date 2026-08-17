@@ -54,11 +54,18 @@ class Payment(TimeStampedModel):
         ("refunded", "refunded"),
     ]
 
-    order = models.OneToOneField("payments.Order", on_delete=models.CASCADE, related_name="payment")
+    # FK, not OneToOne — "إعادة المحاولة" (retry after a failed payment)
+    # means a second Payment attempt against the same Order, not a second
+    # Order. The most recent attempt is what the checkout page shows.
+    order = models.ForeignKey("payments.Order", on_delete=models.CASCADE, related_name="payments")
     method = models.CharField(max_length=20, choices=METHOD_CHOICES)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="initiated")
     provider_reference = models.CharField(max_length=255, blank=True)
+    failure_reason = models.TextField(blank=True)
     paid_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
 
     def __str__(self):
         return f"Payment<{self.order_id}>"

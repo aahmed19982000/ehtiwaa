@@ -1,0 +1,114 @@
+{% load i18n %}<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: A4; margin: 28mm 20mm; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", "DejaVu Sans", sans-serif;
+    color: #1F1B29;
+    font-size: 13px;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 3px solid #3A1078;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+  .brand { font-size: 20px; font-weight: 700; color: #3A1078; }
+  .invoice-title { text-align: left; }
+  .invoice-title h1 { margin: 0; font-size: 18px; }
+  .invoice-title p { margin: 4px 0 0; color: #6B667A; }
+  .meta-grid {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .meta-grid div { font-size: 12px; color: #6B667A; }
+  .meta-grid strong { display: block; color: #1F1B29; font-size: 13px; margin-bottom: 2px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+  th {
+    background: #F1EEF6;
+    text-align: right;
+    padding: 8px 10px;
+    font-size: 11px;
+    color: #6B667A;
+  }
+  td {
+    padding: 8px 10px;
+    border-top: 1px solid #E7E3ED;
+    font-size: 12px;
+  }
+  .totals { width: 260px; margin-inline-start: auto; }
+  .totals div {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 12px;
+    color: #6B667A;
+  }
+  .totals .total-row {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1F1B29;
+    border-top: 1px solid #E7E3ED;
+    padding-top: 10px;
+    margin-top: 4px;
+  }
+  .footer { margin-top: 40px; font-size: 11px; color: #6B667A; text-align: center; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">{% trans "منصّة احتواء" %}</div>
+    <div class="invoice-title">
+      <h1>{% trans "فاتورة" %}</h1>
+      <p>{{ invoice.invoice_number }}</p>
+    </div>
+  </div>
+
+  <div class="meta-grid">
+    <div>
+      <strong>{% trans "فوترة إلى" %}</strong>
+      {{ order.user.get_full_name|default:order.user.email }}<br>
+      {{ order.user.email }}
+    </div>
+    <div>
+      <strong>{% trans "تاريخ الإصدار" %}</strong>
+      {{ invoice.issued_at|date:"j F Y" }}
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>{% trans "الوصف" %}</th>
+        <th>{% trans "الكمية" %}</th>
+        <th>{% trans "سعر الوحدة" %}</th>
+        <th>{% trans "الإجمالي" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in order.items.all %}
+      <tr>
+        <td>{{ item.item }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.unit_price }} {% trans "ج.م" %}</td>
+        <td>{{ item.line_total }} {% trans "ج.م" %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="totals">
+    <div><span>{% trans "الإجمالي الفرعي" %}</span><span>{{ order.subtotal }} {% trans "ج.م" %}</span></div>
+    <div><span>{% blocktrans with rate=invoice.vat_rate %}ضريبة القيمة المضافة ({{ rate }}%){% endblocktrans %}</span><span>{{ order.vat_amount }} {% trans "ج.م" %}</span></div>
+    <div class="total-row"><span>{% trans "الإجمالي" %}</span><span>{{ order.total }} {% trans "ج.م" %}</span></div>
+  </div>
+
+  <div class="footer">{% trans "شكرًا لثقتك في منصة احتواء." %}</div>
+</body>
+</html>

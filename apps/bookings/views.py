@@ -8,13 +8,19 @@ from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import DetailView, ListView
 
-from apps.notifications.services import notify_booking_cancelled, notify_booking_created
+from apps.notifications.tasks import notify_booking_cancelled_task, notify_booking_created_task
+from apps.payments.services import create_order_for_item
 from apps.specialists.models import Specialist
 
 from . import google_calendar
 from .forms import BookingForm
 from .models import Booking
-from .services import SLOT_LOOKAHEAD_DAYS, get_session_duration_minutes, get_slots_for_date
+from .services import (
+    SLOT_LOOKAHEAD_DAYS,
+    get_session_duration_minutes,
+    get_session_price,
+    get_slots_for_date,
+)
 
 
 class BookingCreateView(LoginRequiredMixin, View):
@@ -36,7 +42,9 @@ class BookingCreateView(LoginRequiredMixin, View):
         return {
             "specialist": specialist,
             "selected_date": selected_date,
-            "date_options": [timezone.localdate() + timedelta(days=i) for i in range(SLOT_LOOKAHEAD_DAYS)],
+            "date_options": [
+                timezone.localdate() + timedelta(days=i) for i in range(SLOT_LOOKAHEAD_DAYS)
+            ],
             "slots": slots,
             "form": form,
         }
@@ -50,7 +58,9 @@ class BookingCreateView(LoginRequiredMixin, View):
             initial={"date": selected_date, "contact_phone": request.user.phone or ""},
             available_slots=slots,
         )
-        return render(request, self.template_name, self.build_context(specialist, selected_date, slots, form))
+        return render(
+            request, self.template_name, self.build_context(specialist, selected_date, slots, form)
+        )
 
     def post(self, request, specialist_pk):
         specialist = self.get_specialist()
@@ -60,7 +70,9 @@ class BookingCreateView(LoginRequiredMixin, View):
         form = BookingForm(request.POST, available_slots=slots)
 
         if form.is_valid():
-            naive_start = datetime.strptime(form.cleaned_data["time_slot"], "%Y-%m-%dT%H:%M")  # noqa: DTZ007 — localized on the next line
+            naive_start = datetime.strptime(  # noqa: DTZ007 — localized on the next line
+                form.cleaned_data["time_slot"], "%Y-%m-%dT%H:%M"
+            )
             start = timezone.make_aware(naive_start)
             end = start + timedelta(minutes=duration)
             # Re-check right before creating — someone else may have booked
@@ -83,17 +95,19 @@ class BookingCreateView(LoginRequiredMixin, View):
                     contact_phone=form.cleaned_data["contact_phone"],
                     notes=form.cleaned_data["notes"],
                 )
-                meet_link, event_id = google_calendar.create_meeting_for_booking(booking)
-                if meet_link:
-                    booking.meeting_link = meet_link
-                    booking.calendar_event_id = event_id
-                    booking.save(update_fields=["meeting_link", "calendar_event_id"])
-                notify_booking_created(booking)
-                messages.success(request, _("تم إرسال طلب الحجز بنجاح."))
-                return redirect("bookings:detail", pk=booking.pk)
+                # No calendar event yet — that's created once payment is
+                # confirmed (apps.bookings.services.confirm_bookings_from_paid_order),
+                # so unpaid/abandoned bookings never clutter the specialist's
+                # calendar with a session that may never happen.
+                notify_booking_created_task.delay(booking.pk)
+                order = create_order_for_item(request.user, booking, get_session_price(specialist))
+                messages.success(request, _("تم إرسال طلب الحجز — أكمل الدفع لتأكيد موعدك."))
+                return redirect("payments:checkout", order_id=order.pk)
 
         slots = get_slots_for_date(specialist, selected_date, duration)
-        return render(request, self.template_name, self.build_context(specialist, selected_date, slots, form))
+        return render(
+            request, self.template_name, self.build_context(specialist, selected_date, slots, form)
+        )
 
 
 class BookingDetailView(LoginRequiredMixin, DetailView):
@@ -123,10 +137,12 @@ class BookingCancelView(LoginRequiredMixin, View):
             booking.cancelled_at = timezone.now()
             booking.cancelled_by = request.user
             booking.cancellation_reason = request.POST.get("reason", "")
-            booking.save(update_fields=["status", "cancelled_at", "cancelled_by", "cancellation_reason"])
+            booking.save(
+                update_fields=["status", "cancelled_at", "cancelled_by", "cancellation_reason"]
+            )
             if booking.calendar_event_id:
                 google_calendar.delete_event(booking.calendar_event_id)
-            notify_booking_cancelled(booking)
+            notify_booking_cancelled_task.delay(booking.pk)
             messages.success(request, _("تم إلغاء الحجز."))
         else:
             messages.error(request, _("لا يمكن إلغاء هذا الحجز."))

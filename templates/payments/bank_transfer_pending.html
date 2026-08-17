@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "بانتظار تأكيد التحويل" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/payments.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container bank-transfer-page">
+  <h1>{% trans "طلبك قيد الانتظار" %}</h1>
+  <p class="bank-transfer-page__lead">{% trans "حوّل مبلغ الطلب إلى الحساب البنكي التالي، وسيقوم فريقنا بتأكيد طلبك خلال يوم عمل من استلام التحويل." %}</p>
+
+  <div class="bank-details-box">
+    <div class="bank-details-box__row"><span>{% trans "البنك" %}</span><strong>{{ BANK_TRANSFER_BANK_NAME }}</strong></div>
+    <div class="bank-details-box__row"><span>{% trans "اسم الحساب" %}</span><strong>{{ BANK_TRANSFER_ACCOUNT_NAME }}</strong></div>
+    <div class="bank-details-box__row"><span>{% trans "رقم الحساب" %}</span><strong>{{ BANK_TRANSFER_ACCOUNT_NUMBER }}</strong></div>
+    <div class="bank-details-box__row"><span>{% trans "الآيبان (IBAN)" %}</span><strong>{{ BANK_TRANSFER_IBAN }}</strong></div>
+    <div class="bank-details-box__row bank-details-box__row--amount"><span>{% trans "المبلغ المطلوب" %}</span><strong>{% blocktrans with total=order.total %}{{ total }} ج.م{% endblocktrans %}</strong></div>
+  </div>
+
+  <p class="bank-transfer-page__note">{% trans "برجاء إرسال صورة إيصال التحويل مع رقم الطلب إلى فريق الدعم لتسريع التأكيد." %} {% blocktrans with pk=order.pk %}رقم الطلب: {{ pk }}{% endblocktrans %}</p>
+
+  <div class="bank-transfer-page__actions">
+    <a href="{% url 'support:home' %}" class="btn btn-outline">{% trans "تواصل مع الدعم" %}</a>
+    <a href="{% url 'dashboard:orders' %}" class="btn btn-primary">{% trans "الذهاب إلى طلباتي" %}</a>
+  </div>
+</div>
+{% endblock %}

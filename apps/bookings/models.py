@@ -74,7 +74,11 @@ class Booking(TimeStampedModel):
         ordering = ["-scheduled_start"]
 
     def __str__(self):
-        return f"Booking<{self.client_id}->{self.specialist_id}>"
+        # Shows up as-is in Django admin dropdowns/inlines and, via
+        # OrderItem's generic relation, on invoices/order summaries — so
+        # this needs to read like a line-item description, not a debug repr.
+        specialist_name = self.specialist.full_name_ar or self.specialist.full_name_en
+        return f"جلسة استشارية مع {specialist_name} — {self.scheduled_start:%Y-%m-%d %H:%M}"
 
     def is_within_free_cancellation_window(self):
         return timezone.now() <= self.scheduled_start - FREE_CANCELLATION_WINDOW

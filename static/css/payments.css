@@ -1,0 +1,179 @@
+.checkout-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+}
+
+.checkout-page__failed-banner {
+  max-width: 640px;
+}
+
+.checkout-page__failure-reason {
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+  opacity: 0.85;
+}
+
+.checkout-page__label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.9rem;
+}
+
+.checkout-page__note {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin-top: 0.75rem;
+}
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 3rem;
+}
+
+.payment-method-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.75rem;
+}
+
+.payment-method-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.payment-method-option:has(input:checked) {
+  border-color: var(--color-primary);
+  background: var(--color-bg-lavender-2);
+}
+
+.payment-method-option.is-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.payment-method-option__note {
+  margin-inline-start: auto;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+/* Order summary */
+.order-summary-box {
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 1.4rem;
+  height: fit-content;
+}
+
+.order-summary-box__title {
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.order-summary-box__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.order-summary-box__row--total {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-text);
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--color-border);
+  margin-bottom: 1.1rem;
+}
+
+.order-summary-box__refund-note {
+  background: var(--color-bg-lavender-1);
+  border-radius: 10px;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-bottom: 1.1rem;
+}
+
+.order-summary-box__cta {
+  width: 100%;
+  padding: 0.9rem;
+  font-size: 0.95rem;
+  margin-bottom: 0.6rem;
+}
+
+.order-summary-box__secure-note {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .checkout-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Bank transfer pending page */
+.bank-transfer-page {
+  max-width: 560px;
+  margin: 0 auto;
+  padding-top: 2.5rem;
+  padding-bottom: 4rem;
+}
+
+.bank-transfer-page__lead {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.bank-details-box {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.bank-details-box__row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  font-size: 0.88rem;
+  border-bottom: 1px solid var(--color-bg-lavender-1);
+}
+
+.bank-details-box__row:last-child {
+  border-bottom: none;
+}
+
+.bank-details-box__row--amount {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-accent-dark);
+}
+
+.bank-transfer-page__note {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.75rem;
+}
+
+.bank-transfer-page__actions {
+  display: flex;
+  gap: 1rem;
+}

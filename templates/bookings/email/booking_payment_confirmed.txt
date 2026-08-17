@@ -1,0 +1,11 @@
+{% load i18n %}{% trans "مرحبًا" %} {{ booking.client.first_name|default:booking.client.email }}،
+
+{% blocktrans with specialist=booking.specialist.full_name_ar %}تم تأكيد حجزك مع {{ specialist }} بعد إتمام الدفع بنجاح.{% endblocktrans %}
+
+{% trans "الموعد" %}: {{ booking.scheduled_start|date:"l j F Y" }} — {{ booking.scheduled_start|time:"H:i" }} {% trans "إلى" %} {{ booking.scheduled_end|time:"H:i" }}
+{% if booking.meeting_link %}
+{% trans "رابط الجلسة (Google Meet)" %}: {{ booking.meeting_link }}
+{% endif %}
+{% trans "يمكنك إلغاء الحجز مجانًا حتى 24 ساعة قبل الموعد." %}
+
+{% trans "فريق احتواء" %}
