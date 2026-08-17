@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "اطرح سؤالاً" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forum.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container forum-ask-page">
+  <a href="{% url 'forum:list' %}" class="course-back-link">{% trans "→ رجوع للمنتدى" %}</a>
+  <h1>{% trans "اطرح سؤالاً" %}</h1>
+
+  <form method="post" class="forum-ask-form">
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="alert alert-error">{{ form.non_field_errors.0 }}</div>{% endif %}
+    <div class="form-field">
+      <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+      {{ form.title }}
+      {% if form.title.errors %}<div class="alert alert-error">{{ form.title.errors.0 }}</div>{% endif %}
+    </div>
+    <div class="form-field">
+      <label for="{{ form.body.id_for_label }}">{{ form.body.label }}</label>
+      {{ form.body }}
+      {% if form.body.errors %}<div class="alert alert-error">{{ form.body.errors.0 }}</div>{% endif %}
+    </div>
+    <div class="form-field">
+      <label for="{{ form.tags.id_for_label }}">{{ form.tags.label }}</label>
+      {{ form.tags }}
+    </div>
+    <button type="submit" class="btn btn-primary">{% trans "نشر السؤال" %}</button>
+  </form>
+</div>
+{% endblock %}

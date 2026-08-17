@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{{ question.title }} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forum.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container forum-detail">
+  <div class="forum-detail__grid">
+    <div class="forum-detail__main">
+      <p class="forum-detail__meta">{% blocktrans with duration=question.created_at|timesince %}سُئل منذ {{ duration }}{% endblocktrans %} · {% blocktrans with count=question.views_count %}{{ count }} مشاهدة{% endblocktrans %}</p>
+      <h1>{{ question.title }}</h1>
+      <p class="forum-detail__body">{{ question.body|linebreaksbr }}</p>
+      {% if question.tags.all %}
+      <div class="tag-pills">
+        {% for tag in question.tags.all %}<span class="tag-pill">{{ tag.name }}</span>{% endfor %}
+      </div>
+      {% endif %}
+
+      {% if user.is_authenticated %}
+      <details class="report-disclosure">
+        <summary>{% trans "إبلاغ عن هذا السؤال" %}</summary>
+        <form method="post" action="{% url 'forum:report-question' question.pk %}">
+          {% csrf_token %}
+          <textarea name="reason" rows="2" placeholder="{% trans 'سبب الإبلاغ (اختياري)' %}"></textarea>
+          <button type="submit" class="btn btn-outline">{% trans "إرسال البلاغ" %}</button>
+        </form>
+      </details>
+      {% endif %}
+
+      <h2 class="forum-detail__answers-title">{% blocktrans count count=answers|length %}الإجابات ({{ count }}){% plural %}الإجابات ({{ count }}){% endblocktrans %}</h2>
+
+      {% for answer in answers %}
+      <div class="answer-card">
+        <div class="answer-card__head">
+          {% if answer.author.profile.avatar %}
+          <img src="{{ answer.author.profile.avatar.url }}" alt="{{ answer.author.first_name }}">
+          {% else %}
+          <span class="answer-card__avatar-placeholder">{{ answer.author.specialist_profile.full_name_ar|default:answer.author.first_name|default:answer.author.email|first }}</span>
+          {% endif %}
+          <span class="answer-card__author">{{ answer.author.specialist_profile.full_name_ar|default:answer.author.first_name|default:answer.author.email }}</span>
+          {% if answer.author.specialist_profile and answer.author.specialist_profile.status == "approved" %}
+          <span class="badge badge--role">{% trans "أخصائي" %}</span>
+          {% else %}
+          <span class="badge badge--role badge--role-member">{% trans "عضو" %}</span>
+          {% endif %}
+          {% if answer.is_accepted %}
+          <span class="badge badge--success">{% trans "أفضل إجابة" %}</span>
+          {% endif %}
+        </div>
+        <p class="answer-card__body">{{ answer.body|linebreaksbr }}</p>
+        <div class="answer-card__footer">
+          <span>{% blocktrans with duration=answer.created_at|timesince %}منذ {{ duration }}{% endblocktrans %} · {% blocktrans count count=answer.helpful_count %}{{ count }} وجد هذا مفيداً{% plural %}{{ count }} وجدوا هذا مفيداً{% endblocktrans %}</span>
+          {% if user.is_authenticated %}
+          <form method="post" action="{% url 'forum:toggle-helpful' answer.pk %}" class="answer-card__inline-form">
+            {% csrf_token %}
+            <button type="submit" class="link-btn{% if answer.user_found_helpful %} is-active{% endif %}">{% trans "وجدت هذا مفيداً" %}</button>
+          </form>
+          {% if question.author_id == user.id and not answer.is_accepted %}
+          <form method="post" action="{% url 'forum:accept-answer' answer.pk %}" class="answer-card__inline-form">
+            {% csrf_token %}
+            <button type="submit" class="link-btn">{% trans "اعتماد كأفضل إجابة" %}</button>
+          </form>
+          {% endif %}
+          <details class="report-disclosure report-disclosure--inline">
+            <summary>{% trans "إبلاغ" %}</summary>
+            <form method="post" action="{% url 'forum:report-answer' answer.pk %}">
+              {% csrf_token %}
+              <textarea name="reason" rows="2" placeholder="{% trans 'سبب الإبلاغ (اختياري)' %}"></textarea>
+              <button type="submit" class="btn btn-outline">{% trans "إرسال البلاغ" %}</button>
+            </form>
+          </details>
+          {% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <p class="forum-detail__empty-note">{% trans "لا توجد إجابات بعد — كن أول من يجيب." %}</p>
+      {% endfor %}
+
+      {% if user.is_authenticated %}
+      <form method="post" action="{% url 'forum:answer' question.pk %}" class="forum-answer-form">
+        {% csrf_token %}
+        {{ answer_form.body }}
+        <button type="submit" class="btn btn-primary">{% trans "نشر الإجابة" %}</button>
+      </form>
+      {% else %}
+      <p class="forum-detail__login-note"><a href="{% url 'accounts:login' %}?next={{ request.path|urlencode }}">{% trans "سجّل الدخول" %}</a> {% trans "للمشاركة بإجابة." %}</p>
+      {% endif %}
+    </div>
+
+    <div class="forum-detail__sidebar">
+      <div class="related-questions-box">
+        <div class="related-questions-box__title">{% trans "أسئلة ذات صلة" %}</div>
+        {% if related_questions %}
+        <div class="related-questions-box__list">
+          {% for related in related_questions %}
+          <a href="{% url 'forum:detail' related.pk %}">{{ related.title }}</a>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="forum-detail__empty-note">{% trans "لا توجد أسئلة ذات صلة حالياً." %}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% load i18n %}تذكرة دعم جديدة
+
+من: {{ ticket.full_name }} ({{ ticket.email }})
+{% if ticket.category %}التصنيف: {{ ticket.category.name }}
+{% endif %}الموضوع: {{ ticket.subject }}
+
+{{ ticket.body }}
+
+{% if ticket.attachment %}مرفق: {{ ticket.attachment.url }}
+{% endif %}
+رقم التذكرة: {{ ticket.pk }}

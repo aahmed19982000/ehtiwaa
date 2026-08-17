@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "مركز المساعدة" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/support.css' %}">
+{% endblock %}
+{% block content %}
+<div class="support-hero">
+  <h1>{% trans "كيف نقدر نساعدك؟" %}</h1>
+  <div class="support-search" data-support-search>
+    <input type="search" placeholder="{% trans 'ابحث عن سؤالك... (مثال: كيف ألغي حجز جلسة)' %}" data-support-search-input autocomplete="off">
+    <div class="support-search__results" data-support-search-results hidden></div>
+  </div>
+</div>
+
+<div class="page-container support-body">
+  <h2>{% trans "تصفّح حسب التصنيف" %}</h2>
+  {% if categories %}
+  <div class="category-grid">
+    {% for category in categories %}
+    <a href="{% url 'support:category' category.slug %}" class="category-card">
+      <span class="category-card__icon">{{ category.icon|default:category.name|first }}</span>
+      <div>
+        <div class="category-card__title">{{ category.name }}</div>
+        <div class="category-card__count">{% blocktrans count count=category.articles_count %}{{ count }} مقالة{% plural %}{{ count }} مقالات{% endblocktrans %}</div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if faqs %}
+  <h2>{% trans "الأسئلة الأكثر شيوعاً" %}</h2>
+  <div class="faq-accordion">
+    {% for faq in faqs %}
+    <details class="faq-item" id="faq-{{ faq.pk }}">
+      <summary>{{ faq.question }}</summary>
+      <p>{{ faq.answer }}</p>
+    </details>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <h2>{% trans "لسه محتاج مساعدة؟" %}</h2>
+  <div class="support-help-grid">
+    <form method="post" action="{% url 'support:ticket-create' %}" enctype="multipart/form-data" id="ticket-form" class="ticket-form">
+      {% csrf_token %}
+      <div class="field-row">
+        <div class="form-field">
+          <label for="{{ ticket_form.full_name.id_for_label }}">{{ ticket_form.full_name.label }}</label>
+          {{ ticket_form.full_name }}
+        </div>
+        <div class="form-field">
+          <label for="{{ ticket_form.email.id_for_label }}">{{ ticket_form.email.label }}</label>
+          {{ ticket_form.email }}
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="form-field">
+          <label for="{{ ticket_form.category.id_for_label }}">{{ ticket_form.category.label }}</label>
+          {{ ticket_form.category }}
+        </div>
+        <div class="form-field">
+          <label for="{{ ticket_form.subject.id_for_label }}">{{ ticket_form.subject.label }}</label>
+          {{ ticket_form.subject }}
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="{{ ticket_form.body.id_for_label }}">{{ ticket_form.body.label }}</label>
+        {{ ticket_form.body }}
+      </div>
+      <div class="form-field">
+        <label for="{{ ticket_form.attachment.id_for_label }}">{{ ticket_form.attachment.label }}</label>
+        {{ ticket_form.attachment }}
+      </div>
+      <button type="submit" class="btn btn-accent">{% trans "إرسال التذكرة" %}</button>
+      <p class="ticket-form__note">{% trans "بنرد خلال 24 ساعة في أيام العمل." %}</p>
+    </form>
+
+    <div class="contact-cards">
+      {% if whatsapp_url %}
+      <a href="{{ whatsapp_url }}" target="_blank" rel="noopener" class="contact-card">
+        <span class="contact-card__icon contact-card__icon--whatsapp">و</span>
+        <div><div class="contact-card__title">{% trans "واتساب" %}</div><div class="contact-card__subtitle">{% trans "تواصل مباشر خلال ساعات العمل" %}</div></div>
+      </a>
+      {% endif %}
+      <a href="mailto:{{ SUPPORT_TEAM_EMAIL }}" class="contact-card">
+        <span class="contact-card__icon contact-card__icon--email">@</span>
+        <div><div class="contact-card__title">{{ SUPPORT_TEAM_EMAIL }}</div><div class="contact-card__subtitle">{% trans "بريد الدعم" %}</div></div>
+      </a>
+      <div class="contact-card">
+        <span class="contact-card__icon contact-card__icon--hours">⏱</span>
+        <div><div class="contact-card__title">{% trans "ساعات العمل" %}</div><div class="contact-card__subtitle">{% trans "الأحد - الخميس، 9ص - 6م" %}</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<a href="{{ whatsapp_url|default:'#ticket-form' }}" {% if whatsapp_url %}target="_blank" rel="noopener"{% endif %} class="floating-chat-btn" aria-label="{% trans "تواصل معنا" %}">💬</a>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/support.js' %}"></script>
+{% endblock %}

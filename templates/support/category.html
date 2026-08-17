@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{{ category.name }} — {% trans "مركز المساعدة" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/support.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container support-category-page">
+  <a href="{% url 'support:home' %}" class="course-back-link">{% trans "→ رجوع لمركز المساعدة" %}</a>
+  <h1>{{ category.name }}</h1>
+
+  {% if articles %}
+  <div class="kb-article-list">
+    {% for article in articles %}
+    <div class="kb-article-card">
+      <h3>{{ article.title }}</h3>
+      {% if article.body %}<p>{{ article.body|truncatewords:40 }}</p>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <p>{% trans "لا توجد مقالات في هذا التصنيف بعد." %}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

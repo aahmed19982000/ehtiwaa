@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "المنتدى المجتمعي" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forum.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container forum-list-page">
+  <div class="forum-list-page__header">
+    <div>
+      <h1>{% trans "المنتدى المجتمعي" %}</h1>
+      <p class="forum-list-page__subtitle">{% trans "اسأل، وشارك إجابتك مع أعضاء المجتمع والأخصائيين." %}</p>
+    </div>
+    <a href="{% url 'forum:ask' %}" class="btn btn-accent">{% trans "اطرح سؤالاً" %}</a>
+  </div>
+
+  <form method="get" class="forum-search-form">
+    <input type="search" name="q" value="{{ query }}" placeholder="{% trans 'ابحث في الأسئلة...' %}">
+    <button type="submit" class="btn btn-outline">{% trans "بحث" %}</button>
+  </form>
+
+  {% if tags %}
+  <div class="topic-chips">
+    <a href="{% url 'forum:list' %}" class="topic-chip{% if not active_tag %} is-active{% endif %}">{% trans "الكل" %}</a>
+    {% for tag in tags %}
+    <a href="?tag={{ tag.slug }}" class="topic-chip{% if active_tag == tag.slug %} is-active{% endif %}">{{ tag.name }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if questions %}
+  <div class="question-list">
+    {% for question in questions %}
+    <a href="{% url 'forum:detail' question.pk %}" class="question-card">
+      <h3>{{ question.title }}</h3>
+      <p class="question-card__snippet">{{ question.body|truncatewords:28 }}</p>
+      <div class="question-card__footer">
+        {% for tag in question.tags.all %}<span class="badge badge--tag">{{ tag.name }}</span>{% endfor %}
+        <span class="question-card__meta">{% blocktrans count count=question.answers_count %}{{ count }} إجابة{% plural %}{{ count }} إجابات{% endblocktrans %} · {% blocktrans with duration=question.created_at|timesince %}منذ {{ duration }}{% endblocktrans %}</span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+  {% if is_paginated %}
+  <div class="pagination">
+    {% if page_obj.has_previous %}
+    <a class="pagination__link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_tag %}&tag={{ active_tag }}{% endif %}">{% trans "السابق" %}</a>
+    {% endif %}
+    <span class="pagination__status">{% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}صفحة {{ current }} من {{ total }}{% endblocktrans %}</span>
+    {% if page_obj.has_next %}
+    <a class="pagination__link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_tag %}&tag={{ active_tag }}{% endif %}">{% trans "التالي" %}</a>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% else %}
+  <div class="empty-state">
+    <p>{% trans "لا توجد أسئلة مطابقة حالياً." %}</p>
+    <a href="{% url 'forum:ask' %}" class="btn btn-primary">{% trans "كن أول من يسأل" %}</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
