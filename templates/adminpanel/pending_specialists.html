@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "طلبات انضمام الأخصائيين" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/adminpanel.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container adminpanel-page">
+  <h1>{% trans "طلبات انضمام الأخصائيين" %}</h1>
+  <p class="adminpanel-page__subtitle">{% blocktrans count count=specialists|length %}{{ count }} طلب بانتظار المراجعة{% plural %}{{ count }} طلبات بانتظار المراجعة{% endblocktrans %}</p>
+
+  {% if specialists %}
+  <div class="review-card-list">
+    {% for specialist in specialists %}
+    <div class="review-card">
+      <div class="review-card__head">
+        <div>
+          <h2>{{ specialist.get_title_display }} {{ specialist.full_name_ar|default:specialist.full_name_en }}</h2>
+          <p class="review-card__meta">{{ specialist.user.email }} · {{ specialist.get_category_display }} · {% blocktrans with duration=specialist.created_at|timesince %}منذ {{ duration }}{% endblocktrans %}</p>
+        </div>
+      </div>
+
+      {% if specialist.headline %}<p class="review-card__headline">{{ specialist.headline }}</p>{% endif %}
+      {% if specialist.about %}<p class="review-card__about">{{ specialist.about|linebreaksbr }}</p>{% endif %}
+
+      <dl class="review-card__facts">
+        <div><dt>{% trans "سنوات الخبرة" %}</dt><dd>{{ specialist.years_of_experience }}</dd></div>
+        {% if specialist.license_number %}<div><dt>{% trans "رقم الترخيص" %}</dt><dd>{{ specialist.license_number }}</dd></div>{% endif %}
+        {% if specialist.get_languages_display %}
+        <div><dt>{% trans "اللغات" %}</dt><dd>{% for label in specialist.get_languages_display %}{{ label }}{% if not forloop.last %}، {% endif %}{% endfor %}</dd></div>
+        {% endif %}
+      </dl>
+
+      {% if specialist.credential_documents.all %}
+      <div class="review-card__documents">
+        <div class="review-card__documents-title">{% trans "المستندات المرفقة" %}</div>
+        <ul>
+          {% for document in specialist.credential_documents.all %}
+          <li><a href="{{ document.file.url }}" target="_blank" rel="noopener">{{ document.label }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% else %}
+      <p class="review-card__no-documents">{% trans "لا توجد مستندات مرفقة بعد." %}</p>
+      {% endif %}
+
+      <div class="review-card__actions">
+        <form method="post" action="{% url 'adminpanel:specialist-approve' specialist.pk %}" class="review-card__decision-form">
+          {% csrf_token %}
+          <textarea name="notes" rows="2" placeholder="{% trans 'ملاحظات (اختياري)' %}"></textarea>
+          <button type="submit" class="btn btn-primary">{% trans "قبول" %}</button>
+        </form>
+        <form method="post" action="{% url 'adminpanel:specialist-reject' specialist.pk %}" class="review-card__decision-form">
+          {% csrf_token %}
+          <textarea name="notes" rows="2" placeholder="{% trans 'سبب الرفض (يظهر للأخصائي)' %}"></textarea>
+          <button type="submit" class="btn btn-outline review-card__reject-btn">{% trans "رفض" %}</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <p>{% trans "لا توجد طلبات بانتظار المراجعة حاليًا." %}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

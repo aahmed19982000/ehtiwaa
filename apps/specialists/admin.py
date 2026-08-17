@@ -27,9 +27,11 @@ class EducationInline(admin.TabularInline):
 
 @admin.register(Specialist)
 class SpecialistAdmin(admin.ModelAdmin):
-    """Approving specialists (and, until the reviews/bookings apps exist,
-    setting average_rating/next_available_date for the directory) happens
-    here — the report defers a dedicated admin panel to a later phase."""
+    """Approving specialists happens here — the report defers a dedicated
+    admin panel to a later phase. average_rating/reviews_count are normally
+    recomputed automatically by apps.reviews (kept editable here only as a
+    manual override); next_available_date has no availability engine
+    feeding it yet, so it stays admin-set."""
 
     list_display = [
         "full_name_ar",

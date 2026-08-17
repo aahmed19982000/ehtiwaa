@@ -1,0 +1,121 @@
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--color-text-muted);
+}
+
+.adminpanel-page__subtitle {
+  color: var(--color-text-muted);
+  margin-bottom: 1.75rem;
+}
+
+.review-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.review-card {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  background: #fff;
+}
+
+.review-card__head h2 {
+  margin: 0 0 0.3rem;
+  font-size: 1.1rem;
+}
+
+.review-card__meta {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0 0 1rem;
+}
+
+.review-card__headline {
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.review-card__about {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.8;
+  margin: 0 0 1rem;
+}
+
+.review-card__facts {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+}
+
+.review-card__facts dt {
+  color: var(--color-text-muted);
+  display: inline;
+}
+
+.review-card__facts dd {
+  display: inline;
+  margin: 0 0 0 0.3rem;
+  font-weight: 600;
+}
+
+.review-card__documents {
+  margin-bottom: 1.25rem;
+}
+
+.review-card__documents-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.review-card__documents ul {
+  margin: 0;
+  padding-inline-start: 1.25rem;
+  font-size: 0.85rem;
+}
+
+.review-card__no-documents {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.review-card__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.review-card__decision-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.review-card__decision-form textarea {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-family: var(--font-family-base);
+  font-size: 0.85rem;
+  resize: vertical;
+}
+
+.review-card__reject-btn {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+@media (max-width: 640px) {
+  .review-card__actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
