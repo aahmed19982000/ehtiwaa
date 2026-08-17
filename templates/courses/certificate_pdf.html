@@ -1,0 +1,57 @@
+{% load i18n %}<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  html, body {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", "DejaVu Sans", sans-serif;
+    color: #1F1B29;
+    background: #FAF9FB;
+  }
+  .certificate {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 48px;
+    border: 10px solid #3A1078;
+    outline: 2px solid #FF8A00;
+    outline-offset: -22px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .meta {
+    margin-top: auto;
+  }
+  .brand { font-size: 20px; font-weight: 700; color: #3A1078; letter-spacing: 1px; }
+  .kicker { margin-top: 36px; font-size: 15px; color: #6B667A; }
+  .title { margin: 10px 0 30px; font-size: 34px; font-weight: 800; color: #3A1078; }
+  .lead { font-size: 15px; color: #6B667A; }
+  .student-name { margin: 12px 0 22px; font-size: 28px; font-weight: 800; }
+  .course-lead { font-size: 15px; color: #6B667A; }
+  .course-title { margin: 10px 0 30px; font-size: 22px; font-weight: 700; color: #B85F00; }
+  .meta { margin-top: 44px; display: flex; justify-content: space-between; font-size: 12px; color: #6B667A; }
+</style>
+</head>
+<body>
+  <div class="certificate">
+    <div class="brand">{% trans "منصّة احتواء" %}</div>
+    <div class="kicker">{% trans "هذه الشهادة تؤكد أن" %}</div>
+    <div class="title">{% trans "شهادة إتمام دورة" %}</div>
+    <div class="lead">{% trans "الطالب/ة" %}</div>
+    <div class="student-name">{{ enrollment.user.get_full_name|default:enrollment.user.email }}</div>
+    <div class="course-lead">{% trans "أتمّ/ت بنجاح دورة" %}</div>
+    <div class="course-title">{{ enrollment.course.title }}</div>
+    <div class="meta">
+      <span>{% trans "رقم الشهادة" %}: {{ certificate_number }}</span>
+      <span>{% trans "تاريخ الإصدار" %}: {{ enrollment.completed_at|date:"j F Y" }}</span>
+    </div>
+  </div>
+</body>
+</html>

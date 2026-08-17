@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{{ course.title }} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/courses.css' %}">
+<link rel="stylesheet" href="{% static 'css/reviews.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container course-detail">
+  <div class="course-detail__breadcrumb">
+    <a href="{% url 'courses:list' %}">{% trans "الدورات" %}</a>{% if course.category %} / {{ course.category }}{% endif %}
+  </div>
+
+  <div class="course-detail__grid">
+    <div class="course-detail__main">
+      <h1 class="course-detail__title">{{ course.title }}</h1>
+
+      <div class="course-detail__author-row">
+        {% if course.instructor %}
+        <div class="course-detail__author">
+          {% if course.instructor.user.profile.avatar %}
+          <img src="{{ course.instructor.user.profile.avatar.url }}" alt="{{ course.instructor.full_name_ar }}">
+          {% endif %}
+          <span>{{ course.instructor.full_name_ar|default:course.instructor.full_name_en }}</span>
+        </div>
+        {% endif %}
+        {% if course.average_rating %}
+        <span class="rating-badge">★ {{ course.average_rating }} {% blocktrans with count=course.reviews_count %}({{ count }} تقييم){% endblocktrans %}</span>
+        {% endif %}
+      </div>
+
+      {% if enrollment %}
+      <div class="course-progress">
+        <div class="course-progress__bar"><span style="width:{{ enrollment.progress_percent }}%"></span></div>
+        <p class="course-progress__label">{% blocktrans with percent=enrollment.progress_percent %}تقدّمك: {{ percent }}%{% endblocktrans %}</p>
+      </div>
+      {% endif %}
+
+      {% if course.cover_image %}
+      <div class="course-detail__cover">
+        <img src="{{ course.cover_image.url }}" alt="{{ course.title }}">
+      </div>
+      {% endif %}
+
+      <div class="course-tabs" data-course-tabs>
+        <button type="button" class="course-tabs__tab is-active" data-course-tab="overview">{% trans "نظرة عامة" %}</button>
+        <button type="button" class="course-tabs__tab" data-course-tab="content">{% trans "المحتوى" %}</button>
+        <button type="button" class="course-tabs__tab" data-course-tab="reviews">{% trans "التقييمات" %}</button>
+      </div>
+
+      <div class="course-tab-panel is-active" data-course-panel="overview">
+        {% if course.description %}<p class="course-detail__description">{{ course.description|linebreaksbr }}</p>{% endif %}
+        {% if course.learning_outcomes %}
+        <h2>{% trans "ماذا ستتعلم" %}</h2>
+        <div class="learn-grid">
+          {% for outcome in course.learning_outcomes %}
+          <div class="learn-grid__item"><span>✓</span>{{ outcome }}</div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="course-tab-panel" data-course-panel="content">
+        {% for module in modules %}
+        <div class="curriculum-module">
+          <div class="curriculum-module__header">
+            <span>{{ module.title }}</span>
+            {% if module.is_free_preview %}<span class="badge badge--preview">{% trans "معاينة مجانية" %}</span>{% endif %}
+          </div>
+          {% for lesson in module.lessons.all %}
+          <div class="curriculum-lesson">
+            {% if lesson.locked %}
+            <span class="curriculum-lesson__title">{{ lesson.title }}</span>
+            {% else %}
+            <a class="curriculum-lesson__title" href="{% url 'courses:lesson' course.slug lesson.pk %}">{{ lesson.title }}</a>
+            {% endif %}
+            <span class="curriculum-lesson__meta">
+              {% if lesson.duration_minutes %}{% blocktrans with minutes=lesson.duration_minutes %}{{ minutes }} دقيقة{% endblocktrans %}{% endif %}
+              {% if lesson.locked %}<span class="badge badge--locked">{% trans "مقفل" %}</span>{% endif %}
+            </span>
+          </div>
+          {% endfor %}
+        </div>
+        {% empty %}
+        <p class="course-detail__empty-note">{% trans "لم تتم إضافة محتوى لهذه الدورة بعد." %}</p>
+        {% endfor %}
+      </div>
+
+      <div class="course-tab-panel" data-course-panel="reviews">
+        {% if user.is_authenticated %}
+        <div class="review-form-box">
+          <h3>{% trans "أضف تقييمك" %}</h3>
+          <form method="post" action="{% url 'reviews:course-review' course.pk %}">
+            {% csrf_token %}
+            <div class="rating-picker">
+              {% for value in "12345" %}
+              <label><input type="radio" name="rating" value="{{ value }}" required>★ {{ value }}</label>
+              {% endfor %}
+            </div>
+            <textarea name="comment" rows="3" placeholder="{% trans 'تعليقك (اختياري)' %}"></textarea>
+            <button type="submit" class="btn btn-primary">{% trans "إرسال التقييم" %}</button>
+          </form>
+        </div>
+        {% endif %}
+        {% if reviews %}
+        <div class="review-list">
+          {% for review in reviews %}
+          <div class="review-item">
+            <div class="review-item__head">
+              <strong>{{ review.user.first_name|default:review.user.email }}</strong>
+              <span class="rating-badge">★ {{ review.rating }}</span>
+            </div>
+            {% if review.comment %}<p>{{ review.comment }}</p>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="course-detail__empty-note">{% trans "لا توجد تقييمات بعد." %}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="course-detail__sidebar">
+      <div class="price-box">
+        <div class="price-box__amount">
+          <span class="price-box__current">{% blocktrans with price=course.price %}{{ price }} ج.م{% endblocktrans %}</span>
+          {% if course.original_price %}
+          <span class="price-box__original">{% blocktrans with price=course.original_price %}{{ price }} ج.م{% endblocktrans %}</span>
+          <span class="badge badge--discount">-{{ course.discount_percent }}%</span>
+          {% endif %}
+        </div>
+
+        {% if is_enrolled %}
+          {% if enrollment.completed_at %}
+          <a href="{% url 'courses:certificate' course.slug %}" class="btn btn-primary price-box__cta">{% trans "تحميل شهادة الإتمام" %}</a>
+          {% elif first_lesson %}
+          <a href="{% url 'courses:lesson' course.slug first_lesson.pk %}" class="btn btn-primary price-box__cta">{% trans "استمر في التعلم" %}</a>
+          {% endif %}
+        {% elif user.is_authenticated %}
+          <form method="post" action="{% url 'courses:checkout' course.slug %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary price-box__cta">{% trans "اشترِ الآن" %}</button>
+          </form>
+        {% else %}
+          <a href="{% url 'accounts:login' %}?next={{ request.path|urlencode }}" class="btn btn-primary price-box__cta">{% trans "سجّل الدخول للشراء" %}</a>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'dashboard:wishlist-toggle-course' course.pk %}" class="price-box__wishlist-form">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline price-box__cta">
+            {% if is_wishlisted %}{% trans "إزالة من المفضلة ★" %}{% else %}{% trans "أضف للمفضلة ☆" %}{% endif %}
+          </button>
+        </form>
+        {% endif %}
+
+        <div class="price-box__features">
+          <div><span>✓</span>{% trans "وصول مدى الحياة" %}</div>
+          <div><span>✓</span>{% trans "شهادة معتمدة" %}</div>
+          <div><span>✓</span>{% trans "دعم أثناء الدورة" %}</div>
+        </div>
+        <p class="price-box__note">{% trans "استرداد كامل خلال 7 أيام من الشراء" %}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/courses.js' %}"></script>
+{% endblock %}

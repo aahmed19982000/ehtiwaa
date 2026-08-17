@@ -1,0 +1,7 @@
+{% load i18n %}{% trans "مرحبًا" %} {{ enrollment.user.first_name|default:enrollment.user.email }}،
+
+{% blocktrans with course=enrollment.course.title %}أتممت دورة "{{ course }}" بنجاح — مبروك!{% endblocktrans %}
+
+{% trans "يمكنك تحميل شهادة الإتمام الآن من صفحة الدورة في لوحة المستخدم." %}
+
+{% trans "فريق احتواء" %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "الدورات التعليمية" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/courses.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container course-list-page">
+  <h1>{% trans "الدورات التعليمية" %}</h1>
+  <p class="course-list-page__subtitle">{% trans "دورات عملية بإشراف أخصائيين معتمدين، بمحتوى فيديو ومتابعة تقدّم وشهادة إتمام." %}</p>
+
+  {% if courses %}
+  <div class="course-grid">
+    {% for course in courses %}
+    <a href="{% url 'courses:detail' course.slug %}" class="course-card">
+      {% if course.cover_image %}
+      <img class="course-card__cover" src="{{ course.cover_image.url }}" alt="{{ course.title }}">
+      {% else %}
+      <span class="course-card__cover course-card__cover--placeholder">{{ course.title|first }}</span>
+      {% endif %}
+      <div class="course-card__body">
+        {% if course.category %}<p class="course-card__category">{{ course.category }}</p>{% endif %}
+        <h3>{{ course.title }}</h3>
+        {% if course.instructor %}
+        <p class="course-card__instructor">{{ course.instructor.full_name_ar|default:course.instructor.full_name_en }}</p>
+        {% endif %}
+        <div class="course-card__meta">
+          {% if course.average_rating %}<span class="rating-badge">★ {{ course.average_rating }}</span>{% endif %}
+          <span>{% blocktrans count count=course.total_lessons_count %}{{ count }} درس{% plural %}{{ count }} دروس{% endblocktrans %}</span>
+        </div>
+        <p class="course-card__price">
+          {% blocktrans with price=course.price %}{{ price }} ج.م{% endblocktrans %}
+          {% if course.original_price %}<span class="course-card__price-original">{% blocktrans with price=course.original_price %}{{ price }} ج.م{% endblocktrans %}</span>{% endif %}
+        </p>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+  {% if is_paginated %}
+  <div class="pagination">
+    {% if page_obj.has_previous %}
+    <a class="pagination__link" href="?page={{ page_obj.previous_page_number }}">{% trans "السابق" %}</a>
+    {% endif %}
+    <span class="pagination__status">{% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}صفحة {{ current }} من {{ total }}{% endblocktrans %}</span>
+    {% if page_obj.has_next %}
+    <a class="pagination__link" href="?page={{ page_obj.next_page_number }}">{% trans "التالي" %}</a>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% else %}
+  <div class="empty-state">
+    <p>{% trans "لسه معندناش دورات متاحة حاليًا." %}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

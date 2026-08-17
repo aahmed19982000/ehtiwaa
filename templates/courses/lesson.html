@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{{ lesson.title }} — {{ course.title }} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/courses.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container lesson-page">
+  <a href="{% url 'courses:detail' course.slug %}" class="course-back-link">{% trans "→ رجوع لتفاصيل الدورة" %}</a>
+
+  <div class="lesson-page__grid">
+    <aside class="lesson-page__sidebar">
+      <h2>{{ course.title }}</h2>
+      {% for module in modules %}
+      <div class="curriculum-module">
+        <div class="curriculum-module__header"><span>{{ module.title }}</span></div>
+        {% for l in module.lessons.all %}
+        <div class="curriculum-lesson{% if l.pk == lesson.pk %} is-current{% endif %}">
+          {% if l.locked %}
+          <span class="curriculum-lesson__title">{{ l.title }}</span>
+          {% else %}
+          <a class="curriculum-lesson__title" href="{% url 'courses:lesson' course.slug l.pk %}">{{ l.title }}</a>
+          {% endif %}
+          <span class="curriculum-lesson__meta">
+            {% if l.locked %}<span class="badge badge--locked">{% trans "مقفل" %}</span>{% endif %}
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </aside>
+
+    <div class="lesson-page__main">
+      <h1>{{ lesson.title }}</h1>
+
+      {% if accessible %}
+        {% if lesson.video_url %}
+        <div class="lesson-page__video">
+          <iframe src="{{ lesson.video_url }}" allowfullscreen loading="lazy"></iframe>
+        </div>
+        {% endif %}
+        {% if lesson.content %}
+        <div class="lesson-page__content">{{ lesson.content|linebreaksbr }}</div>
+        {% endif %}
+
+        {% if enrollment %}
+        <div class="lesson-page__actions">
+          {% if is_completed %}
+          <span class="badge badge--success">{% trans "تم إكمال هذا الدرس ✓" %}</span>
+          {% if next_lesson %}
+          <a href="{% url 'courses:lesson' course.slug next_lesson.pk %}" class="btn btn-outline">{% trans "الدرس التالي" %}</a>
+          {% endif %}
+          {% else %}
+          <form method="post" action="{% url 'courses:lesson-complete' course.slug lesson.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">{% trans "إكمال الدرس" %}</button>
+          </form>
+          {% endif %}
+        </div>
+        {% endif %}
+      {% else %}
+      <div class="empty-state">
+        <p>{% trans "هذا الدرس مقفل — أكمل الاشتراك في الدورة للوصول لهذا المحتوى." %}</p>
+        <a href="{% url 'courses:detail' course.slug %}" class="btn btn-primary">{% trans "الرجوع لصفحة الدورة" %}</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

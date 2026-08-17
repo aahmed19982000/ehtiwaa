@@ -1,0 +1,7 @@
+{% load i18n %}{% trans "مرحبًا" %} {{ enrollment.user.first_name|default:enrollment.user.email }}،
+
+{% blocktrans with course=enrollment.course.title %}تم تأكيد الدفع وتفعيل وصولك لدورة "{{ course }}" بنجاح.{% endblocktrans %}
+
+{% trans "يمكنك الآن مشاهدة محتوى الدورة والبدء في التعلّم من لوحة المستخدم." %}
+
+{% trans "فريق احتواء" %}
