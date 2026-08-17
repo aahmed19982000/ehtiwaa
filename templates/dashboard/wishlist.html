@@ -1,0 +1,29 @@
+{% extends "dashboard/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "المفضلة" %} — {% trans "احتواء" %}{% endblock %}
+{% block dashboard_title %}{% trans "المفضلة" %}{% endblock %}
+{% block dashboard_content %}
+{% if wishlist_items %}
+<div class="dashboard-list">
+  {% for item in wishlist_items %}
+  {% if item.content_object %}
+  <a
+    href="{% if item.content_type.model == 'course' %}{% url 'courses:detail' item.content_object.slug %}{% elif item.content_type.model == 'product' %}{% url 'store:detail' item.content_object.slug %}{% endif %}"
+    class="dashboard-row dashboard-row--link"
+  >
+    <div class="dashboard-row__info">
+      <div class="dashboard-row__title">{{ item.content_object }}</div>
+    </div>
+    <span class="dashboard-row__meta">
+      {% if item.content_type.model == 'course' %}{% trans "دورة" %}{% elif item.content_type.model == 'product' %}{% trans "منتج" %}{% endif %}
+    </span>
+  </a>
+  {% endif %}
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <p>{% trans "قائمة المفضلة فارغة — أضف دورات أو منتجات لتظهر هنا." %}</p>
+</div>
+{% endif %}
+{% endblock %}

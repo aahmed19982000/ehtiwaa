@@ -80,6 +80,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "apps.core.context_processors.language_urls",
+                "apps.store.context_processors.cart",
             ],
         },
     },
@@ -222,3 +223,38 @@ if EMAIL_HOST:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Paymob (Egyptian card payment gateway) — all blank by default. Checkout
+# falls back to bank-transfer-only until real merchant credentials are
+# supplied, same "unconfigured stub" pattern as the WhatsApp integration
+# elsewhere in this project (apps.notifications.services.send_whatsapp_stub).
+# See apps.payments.paymob.
+PAYMOB_BASE_URL = env("PAYMOB_BASE_URL", default="https://accept.paymob.com")
+PAYMOB_API_KEY = env("PAYMOB_API_KEY", default="")
+PAYMOB_INTEGRATION_ID = env("PAYMOB_INTEGRATION_ID", default="")
+PAYMOB_IFRAME_ID = env("PAYMOB_IFRAME_ID", default="")
+PAYMOB_HMAC_SECRET = env("PAYMOB_HMAC_SECRET", default="")
+
+# Bank transfer is a manual/offline payment method (matches the report's
+# payment methods list) — these placeholder values must be replaced with
+# the business's real account details before launch.
+BANK_TRANSFER_BANK_NAME = env("BANK_TRANSFER_BANK_NAME", default="اسم البنك (لم يُحدَّد بعد)")
+BANK_TRANSFER_ACCOUNT_NAME = env("BANK_TRANSFER_ACCOUNT_NAME", default="احتواء")
+BANK_TRANSFER_ACCOUNT_NUMBER = env("BANK_TRANSFER_ACCOUNT_NUMBER", default="—")
+BANK_TRANSFER_IBAN = env("BANK_TRANSFER_IBAN", default="—")
+
+# Celery — broker/backend both default to the local Redis instance used for
+# dev; override via env in staging/production.
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="redis://localhost:6379/0")
+CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default="redis://localhost:6379/0")
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = "Africa/Cairo"
+
+# Where new support tickets are announced — see apps.support.services.
+# No WhatsApp Business API provider configured yet (needs a real Meta
+# Business account), so SUPPORT_WHATSAPP_NUMBER is only used to label the
+# logged MessageLog stub until one is wired up.
+SUPPORT_TEAM_EMAIL = env("SUPPORT_TEAM_EMAIL", default="support@ehtiwaa.example")
+SUPPORT_WHATSAPP_NUMBER = env("SUPPORT_WHATSAPP_NUMBER", default="")

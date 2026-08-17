@@ -3,6 +3,7 @@
 {% block title %}{{ specialist.get_title_display }} {{ specialist.full_name_ar|default:specialist.full_name_en }} — {% trans "احتواء" %}{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/specialists.css' %}">
+<link rel="stylesheet" href="{% static 'css/reviews.css' %}">
 {% endblock %}
 {% block content %}
 <div class="page-container specialist-detail">
@@ -116,5 +117,39 @@
     </ul>
   </section>
   {% endif %}
+
+  <section class="specialist-detail__section">
+    <h2>{% trans "التقييمات" %}</h2>
+    {% if user.is_authenticated %}
+    <div class="review-form-box">
+      <h3>{% trans "أضف تقييمك" %}</h3>
+      <form method="post" action="{% url 'reviews:specialist-review' specialist.pk %}">
+        {% csrf_token %}
+        <div class="rating-picker">
+          {% for value in "12345" %}
+          <label><input type="radio" name="rating" value="{{ value }}" required>★ {{ value }}</label>
+          {% endfor %}
+        </div>
+        <textarea name="comment" rows="3" placeholder="{% trans 'تعليقك (اختياري)' %}"></textarea>
+        <button type="submit" class="btn btn-primary">{% trans "إرسال التقييم" %}</button>
+      </form>
+    </div>
+    {% endif %}
+    {% if reviews %}
+    <div class="review-list">
+      {% for review in reviews %}
+      <div class="review-item">
+        <div class="review-item__head">
+          <strong>{{ review.user.first_name|default:review.user.email }}</strong>
+          <span class="rating-badge">★ {{ review.rating }}</span>
+        </div>
+        {% if review.comment %}<p>{{ review.comment }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>{% trans "لا توجد تقييمات بعد." %}</p>
+    {% endif %}
+  </section>
 </div>
 {% endblock %}

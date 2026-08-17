@@ -1,0 +1,31 @@
+{% extends "dashboard/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "دوراتي" %} — {% trans "احتواء" %}{% endblock %}
+{% block dashboard_title %}{% trans "دوراتي" %}{% endblock %}
+{% block dashboard_content %}
+{% if enrollments %}
+<div class="dashboard-list">
+  {% for enrollment in enrollments %}
+  <a href="{% url 'courses:detail' enrollment.course.slug %}" class="dashboard-row dashboard-row--link">
+    <div class="dashboard-row__info">
+      {% if enrollment.course.cover_image %}
+      <img src="{{ enrollment.course.cover_image.url }}" alt="">
+      {% else %}
+      <span class="dashboard-row__avatar-placeholder">{{ enrollment.course.title|first }}</span>
+      {% endif %}
+      <div class="dashboard-row__course-info">
+        <div class="dashboard-row__title">{{ enrollment.course.title }}</div>
+        <div class="course-progress__bar"><span style="width:{{ enrollment.progress_percent }}%"></span></div>
+      </div>
+    </div>
+    <span class="dashboard-row__meta">{% blocktrans with percent=enrollment.progress_percent %}{{ percent }}%{% endblocktrans %}</span>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <p>{% trans "لسه معندكش دورات مسجَّل بها." %}</p>
+  <a href="{% url 'courses:list' %}" class="btn btn-primary">{% trans "تصفح الدورات" %}</a>
+</div>
+{% endif %}
+{% endblock %}

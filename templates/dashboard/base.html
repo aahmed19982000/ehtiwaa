@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container dashboard-page">
+  <div class="dashboard-grid">
+    <aside class="dashboard-sidebar">
+      <div class="dashboard-sidebar__user">
+        {% if user.profile.avatar %}
+        <img src="{{ user.profile.avatar.url }}" alt="{{ user.first_name }}">
+        {% else %}
+        <span class="dashboard-sidebar__avatar-placeholder">{{ user.first_name|first|default:user.email|first }}</span>
+        {% endif %}
+        <div>
+          <div class="dashboard-sidebar__name">{{ user.first_name|default:user.email }}</div>
+          <div class="dashboard-sidebar__email">{{ user.email }}</div>
+        </div>
+      </div>
+      <nav class="dashboard-nav" data-dash-nav>
+        <a href="{% url 'dashboard:bookings' %}" class="{% if active_tab == 'bookings' %}is-active{% endif %}">{% trans "حجوزاتي" %}</a>
+        <a href="{% url 'dashboard:courses' %}" class="{% if active_tab == 'courses' %}is-active{% endif %}">{% trans "دوراتي" %}</a>
+        <a href="{% url 'dashboard:orders' %}" class="{% if active_tab == 'orders' %}is-active{% endif %}">{% trans "طلباتي وفواتيري" %}</a>
+        <a href="{% url 'dashboard:wishlist' %}" class="{% if active_tab == 'wishlist' %}is-active{% endif %}">{% trans "المفضلة" %}</a>
+        <a href="{% url 'dashboard:notifications' %}" class="{% if active_tab == 'notifications' %}is-active{% endif %}">{% trans "الإشعارات" %}</a>
+        <a href="{% url 'accounts:profile' %}">{% trans "ملفي الشخصي" %}</a>
+      </nav>
+    </aside>
+    <div class="dashboard-content">
+      <h1>{% block dashboard_title %}{% endblock %}</h1>
+      {% block dashboard_content %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% endblock %}

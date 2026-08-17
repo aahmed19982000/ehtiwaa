@@ -1,0 +1,33 @@
+{% extends "dashboard/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "طلباتي وفواتيري" %} — {% trans "احتواء" %}{% endblock %}
+{% block dashboard_title %}{% trans "طلباتي وفواتيري" %}{% endblock %}
+{% block dashboard_content %}
+{% if orders %}
+<div class="invoice-table">
+  <div class="invoice-table__row invoice-table__row--head">
+    <span>{% trans "الوصف" %}</span>
+    <span>{% trans "التاريخ" %}</span>
+    <span>{% trans "المبلغ" %}</span>
+    <span>{% trans "الحالة" %}</span>
+  </div>
+  {% for order in orders %}
+  <div class="invoice-table__row">
+    <span>{% for item in order.items.all %}{{ item.item }}{% if not forloop.last %}، {% endif %}{% endfor %}</span>
+    <span class="invoice-table__date">{{ order.created_at|date:"j F" }}</span>
+    <span class="invoice-table__amount">{% blocktrans with total=order.total %}{{ total }} ج.م{% endblocktrans %}</span>
+    <span>
+      <span class="badge badge--status-{{ order.status }}">{{ order.get_status_display }}</span>
+      {% if order.invoice.pdf_file %}
+      <a href="{{ order.invoice.pdf_file.url }}" target="_blank" class="invoice-table__download">{% trans "تحميل الفاتورة" %}</a>
+      {% endif %}
+    </span>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <p>{% trans "لا توجد طلبات بعد." %}</p>
+</div>
+{% endif %}
+{% endblock %}

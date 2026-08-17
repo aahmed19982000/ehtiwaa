@@ -1,6 +1,7 @@
 from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount.helpers import complete_social_login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import F, Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -8,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, FormView, ListView, TemplateView
 
 from apps.accounts import auth0
+from apps.reviews.models import Review
 
 from .forms import SpecialistApplicationForm, SpecialistDirectoryFilterForm, SpecialistDocumentsForm
 from .models import CredentialDocument, Specialist
@@ -83,9 +85,21 @@ class SpecialistDetailView(DetailView):
     model = Specialist
     template_name = "specialists/detail.html"
     context_object_name = "specialist"
-    queryset = Specialist.objects.filter(status="approved").select_related(
-        "user__profile"
-    ).prefetch_related("specialties")
+    queryset = (
+        Specialist.objects.filter(status="approved")
+        .select_related("user__profile")
+        .prefetch_related("specialties")
+    )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        content_type = ContentType.objects.get_for_model(Specialist)
+        context["reviews"] = (
+            Review.objects.filter(content_type=content_type, object_id=self.object.pk)
+            .select_related("user")
+            .order_by("-created_at")[:20]
+        )
+        return context
 
 
 class SpecialistApplyView(FormView):

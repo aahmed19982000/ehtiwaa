@@ -1,0 +1,298 @@
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--color-text-muted);
+}
+
+.empty-state .btn {
+  margin-top: 1rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.badge--status-pending,
+.badge--status-open {
+  background: var(--color-accent-tint-1);
+  color: var(--color-accent-dark);
+}
+
+.badge--status-confirmed,
+.badge--status-paid,
+.badge--status-resolved {
+  background: var(--color-success-bg);
+  color: var(--color-success-dark);
+}
+
+.badge--status-completed,
+.badge--status-closed,
+.badge--status-in_progress {
+  background: var(--color-bg-lavender-1);
+  color: var(--color-text-muted);
+}
+
+.badge--status-cancelled,
+.badge--status-no_show,
+.badge--status-refunded {
+  background: var(--color-error-bg);
+  color: var(--color-error-dark);
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  padding: 0;
+}
+
+/* Layout */
+.dashboard-page {
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 2.5rem;
+}
+
+.dashboard-sidebar__user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-sidebar__user img,
+.dashboard-sidebar__avatar-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.dashboard-sidebar__avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+}
+
+.dashboard-sidebar__name {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.dashboard-sidebar__email {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.dashboard-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.dashboard-nav a {
+  padding: 0.7rem 0.85rem;
+  border-radius: 8px;
+  color: var(--color-text-muted);
+}
+
+.dashboard-nav a.is-active {
+  background: var(--color-bg-lavender-2);
+  color: var(--color-primary);
+}
+
+.dashboard-content h1 {
+  font-size: 1.35rem;
+  margin: 0 0 1.25rem;
+}
+
+/* Rows shared by bookings/courses/wishlist */
+.dashboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dashboard-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  background: #fff;
+}
+
+.dashboard-row--link:hover {
+  box-shadow: 0 8px 20px rgba(30, 7, 64, 0.08);
+}
+
+.dashboard-row__info {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.dashboard-row__info img,
+.dashboard-row__avatar-placeholder {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.dashboard-row__avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+}
+
+.dashboard-row__title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.dashboard-row__meta {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.dashboard-row__course-info {
+  min-width: 160px;
+}
+
+.course-progress__bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-bg-lavender-1);
+  overflow: hidden;
+  width: 160px;
+  margin-top: 0.4rem;
+}
+
+.course-progress__bar span {
+  display: block;
+  height: 100%;
+  background: var(--color-success);
+}
+
+/* Invoices table */
+.invoice-table {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.invoice-table__row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 1rem;
+  padding: 0.85rem 1.1rem;
+  font-size: 0.85rem;
+  border-top: 1px solid var(--color-border);
+  align-items: center;
+}
+
+.invoice-table__row--head {
+  background: var(--color-bg-lavender-1);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  border-top: none;
+}
+
+.invoice-table__amount {
+  font-weight: 700;
+}
+
+.invoice-table__download {
+  margin-inline-start: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* Notifications */
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  background: #fff;
+}
+
+.notification-item.is-unread {
+  border-color: var(--color-primary);
+  background: var(--color-bg-lavender-2);
+}
+
+.notification-item__title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.notification-item__body {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.notification-item__meta {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 800px) {
+  .dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dashboard-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 0.5rem;
+  }
+
+  .invoice-table__row {
+    grid-template-columns: 1fr 1fr;
+    font-size: 0.75rem;
+  }
+
+  .invoice-table__row span:nth-child(2) {
+    display: none;
+  }
+}

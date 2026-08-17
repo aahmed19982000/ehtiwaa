@@ -1,0 +1,31 @@
+{% extends "dashboard/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "حجوزاتي" %} — {% trans "احتواء" %}{% endblock %}
+{% block dashboard_title %}{% trans "حجوزاتي" %}{% endblock %}
+{% block dashboard_content %}
+{% if bookings %}
+<div class="dashboard-list">
+  {% for booking in bookings %}
+  <a href="{% url 'bookings:detail' booking.pk %}" class="dashboard-row dashboard-row--link">
+    <div class="dashboard-row__info">
+      {% if booking.specialist.user.profile.avatar %}
+      <img src="{{ booking.specialist.user.profile.avatar.url }}" alt="">
+      {% else %}
+      <span class="dashboard-row__avatar-placeholder">{{ booking.specialist.full_name_ar|default:booking.specialist.full_name_en|first }}</span>
+      {% endif %}
+      <div>
+        <div class="dashboard-row__title">{{ booking.specialist.full_name_ar|default:booking.specialist.full_name_en }}</div>
+        <div class="dashboard-row__meta">{{ booking.scheduled_start|date:"j F" }} · {{ booking.scheduled_start|time:"H:i" }}</div>
+      </div>
+    </div>
+    <span class="badge badge--status-{{ booking.status }}">{{ booking.get_status_display }}</span>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <p>{% trans "لا توجد حجوزات بعد." %}</p>
+  <a href="{% url 'specialists:directory' %}" class="btn btn-primary">{% trans "تصفح الأخصائيين" %}</a>
+</div>
+{% endif %}
+{% endblock %}

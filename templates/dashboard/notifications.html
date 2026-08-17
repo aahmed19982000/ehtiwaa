@@ -1,0 +1,29 @@
+{% extends "dashboard/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "الإشعارات" %} — {% trans "احتواء" %}{% endblock %}
+{% block dashboard_title %}{% trans "الإشعارات" %}{% endblock %}
+{% block dashboard_content %}
+{% if notifications %}
+<div class="notification-list">
+  {% for notification in notifications %}
+  <div class="notification-item{% if not notification.is_read %} is-unread{% endif %}">
+    <div>
+      <div class="notification-item__title">{{ notification.title }}</div>
+      <div class="notification-item__body">{{ notification.body }}</div>
+      <div class="notification-item__meta">{% blocktrans with duration=notification.created_at|timesince %}منذ {{ duration }}{% endblocktrans %}</div>
+    </div>
+    {% if not notification.is_read %}
+    <form method="post" action="{% url 'dashboard:notification-read' notification.pk %}">
+      {% csrf_token %}
+      <button type="submit" class="link-btn">{% trans "تحديد كمقروء" %}</button>
+    </form>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <p>{% trans "لا توجد إشعارات بعد." %}</p>
+</div>
+{% endif %}
+{% endblock %}

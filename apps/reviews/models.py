@@ -21,6 +21,7 @@ class Review(TimeStampedModel):
 
     class Meta:
         indexes = [models.Index(fields=["content_type", "object_id"])]
+        unique_together = [("user", "content_type", "object_id")]
 
     def __str__(self):
         return f"Review<{self.user_id}:{self.rating}>"

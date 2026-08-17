@@ -61,11 +61,15 @@ class Specialist(TimeStampedModel):
     # profile page alongside it.
     hourly_rate = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     price_30min = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
-    # Denormalized directory/profile sort-display fields — the reviews and
-    # bookings apps (later phases) will compute these for real; until then
-    # they're plain admin-editable fields, matching the report's guidance to
-    # rely on the default Django Admin for temporary tracking at this phase.
+    # average_rating/reviews_count are recomputed automatically by
+    # apps.reviews' post_save/post_delete signal whenever a Review targets
+    # this specialist — not admin-editable in practice, though nothing
+    # stops an admin override. next_available_date/completed_sessions_count
+    # remain plain admin-editable fields (no booking-availability engine
+    # feeds them yet), matching the report's guidance to rely on the
+    # default Django Admin for temporary tracking at this phase.
     average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
+    reviews_count = models.PositiveIntegerField(default=0)
     next_available_date = models.DateField(null=True, blank=True)
     completed_sessions_count = models.PositiveIntegerField(default=0)
 

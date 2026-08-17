@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
-from .models import MessageLog, Notification
+from .models import MessageLog
 
 
 def send_notification_email(user, subject_template, body_template, context):
@@ -15,7 +15,7 @@ def send_notification_email(user, subject_template, body_template, context):
     )
     try:
         send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [user.email])
-    except Exception as exc:  # noqa: BLE001 — SMTP backends raise all sorts (smtplib, socket, ssl); MessageLog exists specifically to capture whichever one happened.
+    except Exception as exc:  # noqa: BLE001 — SMTP backends raise all sorts; MessageLog captures it
         log.status = "failed"
         log.provider_response = str(exc)
         log.save(update_fields=["status", "provider_response"])
@@ -37,44 +37,4 @@ def send_whatsapp_stub(user, message):
         provider_response=(
             "No WhatsApp provider configured — see apps.notifications.services.send_whatsapp_stub."
         ),
-    )
-
-
-def notify_booking_created(booking):
-    context = {"booking": booking}
-    send_notification_email(
-        booking.client,
-        "bookings/email/booking_confirmation_subject.txt",
-        "bookings/email/booking_confirmation.txt",
-        context,
-    )
-    send_whatsapp_stub(
-        booking.client,
-        f"تم استلام طلب حجزك مع {booking.specialist.full_name_ar} — بانتظار التأكيد.",
-    )
-    Notification.objects.create(
-        user=booking.client,
-        title="تم استلام طلب حجزك",
-        body=f"طلب حجزك مع {booking.specialist.full_name_ar} قيد المراجعة.",
-        notif_type="booking",
-    )
-
-
-def notify_booking_cancelled(booking):
-    context = {"booking": booking}
-    send_notification_email(
-        booking.client,
-        "bookings/email/booking_cancelled_subject.txt",
-        "bookings/email/booking_cancelled.txt",
-        context,
-    )
-    send_whatsapp_stub(
-        booking.client,
-        f"تم إلغاء حجزك مع {booking.specialist.full_name_ar}.",
-    )
-    Notification.objects.create(
-        user=booking.client,
-        title="تم إلغاء حجزك",
-        body=f"تم إلغاء حجزك مع {booking.specialist.full_name_ar}.",
-        notif_type="booking",
     )

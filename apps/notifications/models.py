@@ -7,6 +7,7 @@ class Notification(TimeStampedModel):
     NOTIF_TYPE_CHOICES = [
         ("booking", "booking"),
         ("order", "order"),
+        ("course", "course"),
         ("system", "system"),
         ("forum", "forum"),
     ]
