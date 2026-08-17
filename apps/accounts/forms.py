@@ -1,64 +1,89 @@
 from django import forms
 from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from apps.core.countries import DEFAULT_DIAL_CODE, DIAL_CODE_CHOICES
 
 from .models import Profile, User
 
 
-class SignupForm(forms.Form):
-    full_name = forms.CharField(label="الأسم", max_length=150)
-    email = forms.EmailField(label="البريد الإلكتروني")
-    country_code = forms.ChoiceField(
-        label="مفتاح الدولة", choices=DIAL_CODE_CHOICES, initial=DEFAULT_DIAL_CODE
+class LoginForm(forms.Form):
+    email = forms.EmailField(label=_("البريد الإلكتروني"))
+    password = forms.CharField(
+        label=_("كلمة المرور"), widget=forms.PasswordInput(attrs={"autocomplete": "current-password"})
     )
-    phone = forms.CharField(label="رقم الهاتف", max_length=20)
-    password1 = forms.CharField(label="كلمة المرور", widget=forms.PasswordInput)
-    password2 = forms.CharField(label="تأكيد كلمة المرور", widget=forms.PasswordInput)
+
+
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(label=_("البريد الإلكتروني"))
+
+
+class SignupForm(forms.Form):
+    full_name = forms.CharField(label=_("الاسم"), max_length=150)
+    email = forms.EmailField(label=_("البريد الإلكتروني"))
+    country_code = forms.ChoiceField(
+        label=_("مفتاح الدولة"), choices=DIAL_CODE_CHOICES, initial=DEFAULT_DIAL_CODE
+    )
+    phone = forms.CharField(label=_("رقم الهاتف"), max_length=20)
+    password1 = forms.CharField(
+        label=_("كلمة المرور"),
+        min_length=8,
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+        help_text=_("8 أحرف على الأقل."),
+    )
+    password2 = forms.CharField(
+        label=_("تأكيد كلمة المرور"),
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+    )
     agree_terms = forms.BooleanField(
-        label="أوافق على الشروط والأحكام وسياسة الخصوصية", required=True
+        label=_("أوافق على الشروط والأحكام وسياسة الخصوصية"), required=True
     )
 
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
         if User.objects.filter(email__iexact=email).exists():
-            raise forms.ValidationError("هذا البريد الإلكتروني مستخدم بالفعل.")
+            raise ValidationError(_("هذا البريد الإلكتروني مستخدم بالفعل."))
         return email
+
+    def clean_password1(self):
+        password1 = self.cleaned_data["password1"]
+        validate_password(password1)
+        return password1
 
     def clean(self):
         cleaned_data = super().clean()
-        password1 = cleaned_data.get("password1")
-        password2 = cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
-            self.add_error("password2", "كلمتا المرور غير متطابقتين.")
-        elif password1:
-            validate_password(password1)
 
         country_code = cleaned_data.get("country_code")
         phone = cleaned_data.get("phone")
         if country_code and phone:
             full_phone = f"{country_code}{phone.lstrip('0')}"
             if User.objects.filter(phone=full_phone).exists():
-                self.add_error("phone", "رقم الهاتف مستخدم بالفعل.")
+                self.add_error("phone", _("رقم الهاتف مستخدم بالفعل."))
             cleaned_data["full_phone"] = full_phone
+
+        password1 = cleaned_data.get("password1")
+        password2 = cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            self.add_error("password2", _("كلمتا المرور غير متطابقتين."))
+
         return cleaned_data
 
 
-class LoginForm(forms.Form):
-    identifier = forms.CharField(label="البريد الإلكتروني أو رقم الهاتف")
-    password = forms.CharField(label="كلمة المرور", widget=forms.PasswordInput)
-
-
 class ProfileForm(forms.ModelForm):
-    first_name = forms.CharField(label="الاسم الأول", max_length=150, required=False)
-    last_name = forms.CharField(label="اسم العائلة", max_length=150, required=False)
-    email = forms.EmailField(label="البريد الإلكتروني")
-    phone = forms.CharField(label="رقم الهاتف", max_length=20, required=False)
+    first_name = forms.CharField(label=_("الاسم الأول"), max_length=150, required=False)
+    last_name = forms.CharField(label=_("اسم العائلة"), max_length=150, required=False)
+    email = forms.EmailField(label=_("البريد الإلكتروني"))
+    phone = forms.CharField(label=_("رقم الهاتف"), max_length=20, required=False)
 
     class Meta:
         model = Profile
         fields = ["avatar", "bio", "city"]
-        labels = {"avatar": "الصورة الشخصية", "bio": "نبذة تعريفية", "city": "المدينة"}
+        labels = {
+            "avatar": _("الصورة الشخصية"),
+            "bio": _("نبذة تعريفية"),
+            "city": _("المدينة"),
+        }
 
     def __init__(self, *args, user=None, **kwargs):
         self.user = user
@@ -72,7 +97,7 @@ class ProfileForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
         if User.objects.filter(email__iexact=email).exclude(pk=self.user.pk).exists():
-            raise forms.ValidationError("هذا البريد الإلكتروني مستخدم بالفعل.")
+            raise forms.ValidationError(_("هذا البريد الإلكتروني مستخدم بالفعل."))
         return email
 
     def save(self, commit=True):

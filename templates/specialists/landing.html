@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "انضم كمعالج" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/specialists.css' %}">
+{% endblock %}
+{% block content %}
+<div class="specialist-hero">
+  <div class="page-container specialist-hero__inner">
+    <div class="specialist-hero__content">
+      <h1>{% trans "انضم لاحتواء وابدأ رحلتك في مساعدة الآخرين" %}</h1>
+      <p>
+        {% trans "مارس العلاج النفسي عبر الإنترنت وتواصل مع آلاف العملاء من جميع أنحاء الوطن العربي. انضم إلينا مع نخبة من الأطباء والمعالجين النفسيين، وابدأ في بناء عيادتك الرقمية بمرونة تامة في المواعيد والمكان." %}
+      </p>
+      <a href="{% url 'specialists:apply' %}" class="btn btn-accent">{% trans "انضم إلينا الآن" %}</a>
+    </div>
+    <svg class="specialist-hero__art" viewBox="0 0 260 260" aria-hidden="true">
+      <circle cx="130" cy="130" r="128" fill="rgba(255,255,255,0.12)"/>
+      <circle cx="130" cy="130" r="92" fill="rgba(255,255,255,0.14)"/>
+      <path d="M130 192c-2.2 0-4.4-.8-6.1-2.3-26.8-23.7-44.8-40.3-44.8-65.9 0-19.8 14.9-34.8 34.1-34.8 9.7 0 19.1 4.5 25.3 11.7 6.2-7.2 15.6-11.7 25.3-11.7 19.2 0 34.1 15 34.1 34.8 0 25.6-18 42.2-44.8 65.9-1.7 1.5-3.9 2.3-6.1 2.3z" fill="#fff"/>
+    </svg>
+  </div>
+</div>
+
+<div class="page-container">
+  <section class="benefits-section">
+    <h2>{% trans "احتواء بتقدملك ايه؟" %}</h2>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <h3>{% trans "خصوصية وأمان" %}</h3>
+        <p>{% trans "منصة مشفّرة بالكامل تحافظ على سرية بيانات عملائك وجلساتك." %}</p>
+      </div>
+      <div class="benefit-card">
+        <h3>{% trans "سهولة التواصل" %}</h3>
+        <p>{% trans "تواصل مع عملائك بأسهل الطرق عبر الشات ومكالمات الفيديو." %}</p>
+      </div>
+      <div class="benefit-card">
+        <h3>{% trans "جلسات عن بُعد" %}</h3>
+        <p>{% trans "قدّم جلساتك من أي مكان وفي أي وقت يناسبك، ووفّر الوقت والتكلفة." %}</p>
+      </div>
+      <div class="benefit-card">
+        <h3>{% trans "سجل العميل" %}</h3>
+        <p>{% trans "اطّلع على تاريخ الجلسات السابقة مع كل عميل لتقديم رعاية أفضل." %}</p>
+      </div>
+      <div class="benefit-card">
+        <h3>{% trans "ملاحظات منظمة" %}</h3>
+        <p>{% trans "دوّن ملاحظاتك وتابع تقدّم كل عميل بشكل منظم وآمن." %}</p>
+      </div>
+      <div class="benefit-card">
+        <h3>{% trans "عملاء من كل مكان" %}</h3>
+        <p>{% trans "وسّع نطاق عملك ونمِّ خبرتك مع عملاء من جميع أنحاء الوطن العربي." %}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="process-section">
+    <h2>{% trans "إزاي تبدأ؟" %}</h2>
+    <div class="process-timeline">
+      <div class="process-step">
+        <span class="process-step__dot">1</span>
+        <p>{% trans "املأ نموذج الطلب ببياناتك الشخصية والمهنية — هيتم إنشاء حسابك تلقائيًا معاه." %}</p>
+      </div>
+      <div class="process-step">
+        <span class="process-step__dot">2</span>
+        <p>{% trans "ارفع الشهادات والمستندات المطلوبة لفئتك." %}</p>
+      </div>
+      <div class="process-step">
+        <span class="process-step__dot">3</span>
+        <p>{% trans "انتظر مراجعة فريقنا وتفعيل حسابك كمعالج." %}</p>
+      </div>
+    </div>
+    <a href="{% url 'specialists:apply' %}" class="btn btn-primary">{% trans "انضم إلينا الآن" %}</a>
+  </section>
+</div>
+{% endblock %}

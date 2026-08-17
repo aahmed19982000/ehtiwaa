@@ -1,18 +1,17 @@
+from allauth.socialaccount.adapter import get_adapter
+from allauth.socialaccount.helpers import complete_social_login
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import update_session_auth_hash
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from django.views import View
-from django.views.generic import FormView, TemplateView
+from django.views.generic import TemplateView
 
-from . import services
-from .forms import LoginForm, ProfileForm, SignupForm
-from .models import EmailVerification
+from . import auth0
+from .forms import ForgotPasswordForm, LoginForm, ProfileForm, SignupForm
 
 
 def _social_provider_flags():
@@ -31,82 +30,160 @@ class WelcomeView(TemplateView):
         return context
 
 
-class SignupView(FormView):
+class Auth0RedirectView(View):
+    """Sends the browser straight into Auth0's hosted Universal Login page.
+    No longer linked from accounts:login (LoginView has its own branded
+    form now) — kept for allauth's account_login fallback (see
+    config/urls.py) and as a manual escape hatch to the hosted page."""
+
+    screen_hint = None
+
+    def get(self, request):
+        if not _social_provider_flags()["auth0_enabled"]:
+            messages.error(request, _("تسجيل الدخول غير متاح حاليًا."))
+            return redirect("accounts:welcome")
+
+        provider = get_adapter().get_provider(request, "auth0")
+        kwargs = {"process": "login"}
+        next_url = request.GET.get(REDIRECT_FIELD_NAME)
+        if next_url:
+            kwargs[REDIRECT_FIELD_NAME] = next_url
+        # prompt=login forces Auth0 to show the login/signup screen even when
+        # the browser still has an Auth0 SSO session from an earlier test —
+        # without it, clicking "signup" while already logged in silently
+        # reuses that session and jumps straight to the "Authorize App"
+        # consent screen instead of the actual signup form.
+        auth_params = ["prompt=login"]
+        if self.screen_hint:
+            auth_params.append(f"screen_hint={self.screen_hint}")
+        kwargs["auth_params"] = "&".join(auth_params)
+        return redirect(provider.get_login_url(request, **kwargs))
+
+
+class SignupView(View):
+    """Our own branded, two-step signup form — collects name/email/phone
+    then password, unlike Auth0RedirectView which bounces straight to
+    Auth0's hosted page. Talks to Auth0's Authentication API directly
+    (apps.accounts.auth0) so the account still lives in Auth0's Database
+    connection, then hands off to allauth's normal social-login pipeline
+    (EhtiwaaSocialAccountAdapter) so the resulting local User/SocialAccount
+    are indistinguishable from one created via the hosted login page."""
+
     template_name = "accounts/signup.html"
-    form_class = SignupForm
-    success_url = reverse_lazy("accounts:signup-check-email")
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update(_social_provider_flags())
-        return context
+    def get(self, request):
+        if not _social_provider_flags()["auth0_enabled"]:
+            messages.error(request, _("التسجيل غير متاح حاليًا."))
+            return redirect("accounts:welcome")
+        return render(request, self.template_name, {"form": SignupForm()})
 
-    def form_valid(self, form):
-        data = form.cleaned_data
-        user = services.create_local_user(
-            email=data["email"],
-            phone=data.get("full_phone"),
-            full_name=data["full_name"],
-            password=data["password1"],
-        )
-        services.send_activation_email(user, request=self.request)
-        self.request.session["signup_email"] = user.email
-        return super().form_valid(form)
+    def post(self, request):
+        if not _social_provider_flags()["auth0_enabled"]:
+            messages.error(request, _("التسجيل غير متاح حاليًا."))
+            return redirect("accounts:welcome")
 
+        form = SignupForm(request.POST)
+        if not form.is_valid():
+            return render(request, self.template_name, {"form": form})
 
-class SignupCheckEmailView(TemplateView):
-    template_name = "accounts/signup_check_email.html"
+        email = form.cleaned_data["email"]
+        password = form.cleaned_data["password1"]
+        full_name = form.cleaned_data["full_name"].strip()
+        full_phone = form.cleaned_data["full_phone"]
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["email"] = self.request.session.get("signup_email", "")
-        return context
+        signup_failed_login_error = _("تم إنشاء حسابك، لكن تعذّر تسجيل دخولك تلقائيًا.")
+        try:
+            auth0.signup(email=email, password=password, name=full_name)
+            token_data = auth0.login(
+                email=email, password=password, generic_error=signup_failed_login_error
+            )
+            userinfo = auth0.get_userinfo(
+                token_data["access_token"], generic_error=signup_failed_login_error
+            )
+        except auth0.Auth0Error as exc:
+            form.add_error(None, str(exc))
+            return render(request, self.template_name, {"form": form})
 
+        provider = get_adapter().get_provider(request, "auth0")
+        sociallogin = provider.sociallogin_from_response(request, userinfo)
 
-class VerifyEmailView(View):
-    def get(self, request, token):
-        verification = get_object_or_404(EmailVerification, token=token)
-        if verification.verified_at is None and verification.expires_at >= timezone.now():
-            verification.verified_at = timezone.now()
-            verification.save(update_fields=["verified_at"])
-            user = verification.user
-            user.is_active = True
-            user.is_email_verified = True
-            user.save(update_fields=["is_active", "is_email_verified"])
-            login(request, user, backend="apps.accounts.backends.EmailOrPhoneBackend")
-            messages.success(request, "تم تفعيل حسابك بنجاح.")
-            return redirect("accounts:profile")
+        name_parts = full_name.split(" ", 1)
+        sociallogin.user.first_name = name_parts[0]
+        sociallogin.user.last_name = name_parts[1] if len(name_parts) > 1 else ""
+        sociallogin.user.phone = full_phone
 
-        messages.error(request, "رابط التفعيل غير صالح أو منتهي الصلاحية.")
-        return redirect("accounts:login")
+        return complete_social_login(request, sociallogin)
 
 
-class LoginView(FormView):
+class LoginView(View):
+    """Our own branded, two-step login form (email → password), same
+    approach as SignupView: talks to Auth0's Authentication API directly
+    (Resource Owner Password Grant) instead of bouncing to Auth0's hosted
+    Universal Login page, then hands off to the same social-login pipeline
+    so returning users are recognized by their existing SocialAccount."""
+
     template_name = "accounts/login.html"
-    form_class = LoginForm
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update(_social_provider_flags())
-        return context
+    def get(self, request):
+        if not _social_provider_flags()["auth0_enabled"]:
+            messages.error(request, _("تسجيل الدخول غير متاح حاليًا."))
+            return redirect("accounts:welcome")
+        if request.user.is_authenticated:
+            return redirect("accounts:profile")
+        return render(request, self.template_name, {"form": LoginForm()})
 
-    def form_valid(self, form):
-        user = authenticate(
-            self.request,
-            username=form.cleaned_data["identifier"],
-            password=form.cleaned_data["password"],
-        )
-        if user is None:
-            form.add_error(None, "بيانات الدخول غير صحيحة.")
-            return self.form_invalid(form)
-        if not user.is_active:
-            form.add_error(None, "الحساب غير مفعّل بعد، برجاء تفعيله عبر البريد الإلكتروني.")
-            return self.form_invalid(form)
-        login(self.request, user)
-        return redirect(self.get_success_url())
+    def post(self, request):
+        if not _social_provider_flags()["auth0_enabled"]:
+            messages.error(request, _("تسجيل الدخول غير متاح حاليًا."))
+            return redirect("accounts:welcome")
 
-    def get_success_url(self):
-        return self.request.GET.get("next") or reverse_lazy("accounts:profile")
+        form = LoginForm(request.POST)
+        if not form.is_valid():
+            return render(request, self.template_name, {"form": form})
+
+        try:
+            token_data = auth0.login(
+                email=form.cleaned_data["email"], password=form.cleaned_data["password"]
+            )
+            userinfo = auth0.get_userinfo(token_data["access_token"])
+        except auth0.Auth0Error as exc:
+            form.add_error(None, str(exc))
+            return render(request, self.template_name, {"form": form})
+
+        provider = get_adapter().get_provider(request, "auth0")
+        sociallogin = provider.sociallogin_from_response(request, userinfo)
+        return complete_social_login(request, sociallogin)
+
+
+class ForgotPasswordView(View):
+    """Triggers Auth0's own password-reset email — separate from
+    accounts:password-reset, which is the local Django flow kept only for
+    staff/admin accounts with a real (non-Auth0) usable password."""
+
+    template_name = "accounts/forgot_password.html"
+
+    def get(self, request):
+        if not _social_provider_flags()["auth0_enabled"]:
+            messages.error(request, _("هذه الخدمة غير متاحة حاليًا."))
+            return redirect("accounts:welcome")
+        return render(request, self.template_name, {"form": ForgotPasswordForm()})
+
+    def post(self, request):
+        if not _social_provider_flags()["auth0_enabled"]:
+            messages.error(request, _("هذه الخدمة غير متاحة حاليًا."))
+            return redirect("accounts:welcome")
+
+        form = ForgotPasswordForm(request.POST)
+        if not form.is_valid():
+            return render(request, self.template_name, {"form": form})
+
+        try:
+            auth0.request_password_change(form.cleaned_data["email"])
+        except auth0.Auth0Error as exc:
+            form.add_error(None, str(exc))
+            return render(request, self.template_name, {"form": form})
+
+        return render(request, self.template_name, {"form": form, "sent": True})
 
 
 class ProfileEditView(LoginRequiredMixin, View):
@@ -115,33 +192,15 @@ class ProfileEditView(LoginRequiredMixin, View):
 
     def get(self, request):
         profile_form = ProfileForm(instance=request.user.profile, user=request.user)
-        password_form = PasswordChangeForm(user=request.user)
-        return render(
-            request,
-            self.template_name,
-            {"profile_form": profile_form, "password_form": password_form},
-        )
+        return render(request, self.template_name, {"profile_form": profile_form})
 
     def post(self, request):
         profile_form = ProfileForm(
             request.POST, request.FILES, instance=request.user.profile, user=request.user
         )
-        password_form = PasswordChangeForm(user=request.user)
-
-        if "change_password" in request.POST:
-            password_form = PasswordChangeForm(user=request.user, data=request.POST)
-            if password_form.is_valid():
-                password_form.save()
-                update_session_auth_hash(request, password_form.user)
-                messages.success(request, "تم تغيير كلمة المرور بنجاح.")
-                return redirect("accounts:profile")
-        elif profile_form.is_valid():
+        if profile_form.is_valid():
             profile_form.save()
-            messages.success(request, "تم تحديث الملف الشخصي بنجاح.")
+            messages.success(request, _("تم تحديث الملف الشخصي بنجاح."))
             return redirect("accounts:profile")
 
-        return render(
-            request,
-            self.template_name,
-            {"profile_form": profile_form, "password_form": password_form},
-        )
+        return render(request, self.template_name, {"profile_form": profile_form})

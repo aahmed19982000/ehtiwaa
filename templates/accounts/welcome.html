@@ -1,15 +1,15 @@
 {% extends "base.html" %}
-{% load socialaccount static %}
-{% block title %}مرحبًا بك في احتواء{% endblock %}
+{% load socialaccount static i18n %}
+{% block title %}{% trans "مرحبًا بك في احتواء" %}{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
 {% endblock %}
 {% block content %}
 <div class="auth-shell">
   <div class="auth-card">
-    <a href="{% url 'home' %}" class="auth-card__back">→ رجوع</a>
-    <h1>مرحبًا في احتواء</h1>
-    <p class="auth-card__subtitle">اختر طريقة التسجيل المفضلة لديك، وابدأ رحلتك في ثوانٍ معدودة</p>
+    <a href="{% url 'home' %}" class="auth-card__back">{% trans "→ رجوع" %}</a>
+    <h1>{% trans "مرحبًا في احتواء" %}</h1>
+    <p class="auth-card__subtitle">{% trans "اختر طريقة التسجيل المفضلة لديك، وابدأ رحلتك في ثوانٍ معدودة" %}</p>
 
     {% if auth0_enabled %}
     <div class="auth-social">
@@ -17,22 +17,24 @@
       Routed through Auth0, but with connection=google-oauth2 so Auth0 skips
       its own chooser page and redirects straight to Google's real login.
       {% endcomment %}
-      <a href="{% provider_login_url 'auth0' process='login' auth_params='connection=google-oauth2' %}" class="btn-social">
+      <a href="{% provider_login_url 'auth0' process='login' auth_params='connection=google-oauth2&prompt=login' %}" class="btn-social">
         {% include "partials/icons/google.html" %}
-        <span>المتابعة باستخدام Google</span>
+        <span>{% trans "المتابعة باستخدام Google" %}</span>
       </a>
     </div>
-    <div class="auth-divider">أو</div>
-    {% endif %}
+    <div class="auth-divider">{% trans "أو" %}</div>
 
     <div class="auth-actions">
-      <a href="{% url 'accounts:signup' %}" class="btn btn-primary">إنشاء حساب جديد</a>
-      <a href="{% url 'specialists:apply' %}" class="btn btn-outline">انضم كمعالج</a>
+      <a href="{% url 'accounts:signup' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}" class="btn btn-primary">{% trans "إنشاء حساب جديد" %}</a>
+      <a href="{% url 'specialists:landing' %}" class="btn btn-outline">{% trans "انضم كمعالج" %}</a>
     </div>
 
     <p class="auth-footer-link">
-      لديك حساب بالفعل؟ <a href="{% url 'accounts:login' %}">تسجيل الدخول</a>
+      {% trans "لديك حساب بالفعل؟" %} <a href="{% url 'accounts:login' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}">{% trans "تسجيل الدخول" %}</a>
     </p>
+    {% else %}
+    <p class="auth-card__subtitle">{% trans "تسجيل الدخول غير متاح حاليًا." %}</p>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

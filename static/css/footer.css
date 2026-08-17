@@ -25,11 +25,16 @@
   line-height: 1.9;
 }
 
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
 .footer-brand__logo {
-  height: 32px;
+  height: 168px;
   width: auto;
-  filter: brightness(0) invert(1);
-  margin-bottom: 0.75rem;
 }
 
 .footer-links {
@@ -74,5 +79,9 @@
 @media (max-width: 640px) {
   .footer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .footer-brand__logo {
+    height: 96px;
   }
 }

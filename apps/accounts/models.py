@@ -36,15 +36,3 @@ class Profile(TimeStampedModel):
 
     def __str__(self):
         return f"Profile<{self.user_id}>"
-
-
-class EmailVerification(TimeStampedModel):
-    user = models.ForeignKey(
-        "accounts.User", on_delete=models.CASCADE, related_name="email_verifications"
-    )
-    token = models.CharField(max_length=255, unique=True)
-    expires_at = models.DateTimeField()
-    verified_at = models.DateTimeField(null=True, blank=True)
-
-    def __str__(self):
-        return f"EmailVerification<{self.user_id}>"

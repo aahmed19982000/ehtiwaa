@@ -1,10 +1,27 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}احتواء{% endblock %}</title>
+  <title>{% block title %}{% trans "احتواء" %}{% endblock %}</title>
+  <script>
+    // Detects the browser's IANA timezone and stores it in a cookie so the
+    // server can render booking times in the visitor's local time instead
+    // of always Africa/Cairo (see apps.core.middleware.ClientTimezoneMiddleware).
+    // Reloads once on a fresh visit so the very first render already uses it.
+    (function () {
+      try {
+        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        var match = document.cookie.match(/(?:^|; )client_tz=([^;]*)/);
+        var current = match ? decodeURIComponent(match[1]) : null;
+        if (tz && tz !== current) {
+          document.cookie = "client_tz=" + encodeURIComponent(tz) + ";path=/;max-age=31536000;SameSite=Lax";
+          if (!current) location.reload();
+        }
+      } catch (e) {}
+    })();
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
   <link rel="stylesheet" href="{% static 'css/header.css' %}">
@@ -15,6 +32,7 @@
   {% include "partials/header.html" %}
   <main>{% block content %}{% endblock %}</main>
   {% include "partials/footer.html" %}
+  <script src="{% static 'js/header.js' %}"></script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "حجوزاتي" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/specialists.css' %}">
+<link rel="stylesheet" href="{% static 'css/bookings.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container booking-page">
+  <h1>{% trans "حجوزاتي" %}</h1>
+
+  {% if bookings %}
+  <div class="booking-list">
+    {% for booking in bookings %}
+    <a href="{% url 'bookings:detail' booking.pk %}" class="booking-list-item">
+      <span class="booking-status booking-status--{{ booking.status }}">{{ booking.get_status_display }}</span>
+      <h3>{{ booking.specialist.get_title_display }} {{ booking.specialist.full_name_ar }}</h3>
+      <div class="booking-list-item__row">
+        <span>{{ booking.scheduled_start|date:"j F Y" }} — {{ booking.scheduled_start|time:"H:i" }}</span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+  {% if is_paginated %}
+  <div class="pagination">
+    {% if page_obj.has_previous %}
+    <a class="pagination__link" href="?page={{ page_obj.previous_page_number }}">{% trans "السابق" %}</a>
+    {% endif %}
+    <span class="pagination__status">{% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}صفحة {{ current }} من {{ total }}{% endblocktrans %}</span>
+    {% if page_obj.has_next %}
+    <a class="pagination__link" href="?page={{ page_obj.next_page_number }}">{% trans "التالي" %}</a>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% else %}
+  <div class="empty-state">
+    <p>{% trans "لسه معملتش أي حجز." %}</p>
+    <a href="{% url 'specialists:directory' %}" class="btn btn-primary">{% trans "تصفّح دليل الأخصائيين" %}</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

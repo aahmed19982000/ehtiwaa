@@ -1,33 +1,35 @@
-{% load static %}
+{% load static i18n %}
 <footer class="site-footer">
   <div class="footer-grid">
     <div class="footer-col">
-      <img class="footer-brand__logo" src="{% static 'img/logo.png' %}" alt="احتواء">
-      <p>منصة احتواء تجمعك بأفضل الأخصائيين النفسيين والدورات والموارد لدعم صحتك النفسية.</p>
+      <div class="footer-brand">
+        <img class="footer-brand__logo" src="{% static 'img/logo.png' %}" alt="{% trans "احتواء" %}">
+      </div>
+      <p>{% trans "منصة احتواء تجمعك بأفضل الأخصائيين النفسيين والدورات والموارد لدعم صحتك النفسية." %}</p>
     </div>
 
     <div class="footer-col">
-      <h4>روابط سريعة</h4>
+      <h4>{% trans "روابط سريعة" %}</h4>
       <ul class="footer-links">
-        <li><a href="#">الرئيسية</a></li>
-        <li><a href="#">دليل الأخصائيين</a></li>
-        <li><a href="#">الدورات</a></li>
-        <li><a href="#">المتجر</a></li>
-        <li><a href="#">المنتدى</a></li>
+        <li><a href="#">{% trans "الرئيسية" %}</a></li>
+        <li><a href="#">{% trans "دليل الأخصائيين" %}</a></li>
+        <li><a href="#">{% trans "الدورات" %}</a></li>
+        <li><a href="#">{% trans "المتجر" %}</a></li>
+        <li><a href="#">{% trans "المنتدى" %}</a></li>
       </ul>
     </div>
 
     <div class="footer-col">
-      <h4>السياسات</h4>
+      <h4>{% trans "السياسات" %}</h4>
       <ul class="footer-links">
-        <li><a href="{% url 'core:terms' %}">الشروط والأحكام</a></li>
-        <li><a href="{% url 'core:privacy' %}">سياسة الخصوصية</a></li>
-        <li><a href="#">سياسة الإلغاء والاسترداد</a></li>
+        <li><a href="{% url 'core:terms' %}">{% trans "الشروط والأحكام" %}</a></li>
+        <li><a href="{% url 'core:privacy' %}">{% trans "سياسة الخصوصية" %}</a></li>
+        <li><a href="#">{% trans "سياسة الإلغاء والاسترداد" %}</a></li>
       </ul>
     </div>
 
     <div class="footer-col">
-      <h4>تواصل معنا</h4>
+      <h4>{% trans "تواصل معنا" %}</h4>
       <p>support@ehtiwaa.example</p>
       <div class="footer-social">
         <a href="#" aria-label="X">X</a>
@@ -38,6 +40,6 @@
   </div>
 
   <div class="footer-bottom">
-    © 2026 احتواء. جميع الحقوق محفوظة.
+    {% blocktrans %}© 2026 احتواء. جميع الحقوق محفوظة.{% endblocktrans %}
   </div>
 </footer>

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "طلب الانضمام" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+{% endblock %}
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-card">
+    <h1>{% trans "تم استلام طلبك" %}</h1>
+    <p class="auth-card__subtitle">
+      {% if specialist %}
+        {% trans "شكرًا لتقديم طلب الانضمام كمعالج. سيقوم فريقنا بمراجعته والتواصل معك قريبًا." %}
+        <br>
+        {% trans "حالة الطلب:" %} <strong>{{ specialist.get_status_display }}</strong>
+      {% else %}
+        {% trans "لم نجد طلب انضمام مرتبط بحسابك بعد." %}
+      {% endif %}
+    </p>
+    <p class="auth-footer-link">
+      <a href="{% url 'accounts:profile' %}">{% trans "الذهاب إلى الملف الشخصي" %}</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

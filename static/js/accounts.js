@@ -33,6 +33,10 @@ function initSignupSteps() {
   }
 }
 
+// Must match AUTH_PASSWORD_VALIDATORS' MinimumLengthValidator (Django) and
+// the Auth0 Database connection's password policy — keep all three in sync.
+var MIN_PASSWORD_LENGTH = 8;
+
 function initPasswordStrength() {
   var input = document.querySelector("[data-password-strength-input]");
   var bar = document.querySelector("[data-password-strength-bar]");
@@ -40,24 +44,21 @@ function initPasswordStrength() {
   if (!input || !bar || !label) return;
 
   input.addEventListener("input", function () {
-    var score = scorePassword(input.value);
-    var percent = Math.min(100, score * 25);
+    var length = input.value.length;
+    var percent = Math.min(100, (length / MIN_PASSWORD_LENGTH) * 100);
     bar.style.width = percent + "%";
 
-    var levels = ["ضعيفة جدًا", "ضعيفة", "متوسطة", "قوية", "قوية جدًا"];
-    var colors = ["#d8352f", "#d8352f", "#ff8a00", "#1e8e5a", "#166b44"];
-    var idx = Math.min(levels.length - 1, score);
-    label.textContent = input.value ? "قوة كلمة المرور: " + levels[idx] : "";
-    bar.style.background = colors[idx];
+    if (!input.value) {
+      label.textContent = "";
+      bar.style.background = "#d8352f";
+      return;
+    }
+    if (length < MIN_PASSWORD_LENGTH) {
+      label.textContent = "كلمة المرور قصيرة (" + length + "/" + MIN_PASSWORD_LENGTH + " حرفًا على الأقل)";
+      bar.style.background = "#d8352f";
+    } else {
+      label.textContent = "كلمة المرور تفي بالحد الأدنى للطول";
+      bar.style.background = "#1e8e5a";
+    }
   });
-}
-
-function scorePassword(value) {
-  var score = 0;
-  if (value.length >= 8) score++;
-  if (value.length >= 12) score++;
-  if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score++;
-  if (/[0-9]/.test(value)) score++;
-  if (/[^A-Za-z0-9]/.test(value)) score++;
-  return score;
 }

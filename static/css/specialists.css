@@ -50,6 +50,23 @@
   cursor: pointer;
 }
 
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.6rem;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 0.6rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
 .category-group {
   display: none;
   border-top: 1px dashed var(--color-border);
@@ -78,4 +95,458 @@ label.category-group.is-active {
   font-size: 1.05rem;
   color: var(--color-primary-dark);
   margin: 2rem 0 1rem;
+}
+
+/* Landing page */
+.specialist-hero {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: #fff;
+}
+
+.specialist-hero__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
+}
+
+.specialist-hero__content {
+  flex: 1;
+  min-width: 280px;
+  max-width: 620px;
+}
+
+.specialist-hero__content h1 {
+  font-size: 2.1rem;
+  line-height: 1.4;
+  margin: 0 0 1rem;
+}
+
+.specialist-hero__content p {
+  color: var(--color-text-on-dark-strong);
+  font-size: 1rem;
+  line-height: 1.8;
+  margin: 0 0 1.75rem;
+}
+
+.specialist-hero__art {
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+}
+
+.benefits-section,
+.process-section {
+  padding: 3.5rem 0;
+}
+
+.benefits-section h2,
+.process-section h2 {
+  text-align: center;
+  color: var(--color-primary-dark);
+  margin: 0 0 2rem;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.benefit-card {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  background: #fff;
+}
+
+.benefit-card h3 {
+  color: var(--color-primary);
+  font-size: 1.05rem;
+  margin: 0 0 0.5rem;
+}
+
+.benefit-card p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.process-timeline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.process-step {
+  flex: 1;
+  text-align: center;
+}
+
+.process-step__dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.process-step p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.process-section .btn {
+  display: block;
+  width: max-content;
+  margin: 0 auto;
+}
+
+@media (max-width: 860px) {
+  .specialist-hero__inner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .process-timeline {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Directory (listing) page */
+.directory-page {
+  padding-top: 2.5rem;
+  padding-bottom: 3rem;
+}
+
+.directory-page h1 {
+  color: var(--color-primary-dark);
+  margin-bottom: 0.4rem;
+}
+
+.directory-page__subtitle {
+  color: var(--color-text-muted);
+  margin: 0 0 2rem;
+}
+
+.filter-form {
+  background: var(--color-bg-lavender-2);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.filter-form__search {
+  margin-bottom: 1rem;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filter-form__checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+  cursor: pointer;
+}
+
+.filter-form__actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.specialist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.specialist-card {
+  display: block;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  background: #fff;
+  text-align: center;
+  transition: box-shadow 0.15s ease;
+}
+
+.specialist-card:hover {
+  box-shadow: 0 12px 24px rgba(30, 7, 64, 0.1);
+}
+
+.specialist-card__photo {
+  width: 88px;
+  height: 88px;
+  border-radius: 999px;
+  object-fit: cover;
+  margin: 0 auto 1rem;
+  display: block;
+}
+
+.specialist-card__photo--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.specialist-card__body h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+  color: var(--color-primary-dark);
+}
+
+.specialist-card__category {
+  color: var(--color-accent-dark);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.specialist-card__headline {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin: 0 0 0.75rem;
+}
+
+.specialist-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.rating-badge {
+  color: var(--color-accent-dark);
+  font-weight: 700;
+}
+
+.specialist-card__price {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  margin: 0;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.pagination__link {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.pagination__status {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--color-text-muted);
+}
+
+.empty-state .btn {
+  margin-top: 1rem;
+}
+
+/* Detail page */
+.specialist-detail {
+  max-width: 760px;
+  margin: 0 auto;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+.specialist-detail__header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.specialist-detail__photo {
+  width: 96px;
+  height: 96px;
+  border-radius: 999px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.specialist-detail__photo--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.specialist-detail__header h1 {
+  margin: 0 0 0.25rem;
+  color: var(--color-primary-dark);
+}
+
+.specialist-detail__category {
+  color: var(--color-accent-dark);
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.specialist-detail__headline {
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+  margin: 0 0 1.5rem;
+}
+
+.specialist-detail__section {
+  margin-bottom: 2rem;
+}
+
+.specialist-detail__section h2 {
+  font-size: 1.1rem;
+  color: var(--color-primary-dark);
+  margin: 0 0 0.75rem;
+}
+
+.specialist-detail__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 0;
+}
+
+.specialist-detail__facts dt {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: 0 0 0.15rem;
+}
+
+.specialist-detail__facts dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.specialty-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.specialty-tag {
+  background: var(--color-bg-lavender-1);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--color-primary-dark);
+}
+
+.specialist-detail__prices {
+  display: flex;
+  gap: 0.6rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  margin-top: 0.5rem;
+}
+
+.specialist-detail__prices-sep {
+  color: var(--color-border);
+  font-weight: 400;
+}
+
+.specialist-detail__prices-note {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin: 0.25rem 0 0;
+}
+
+.specialist-detail__book-btn {
+  margin-top: 1rem;
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-inline-start: 2px solid var(--color-border);
+}
+
+.timeline__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0 0 1.25rem 1.25rem;
+  margin-inline-start: -1px;
+  border-inline-start: 2px solid var(--color-border);
+}
+
+.timeline__item:last-child {
+  border-inline-start-color: transparent;
+  padding-bottom: 0;
+}
+
+.timeline__item strong {
+  color: var(--color-primary-dark);
+  font-size: 0.95rem;
+}
+
+.timeline__institution {
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+.timeline__dates {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 640px) {
+  .specialist-detail__header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .specialist-detail__prices {
+    justify-content: center;
+  }
 }

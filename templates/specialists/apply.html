@@ -1,40 +1,45 @@
 {% extends "base.html" %}
-{% load static %}
-{% block title %}انضم كمعالج — احتواء{% endblock %}
+{% load static i18n %}
+{% block title %}{% trans "انضم كمعالج" %} — {% trans "احتواء" %}{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
 <link rel="stylesheet" href="{% static 'css/specialists.css' %}">
 {% endblock %}
 {% block content %}
 <div class="apply-shell">
-  <a href="{% url 'accounts:welcome' %}" class="auth-card__back">→ رجوع</a>
-  <h1>نموذج طلب انضمام كمعالج لفريق احتواء</h1>
+  <a href="{% url 'specialists:landing' %}" class="auth-card__back">{% trans "→ رجوع" %}</a>
+  <h1>{% trans "نموذج طلب انضمام كمعالج لفريق احتواء" %}</h1>
+  {% if request.user.is_authenticated %}
+  <p class="auth-card__subtitle">{% blocktrans with email=request.user.email %}تم تسجيل الدخول باسم {{ email }}{% endblocktrans %}</p>
+  {% else %}
+  <p class="auth-card__subtitle">{% trans "املأ بياناتك عشان ننشئلك حساب ونستلم طلبك في نفس الوقت." %}</p>
+  {% endif %}
 
   <div class="requirements-box">
-    <h3>المعايير المطلوبة لكل فئة</h3>
+    <h3>{% trans "المعايير المطلوبة لكل فئة" %}</h3>
     <div>
-      <strong>طبيب نفسي</strong>
+      <strong>{% trans "طبيب نفسي" %}</strong>
       <ol>
-        <li>شهادة التخرج</li>
-        <li>رخصة مزاولة المهنة</li>
-        <li>شهادة نقابة الأطباء</li>
-        <li>شهادة الدراسات العليا (ماجستير أو دكتوراه)</li>
+        <li>{% trans "شهادة التخرج" %}</li>
+        <li>{% trans "رخصة مزاولة المهنة" %}</li>
+        <li>{% trans "شهادة نقابة الأطباء" %}</li>
+        <li>{% trans "شهادة الدراسات العليا (ماجستير أو دكتوراه)" %}</li>
       </ol>
     </div>
     <div>
-      <strong>معالج نفسي اكلينيكي</strong>
+      <strong>{% trans "معالج نفسي اكلينيكي" %}</strong>
       <ol>
-        <li>ماجستير العلوم أو الآداب في علم النفس الاكلينيكي</li>
-        <li>خمس سنوات خبرة اكلينيكية</li>
-        <li>إثبات وثيقة الإشراف</li>
+        <li>{% trans "ماجستير العلوم أو الآداب في علم النفس الاكلينيكي" %}</li>
+        <li>{% trans "خمس سنوات خبرة اكلينيكية" %}</li>
+        <li>{% trans "إثبات وثيقة الإشراف" %}</li>
       </ol>
     </div>
     <div>
-      <strong>مرشد نفسي</strong>
+      <strong>{% trans "مرشد نفسي" %}</strong>
       <ol>
-        <li>ماجستير العلوم أو الآداب في علم النفس</li>
-        <li>خمس سنوات خبرة إرشاد نفسي</li>
-        <li>إثبات وثيقة الإشراف</li>
+        <li>{% trans "ماجستير العلوم أو الآداب في علم النفس" %}</li>
+        <li>{% trans "خمس سنوات خبرة إرشاد نفسي" %}</li>
+        <li>{% trans "إثبات وثيقة الإشراف" %}</li>
       </ol>
     </div>
   </div>
@@ -46,7 +51,7 @@
   <form method="post" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
 
-    <h2 class="form-section-title">الفئة</h2>
+    <h2 class="form-section-title">{% trans "الفئة" %}</h2>
     <div class="category-radio-group">
       {% for radio in form.category %}
       <label class="category-radio-option">
@@ -57,7 +62,7 @@
     </div>
     {{ form.category.errors }}
 
-    <h2 class="form-section-title">المعلومات الشخصية</h2>
+    <h2 class="form-section-title">{% trans "المعلومات الشخصية" %}</h2>
     <div class="field-row">
       <div class="form-field">
         <label for="{{ form.full_name_ar.id_for_label }}">{{ form.full_name_ar.label }}</label>
@@ -75,11 +80,28 @@
       {{ form.title }}
       {{ form.title.errors }}
     </div>
+    {% if form.needs_account %}
     <div class="form-field">
       <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
       {{ form.email }}
       {{ form.email.errors }}
     </div>
+    <div class="form-field">
+      <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+      {{ form.password1 }}
+      <p class="help-text">{{ form.password1.help_text }}</p>
+      <div class="password-strength">
+        <div class="password-strength__bar" data-password-strength-bar></div>
+      </div>
+      <div class="password-strength__label" data-password-strength-label></div>
+      {{ form.password1.errors }}
+    </div>
+    <div class="form-field">
+      <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+      {{ form.password2 }}
+      {{ form.password2.errors }}
+    </div>
+    {% endif %}
     <div class="form-field">
       <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
       <div class="phone-field">
@@ -87,11 +109,6 @@
         {{ form.phone }}
       </div>
       {{ form.phone.errors }}
-    </div>
-    <div class="form-field">
-      <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
-      {{ form.username }}
-      {{ form.username.errors }}
     </div>
     <div class="form-field">
       <label for="{{ form.birth_year.id_for_label }}">{{ form.birth_year.label }}</label>
@@ -114,83 +131,47 @@
       {{ form.country_of_residence.errors }}
     </div>
     <div class="form-field">
-      <label for="{{ form.languages.id_for_label }}">{{ form.languages.label }}</label>
-      {{ form.languages }}
-      <p class="help-text">اضغط مع الاستمرار على Ctrl (أو Cmd) لاختيار أكثر من لغة</p>
+      <label>{{ form.languages.label }}</label>
+      <div class="checkbox-group">
+        {% for checkbox in form.languages %}
+        <label class="checkbox-option">
+          {{ checkbox.tag }}
+          {{ checkbox.choice_label }}
+        </label>
+        {% endfor %}
+      </div>
       {{ form.languages.errors }}
     </div>
 
-    <h2 class="form-section-title">المستندات المطلوبة</h2>
-
-    {% comment %}
-    Every field/file input below is rendered exactly once in the DOM (never
-    duplicated across groups, which would create clashing ids/names) —
-    category-specific pieces (extra label text, extra fields) are toggled
-    via the comma-separated data-category-group list on wrapper elements.
-    {% endcomment %}
-    <div class="form-field">
-      <label class="category-group" data-category-group="psychiatrist" for="{{ form.degree_certificate.id_for_label }}">شهادة التخرج</label>
-      <label class="category-group" data-category-group="clinical_psychologist,counselor" for="{{ form.degree_certificate.id_for_label }}">شهادة الماجستير (علم النفس الاكلينيكي أو علم النفس)</label>
-      {{ form.degree_certificate }}
-      {{ form.degree_certificate.errors }}
-    </div>
-
-    <div class="category-group" data-category-group="psychiatrist">
-      <div class="form-field">
-        <label for="{{ form.license_file.id_for_label }}">{{ form.license_file.label }}</label>
-        {{ form.license_file }}
-        {{ form.license_file.errors }}
-      </div>
-      <div class="form-field">
-        <label for="{{ form.syndicate_card.id_for_label }}">{{ form.syndicate_card.label }}</label>
-        {{ form.syndicate_card }}
-        {{ form.syndicate_card.errors }}
-      </div>
-      <div class="form-field">
-        <label for="{{ form.postgraduate_certificate.id_for_label }}">{{ form.postgraduate_certificate.label }}</label>
-        {{ form.postgraduate_certificate }}
-        {{ form.postgraduate_certificate.errors }}
-      </div>
-    </div>
-
-    <div class="category-group" data-category-group="clinical_psychologist,counselor">
-      <div class="form-field">
-        <label for="{{ form.years_of_experience.id_for_label }}">{{ form.years_of_experience.label }}</label>
-        {{ form.years_of_experience }}
-        {{ form.years_of_experience.errors }}
-      </div>
-      <div class="form-field">
-        <label for="{{ form.supervision_proof.id_for_label }}">{{ form.supervision_proof.label }}</label>
-        {{ form.supervision_proof }}
-        {{ form.supervision_proof.errors }}
-      </div>
-    </div>
-
-    <h2 class="form-section-title">كلمة المرور</h2>
-    <div class="form-field">
-      <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
-      {{ form.password1 }}
-      {{ form.password1.errors }}
-    </div>
-    <div class="form-field">
-      <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
-      {{ form.password2 }}
-      {{ form.password2.errors }}
+    <div class="form-field category-group" data-category-group="clinical_psychologist,counselor">
+      <label for="{{ form.years_of_experience.id_for_label }}">{{ form.years_of_experience.label }}</label>
+      {{ form.years_of_experience }}
+      {{ form.years_of_experience.errors }}
     </div>
 
     <div class="terms-checkbox">
       {{ form.agree_terms }}
+      {% url 'core:terms' as terms_url %}
+      {% url 'core:privacy' as privacy_url %}
       <label for="{{ form.agree_terms.id_for_label }}">
-        أوافق على <a href="{% url 'core:terms' %}" target="_blank">الشروط والأحكام</a>
-        و<a href="{% url 'core:privacy' %}" target="_blank">سياسة الخصوصية</a>
+        {% blocktrans %}أوافق على <a href="{{ terms_url }}" target="_blank">الشروط والأحكام</a> و<a href="{{ privacy_url }}" target="_blank">سياسة الخصوصية</a>{% endblocktrans %}
       </label>
     </div>
     {{ form.agree_terms.errors }}
 
-    <button type="submit" class="btn btn-primary">إرسال الطلب</button>
+    <button type="submit" class="btn btn-primary">{% trans "التالي" %}</button>
   </form>
 </div>
 {% endblock %}
 {% block extra_js %}
 <script src="{% static 'js/specialists.js' %}"></script>
+{% if form.needs_account %}
+<script src="{% static 'js/accounts.js' %}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var passwordInput = document.getElementById("{{ form.password1.id_for_label }}");
+    if (passwordInput) passwordInput.setAttribute("data-password-strength-input", "");
+  });
+</script>
+{% endif %}
 {% endblock %}

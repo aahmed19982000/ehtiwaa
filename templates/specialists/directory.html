@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "دليل الأخصائيين" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/specialists.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container directory-page">
+  <h1>{% trans "دليل الأخصائيين" %}</h1>
+  <p class="directory-page__subtitle">{% trans "دوّر على المعالج أو الطبيب النفسي المناسب لك من نخبة الأخصائيين المعتمدين." %}</p>
+
+  <form method="get" class="filter-form">
+    <div class="form-field filter-form__search">
+      <label for="{{ filter_form.q.id_for_label }}">{{ filter_form.q.label }}</label>
+      {{ filter_form.q }}
+    </div>
+    <div class="filter-grid">
+      <div class="form-field">
+        <label for="{{ filter_form.category.id_for_label }}">{{ filter_form.category.label }}</label>
+        {{ filter_form.category }}
+      </div>
+      <div class="form-field">
+        <label for="{{ filter_form.gender.id_for_label }}">{{ filter_form.gender.label }}</label>
+        {{ filter_form.gender }}
+      </div>
+      <div class="form-field">
+        <label for="{{ filter_form.language.id_for_label }}">{{ filter_form.language.label }}</label>
+        {{ filter_form.language }}
+      </div>
+      <div class="form-field">
+        <label for="{{ filter_form.price_min.id_for_label }}">{{ filter_form.price_min.label }}</label>
+        {{ filter_form.price_min }}
+      </div>
+      <div class="form-field">
+        <label for="{{ filter_form.price_max.id_for_label }}">{{ filter_form.price_max.label }}</label>
+        {{ filter_form.price_max }}
+      </div>
+      <div class="form-field">
+        <label for="{{ filter_form.sort.id_for_label }}">{{ filter_form.sort.label }}</label>
+        {{ filter_form.sort }}
+      </div>
+    </div>
+    <label class="filter-form__checkbox">
+      {{ filter_form.available_only }}
+      {{ filter_form.available_only.label }}
+    </label>
+    {% if filter_form.non_field_errors %}
+    <div class="alert alert-error">{{ filter_form.non_field_errors.0 }}</div>
+    {% endif %}
+    <div class="filter-form__actions">
+      <button type="submit" class="btn btn-primary">{% trans "بحث" %}</button>
+      {% if has_active_filters %}
+      <a href="{% url 'specialists:directory' %}" class="btn btn-outline">{% trans "مسح الفلاتر" %}</a>
+      {% endif %}
+    </div>
+  </form>
+
+  {% if specialists %}
+  <div class="specialist-grid">
+    {% for specialist in specialists %}
+    <a href="{% url 'specialists:detail' specialist.pk %}" class="specialist-card">
+      {% if specialist.user.profile.avatar %}
+      <img class="specialist-card__photo" src="{{ specialist.user.profile.avatar.url }}" alt="{{ specialist.full_name_ar }}">
+      {% else %}
+      <span class="specialist-card__photo specialist-card__photo--placeholder">{{ specialist.full_name_ar|default:specialist.full_name_en|first }}</span>
+      {% endif %}
+      <div class="specialist-card__body">
+        <h3>{{ specialist.get_title_display }} {{ specialist.full_name_ar|default:specialist.full_name_en }}</h3>
+        <p class="specialist-card__category">{{ specialist.get_category_display }}</p>
+        {% if specialist.headline %}<p class="specialist-card__headline">{{ specialist.headline }}</p>{% endif %}
+        <div class="specialist-card__meta">
+          <span class="rating-badge">★ {{ specialist.average_rating }}</span>
+          <span>{% blocktrans count years=specialist.years_of_experience %}{{ years }} سنة خبرة{% plural %}{{ years }} سنوات خبرة{% endblocktrans %}</span>
+        </div>
+        {% if specialist.hourly_rate %}
+        <p class="specialist-card__price">{% blocktrans with price=specialist.hourly_rate %}{{ price }} ج.م / الجلسة{% endblocktrans %}</p>
+        {% endif %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+  {% if is_paginated %}
+  <div class="pagination">
+    {% if page_obj.has_previous %}
+    <a class="pagination__link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">{% trans "السابق" %}</a>
+    {% endif %}
+    <span class="pagination__status">{% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}صفحة {{ current }} من {{ total }}{% endblocktrans %}</span>
+    {% if page_obj.has_next %}
+    <a class="pagination__link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">{% trans "التالي" %}</a>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% else %}
+  <div class="empty-state">
+    {% if has_active_filters %}
+    <p>{% trans "مفيش أخصائيين مطابقين لبحثك." %}</p>
+    <a href="{% url 'specialists:directory' %}" class="btn btn-primary">{% trans "مسح الفلاتر" %}</a>
+    {% else %}
+    <p>{% trans "لسه معندناش أخصائيين متاحين في الدليل حاليًا." %}</p>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
 {% endblock %}
 {% block content %}
-<div class="auth-shell">
+<div class="auth-shell auth-shell--split">
   <div class="auth-card">
     <a href="{% url 'accounts:welcome' %}" class="auth-card__back">→ رجوع</a>
 
@@ -15,8 +15,7 @@
       <span class="step-indicator__dot" data-step-dot="2">2</span>
     </div>
 
-    <h1>إنشاء حساب جديد</h1>
-    <p class="auth-card__subtitle">الخطوة الأولى: بياناتك الأساسية</p>
+    <h1>مرحبًا بك في احتواء</h1>
 
     {% if form.non_field_errors %}
     <div class="alert alert-error">{{ form.non_field_errors.0 }}</div>
@@ -24,8 +23,11 @@
 
     <form method="post" novalidate>
       {% csrf_token %}
+      {% firstof request.POST.next request.GET.next as next_url %}
+      {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}">{% endif %}
 
       <div data-signup-step="1" class="signup-step is-active">
+        <p class="auth-card__subtitle">الخطوة الأولى: بياناتك الأساسية</p>
         <div class="form-field">
           <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
           {{ form.full_name }}
@@ -49,9 +51,11 @@
       </div>
 
       <div data-signup-step="2" class="signup-step">
+        <p class="auth-card__subtitle">الخطوة الثانية: كلمة المرور</p>
         <div class="form-field">
           <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
           {{ form.password1 }}
+          <p class="help-text">{{ form.password1.help_text }}</p>
           <div class="password-strength">
             <div class="password-strength__bar" data-password-strength-bar></div>
           </div>
@@ -81,6 +85,15 @@
     <p class="auth-footer-link">
       لديك حساب بالفعل؟ <a href="{% url 'accounts:login' %}">تسجيل الدخول</a>
     </p>
+  </div>
+
+  <div class="auth-illustration">
+    <svg class="auth-illustration__art" viewBox="0 0 240 240" aria-hidden="true">
+      <circle cx="120" cy="120" r="118" fill="var(--color-bg-lavender-1)"/>
+      <path d="M120 176c-2 0-4-.7-5.6-2.1C90 152.6 74 137.8 74 114.6 74 96.6 87.6 83 104.8 83c8.9 0 17.5 4.1 23.2 10.7C133.7 87.1 142.3 83 151.2 83 168.4 83 182 96.6 182 114.6c0 23.2-16 38-40.4 59.3-1.6 1.4-3.6 2.1-5.6 2.1z" fill="var(--color-primary)"/>
+    </svg>
+    <h2 class="auth-illustration__title">رحلتك نحو الدعم النفسي تبدأ بخطوة واحدة</h2>
+    <p class="auth-illustration__text">نحن هنا لنرافقك في كل خطوة، وبياناتك محمية وسرية بالكامل.</p>
   </div>
 </div>
 {% endblock %}

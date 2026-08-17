@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "احجز موعد" %} — {{ specialist.full_name_ar }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/specialists.css' %}">
+<link rel="stylesheet" href="{% static 'css/bookings.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container booking-page">
+  <a href="{% url 'specialists:detail' specialist.pk %}" class="auth-card__back">{% trans "→ رجوع لملف الأخصائي" %}</a>
+  <h1>{% blocktrans with name=specialist.full_name_ar %}احجز موعدًا مع {{ name }}{% endblocktrans %}</h1>
+
+  {% if form.non_field_errors %}
+  <div class="alert alert-error">{{ form.non_field_errors.0 }}</div>
+  {% endif %}
+
+  <form method="post" class="booking-form">
+    {% csrf_token %}
+    {{ form.date }}
+
+    <h2 class="form-section-title">{% trans "اختر اليوم" %}</h2>
+    <div class="date-picker">
+      {% for d in date_options %}
+      <a href="?date={{ d|date:'Y-m-d' }}" class="date-option{% if d == selected_date %} is-active{% endif %}">
+        <span class="date-option__weekday">{{ d|date:"D" }}</span>
+        <span class="date-option__day">{{ d|date:"j M" }}</span>
+      </a>
+      {% endfor %}
+    </div>
+
+    <h2 class="form-section-title">{% trans "اختر الموعد" %}</h2>
+    {% if slots %}
+    <div class="slot-grid">
+      {% for slot in slots %}
+        {% if slot.status == "available" %}
+        <label class="slot-option">
+          <input type="radio" name="{{ form.time_slot.html_name }}" value="{{ slot.value }}"{% if form.time_slot.value == slot.value %} checked{% endif %} required>
+          {{ slot.label }}
+        </label>
+        {% else %}
+        <span class="slot-option slot-option--booked">{{ slot.label }}</span>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="help-text">{% trans "لا توجد مواعيد متاحة في هذا اليوم — جرّب يومًا آخر." %}</p>
+    {% endif %}
+    {{ form.time_slot.errors }}
+
+    <h2 class="form-section-title">{% trans "بيانات التواصل" %}</h2>
+    <div class="form-field">
+      <label for="{{ form.contact_phone.id_for_label }}">{{ form.contact_phone.label }}</label>
+      {{ form.contact_phone }}
+      {{ form.contact_phone.errors }}
+    </div>
+    <div class="form-field">
+      <label for="{{ form.notes.id_for_label }}">{{ form.notes.label }}</label>
+      {{ form.notes }}
+      {{ form.notes.errors }}
+    </div>
+
+    <p class="help-text">{% trans "يمكنك إلغاء الحجز مجانًا حتى 24 ساعة قبل الموعد." %}</p>
+    <button type="submit" class="btn btn-primary">{% trans "تأكيد الحجز" %}</button>
+  </form>
+</div>
+{% endblock %}

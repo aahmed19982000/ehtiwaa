@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "المستندات المطلوبة" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+<link rel="stylesheet" href="{% static 'css/specialists.css' %}">
+{% endblock %}
+{% block content %}
+<div class="apply-shell">
+  <h1>{% trans "المستندات المطلوبة" %}</h1>
+  <p class="auth-card__subtitle">{% trans "خطوة أخيرة — ارفع المستندات المطلوبة عشان يقدر فريقنا يراجع طلبك." %}</p>
+
+  {% if form.non_field_errors %}
+  <div class="alert alert-error">{{ form.non_field_errors.0 }}</div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-field">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {{ field.errors }}
+    </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">{% trans "إرسال الطلب" %}</button>
+  </form>
+</div>
+{% endblock %}

@@ -26,8 +26,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     "django.contrib.sites",
-    # Social login only (Google, Auth0) — local email/phone+password auth is
-    # hand-rolled in apps.accounts, not allauth's own account flows.
+    # Auth0 (Google + Database connection) is the only public signup/login
+    # path — allauth.account itself is still unused (see ACCOUNT_EMAIL_VERIFICATION
+    # below), Django admin keeps its own separate ModelBackend password login.
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -55,12 +56,14 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "apps.core.middleware.ClientTimezoneMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -73,8 +76,10 @@ TEMPLATES = [
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
+                "django.template.context_processors.i18n",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "apps.core.context_processors.language_urls",
             ],
         },
     },
@@ -91,7 +96,6 @@ AUTH_USER_MODEL = "accounts.User"
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
-    "apps.accounts.backends.EmailOrPhoneBackend",
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
@@ -107,18 +111,33 @@ GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET", default="")
 AUTH0_DOMAIN = env("AUTH0_DOMAIN", default="")
 AUTH0_CLIENT_ID = env("AUTH0_CLIENT_ID", default="")
 AUTH0_CLIENT_SECRET = env("AUTH0_CLIENT_SECRET", default="")
+# Database connection used for our own signup form (apps.accounts.auth0),
+# which talks to Auth0's Authentication API directly instead of redirecting
+# to the hosted Universal Login page. Requires the "Password" grant type
+# enabled on the Auth0 application — see docs/social-login-setup.md.
+AUTH0_DB_CONNECTION = env("AUTH0_DB_CONNECTION", default="Username-Password-Authentication")
+
+# Google Calendar — creates a Meet link for each booking (apps.bookings).
+# Booking creation degrades gracefully (no link, just logs) when unset. Uses
+# a real Google account's OAuth refresh token (not a service account) —
+# Google Meet auto-creation via the API isn't available to plain service
+# accounts. Run `python manage.py google_calendar_authorize` once to obtain
+# GOOGLE_CALENDAR_REFRESH_TOKEN — see apps/bookings/management/commands/.
+GOOGLE_CALENDAR_CLIENT_ID = env("GOOGLE_CALENDAR_CLIENT_ID", default="")
+GOOGLE_CALENDAR_CLIENT_SECRET = env("GOOGLE_CALENDAR_CLIENT_SECRET", default="")
+GOOGLE_CALENDAR_REFRESH_TOKEN = env("GOOGLE_CALENDAR_REFRESH_TOKEN", default="")
+GOOGLE_CALENDAR_ID = env("GOOGLE_CALENDAR_ID", default="") or "primary"
 
 SOCIALACCOUNT_ADAPTER = "apps.accounts.adapters.EhtiwaaSocialAccountAdapter"
 SOCIALACCOUNT_AUTO_SIGNUP = True
 # Skip allauth's "you're about to log in with a third-party account" interstitial
 # — clicking the button goes straight to the provider (still full OAuth underneath).
 SOCIALACCOUNT_LOGIN_ON_GET = True
-# We don't include allauth.account.urls (we use our own local signup/login/
-# verification flow, not allauth's). Without this, allauth's account app
-# tries to send its own confirmation email on social signup and fails with
-# NoReverseMatch on 'account_confirm_email', which doesn't exist in our
-# URLconf. The provider (Google/Auth0) already verified the email, so
-# allauth's own verification step is redundant here regardless.
+# We don't include allauth.account.urls (Auth0 hosts its own signup/login/
+# verification pages). Without this, allauth's account app tries to send its
+# own confirmation email on signup and fails with NoReverseMatch on
+# 'account_confirm_email', which doesn't exist in our URLconf. Auth0 already
+# handles email verification itself, so allauth's own step is redundant here.
 ACCOUNT_EMAIL_VERIFICATION = "none"
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
@@ -151,15 +170,30 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
+# MinimumLengthValidator must match this Auth0 tenant's actual Database
+# connection password policy (Authentication > Database > Password Policy)
+# — otherwise a password we accept here still gets rejected later by Auth0's
+# API with a confusing error. Currently 8; if you lower/raise this, update
+# the connection's policy in the Auth0 dashboard to match.
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 8},
+    },
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# Egypt is the confirmed target market (RTL Arabic content, EGP currency, 14% VAT)
+# Egypt is the confirmed target market (RTL Arabic content, EGP currency, 14% VAT).
+# Arabic stays the default/unprefixed language (see i18n_patterns in config/urls.py);
+# English is available under the /en/ prefix for non-Arabic-speaking users.
 LANGUAGE_CODE = "ar"
+LANGUAGES = [
+    ("ar", "العربية"),
+    ("en", "English"),
+]
+LOCALE_PATHS = [BASE_DIR / "locale"]
 TIME_ZONE = "Africa/Cairo"
 USE_I18N = True
 USE_TZ = True

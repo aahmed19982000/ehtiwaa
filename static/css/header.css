@@ -22,8 +22,14 @@
   gap: 0.75rem;
 }
 
+.site-header__logo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .site-header__logo {
-  height: 40px;
+  height: 48px;
   width: auto;
 }
 
@@ -93,6 +99,41 @@
   color: var(--color-text-muted);
 }
 
+.lang-switcher {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 0.2rem;
+  gap: 0.15rem;
+}
+
+.lang-switcher__btn {
+  border: none;
+  background: none;
+  border-radius: 999px;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: var(--font-family-base);
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.lang-switcher__btn.is-active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.header-user-dropdown {
+  position: relative;
+}
+
+.header-user-dropdown .nav-dropdown__menu {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+}
+
 .header-user-link {
   display: flex;
   align-items: center;
@@ -100,6 +141,25 @@
   font-weight: 600;
   font-size: 0.9rem;
   color: var(--color-text);
+}
+
+.nav-dropdown__menu-btn {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: none;
+  background: none;
+  color: var(--color-error);
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-align: inherit;
+  cursor: pointer;
+  font-family: var(--font-family-base);
+}
+
+.nav-dropdown__menu-btn:hover {
+  background: var(--color-bg-lavender-1);
 }
 
 .header-user-link__avatar {
@@ -163,6 +223,10 @@
     gap: 0.5rem;
   }
 
+  .site-header__logo {
+    height: 30px;
+  }
+
   .header-actions {
     gap: 0.4rem;
   }
@@ -174,5 +238,17 @@
 
   .header-actions .btn-outline {
     display: none;
+  }
+
+  /* Search/help are placeholder buttons (no behavior yet) and the language
+     switcher moves into the hamburger menu below — none are worth the
+     width on a small screen alongside the logo and primary CTA. */
+  .header-actions > .header-icon-btn,
+  .header-actions > .lang-switcher {
+    display: none;
+  }
+
+  .mobile-nav .lang-switcher {
+    align-self: flex-start;
   }
 }

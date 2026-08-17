@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{{ specialist.get_title_display }} {{ specialist.full_name_ar|default:specialist.full_name_en }} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/specialists.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container specialist-detail">
+  <a href="{% url 'specialists:directory' %}" class="auth-card__back">{% trans "→ رجوع لدليل الأخصائيين" %}</a>
+
+  <div class="specialist-detail__header">
+    {% if specialist.user.profile.avatar %}
+    <img class="specialist-detail__photo" src="{{ specialist.user.profile.avatar.url }}" alt="{{ specialist.full_name_ar }}">
+    {% else %}
+    <span class="specialist-detail__photo specialist-detail__photo--placeholder">{{ specialist.full_name_ar|default:specialist.full_name_en|first }}</span>
+    {% endif %}
+    <div>
+      <h1>{{ specialist.get_title_display }} {{ specialist.full_name_ar|default:specialist.full_name_en }}</h1>
+      <p class="specialist-detail__category">{{ specialist.get_category_display }}</p>
+      <div class="specialist-card__meta">
+        <span class="rating-badge">★ {{ specialist.average_rating }}</span>
+        <span>{% blocktrans count years=specialist.years_of_experience %}{{ years }} سنة خبرة{% plural %}{{ years }} سنوات خبرة{% endblocktrans %}</span>
+        {% if specialist.completed_sessions_count %}
+        <span>{% blocktrans with count=specialist.completed_sessions_count %}{{ count }}+ جلسة{% endblocktrans %}</span>
+        {% endif %}
+      </div>
+      {% if specialist.hourly_rate or specialist.price_30min %}
+      <div class="specialist-detail__prices">
+        {% if specialist.hourly_rate %}
+        <span>{% blocktrans with price=specialist.hourly_rate %}{{ price }} ج.م / 60 دقيقة{% endblocktrans %}</span>
+        {% endif %}
+        {% if specialist.hourly_rate and specialist.price_30min %}<span class="specialist-detail__prices-sep">|</span>{% endif %}
+        {% if specialist.price_30min %}
+        <span>{% blocktrans with price=specialist.price_30min %}{{ price }} ج.م / 30 دقيقة{% endblocktrans %}</span>
+        {% endif %}
+      </div>
+      <p class="specialist-detail__prices-note">{% trans "جميع الأسعار تشمل ضريبة القيمة المضافة ورسوم الخدمة." %}</p>
+      {% endif %}
+      <a href="{% url 'bookings:create' specialist.pk %}" class="btn btn-primary specialist-detail__book-btn">{% trans "اختر موعد الجلسة" %}</a>
+    </div>
+  </div>
+
+  {% if specialist.headline %}
+  <p class="specialist-detail__headline">{{ specialist.headline }}</p>
+  {% endif %}
+
+  {% if specialist.about %}
+  <section class="specialist-detail__section">
+    <h2>{% trans "نبذة" %}</h2>
+    <p>{{ specialist.about|linebreaksbr }}</p>
+  </section>
+  {% endif %}
+
+  <section class="specialist-detail__section">
+    <h2>{% trans "معلومات إضافية" %}</h2>
+    <dl class="specialist-detail__facts">
+      {% if specialist.get_gender_display %}
+      <div><dt>{% trans "الجنس" %}</dt><dd>{{ specialist.get_gender_display }}</dd></div>
+      {% endif %}
+      {% if specialist.languages %}
+      <div>
+        <dt>{% trans "اللغات" %}</dt>
+        <dd>
+          {% for label in specialist.get_languages_display %}{{ label }}{% if not forloop.last %}، {% endif %}{% endfor %}
+        </dd>
+      </div>
+      {% endif %}
+      {% if specialist.nationality %}
+      <div><dt>{% trans "الجنسية" %}</dt><dd>{{ specialist.nationality }}</dd></div>
+      {% endif %}
+      <div><dt>{% trans "تاريخ الانضمام" %}</dt><dd>{% blocktrans with duration=specialist.created_at|timesince %}منذ {{ duration }}{% endblocktrans %}</dd></div>
+    </dl>
+  </section>
+
+  {% if specialist.specialties.all %}
+  <section class="specialist-detail__section">
+    <h2>{% trans "مجالات التخصص" %}</h2>
+    <div class="specialty-tags">
+      {% for tag in specialist.specialties.all %}
+      <span class="specialty-tag">{{ tag.name }}</span>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if specialist.work_experiences.all %}
+  <section class="specialist-detail__section">
+    <h2>{% trans "الخبرة" %}</h2>
+    <ul class="timeline">
+      {% for exp in specialist.work_experiences.all %}
+      <li class="timeline__item">
+        <strong>{{ exp.job_title }}</strong>
+        <span class="timeline__institution">{{ exp.institution }}</span>
+        <span class="timeline__dates">
+          {{ exp.start_date|date:"F Y" }} - {% if exp.end_date %}{{ exp.end_date|date:"F Y" }}{% else %}{% trans "الآن" %}{% endif %}
+        </span>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if specialist.education_entries.all %}
+  <section class="specialist-detail__section">
+    <h2>{% trans "التعليم" %}</h2>
+    <ul class="timeline">
+      {% for edu in specialist.education_entries.all %}
+      <li class="timeline__item">
+        <strong>{{ edu.degree }}</strong>
+        <span class="timeline__institution">{{ edu.institution }}</span>
+        <span class="timeline__dates">
+          {{ edu.start_date|date:"F Y" }} - {% if edu.end_date %}{{ edu.end_date|date:"F Y" }}{% else %}{% trans "الآن" %}{% endif %}
+        </span>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

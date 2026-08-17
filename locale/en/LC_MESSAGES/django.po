@@ -1,0 +1,847 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-15 18:31+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: apps/accounts/forms.py:11
+msgid "الأسم"
+msgstr "Name"
+
+#: apps/accounts/forms.py:12 apps/accounts/forms.py:56
+#: apps/specialists/forms.py:53 templates/accounts/password_reset.html:16
+msgid "البريد الإلكتروني"
+msgstr "Email"
+
+#: apps/accounts/forms.py:14 apps/specialists/forms.py:55
+msgid "مفتاح الدولة"
+msgstr "Country code"
+
+#: apps/accounts/forms.py:16 apps/accounts/forms.py:57
+msgid "رقم الهاتف"
+msgstr "Phone number"
+
+#: apps/accounts/forms.py:17 apps/accounts/forms.py:50
+#: apps/specialists/forms.py:81 templates/specialists/apply.html:170
+msgid "كلمة المرور"
+msgstr "Password"
+
+#: apps/accounts/forms.py:18 apps/specialists/forms.py:82
+#: templates/accounts/password_reset_confirm.html:20
+msgid "تأكيد كلمة المرور"
+msgstr "Confirm password"
+
+#: apps/accounts/forms.py:20 apps/specialists/forms.py:84
+msgid "أوافق على الشروط والأحكام وسياسة الخصوصية"
+msgstr "I agree to the Terms & Conditions and Privacy Policy"
+
+#: apps/accounts/forms.py:26 apps/accounts/forms.py:80
+#: apps/specialists/forms.py:92
+msgid "هذا البريد الإلكتروني مستخدم بالفعل."
+msgstr "This email is already in use."
+
+#: apps/accounts/forms.py:34 apps/specialists/forms.py:109
+msgid "كلمتا المرور غير متطابقتين."
+msgstr "The passwords don't match."
+
+#: apps/accounts/forms.py:43
+msgid "رقم الهاتف مستخدم بالفعل."
+msgstr "This phone number is already in use."
+
+#: apps/accounts/forms.py:49
+msgid "البريد الإلكتروني أو رقم الهاتف"
+msgstr "Email or phone number"
+
+#: apps/accounts/forms.py:54
+msgid "الاسم الأول"
+msgstr "First name"
+
+#: apps/accounts/forms.py:55
+msgid "اسم العائلة"
+msgstr "Last name"
+
+#: apps/accounts/forms.py:63 templates/accounts/profile_edit.html:38
+msgid "الصورة الشخصية"
+msgstr "Profile photo"
+
+#: apps/accounts/forms.py:64
+msgid "نبذة تعريفية"
+msgstr "Bio"
+
+#: apps/accounts/forms.py:65
+msgid "المدينة"
+msgstr "City"
+
+#: apps/accounts/services.py:64
+msgid "تفعيل حسابك في احتواء"
+msgstr "Activate your Ehtiwaa account"
+
+#: apps/accounts/views.py:78
+msgid "تم تفعيل حسابك بنجاح."
+msgstr "Your account has been activated successfully."
+
+#: apps/accounts/views.py:81
+msgid "رابط التفعيل غير صالح أو منتهي الصلاحية."
+msgstr "The activation link is invalid or has expired."
+
+#: apps/accounts/views.py:101
+msgid "بيانات الدخول غير صحيحة."
+msgstr "Invalid login credentials."
+
+#: apps/accounts/views.py:104
+msgid "الحساب غير مفعّل بعد، برجاء تفعيله عبر البريد الإلكتروني."
+msgstr "Your account isn't activated yet — please activate it via email."
+
+#: apps/accounts/views.py:141
+msgid "تم حفظ كلمة المرور بنجاح."
+msgstr "Password saved successfully."
+
+#: apps/accounts/views.py:145
+msgid "تم تحديث الملف الشخصي بنجاح."
+msgstr "Profile updated successfully."
+
+#: apps/core/countries.py:13
+msgid "مصر"
+msgstr "Egypt"
+
+#: apps/core/countries.py:14
+msgid "السعودية"
+msgstr "Saudi Arabia"
+
+#: apps/core/countries.py:15
+msgid "الإمارات"
+msgstr "United Arab Emirates"
+
+#: apps/core/countries.py:16
+msgid "الكويت"
+msgstr "Kuwait"
+
+#: apps/core/countries.py:17
+msgid "قطر"
+msgstr "Qatar"
+
+#: apps/core/countries.py:18
+msgid "البحرين"
+msgstr "Bahrain"
+
+#: apps/core/countries.py:19
+msgid "عُمان"
+msgstr "Oman"
+
+#: apps/core/countries.py:20
+msgid "الأردن"
+msgstr "Jordan"
+
+#: apps/core/countries.py:21
+msgid "لبنان"
+msgstr "Lebanon"
+
+#: apps/core/countries.py:22
+msgid "سوريا"
+msgstr "Syria"
+
+#: apps/core/countries.py:23
+msgid "العراق"
+msgstr "Iraq"
+
+#: apps/core/countries.py:24
+msgid "فلسطين"
+msgstr "Palestine"
+
+#: apps/core/countries.py:25
+msgid "اليمن"
+msgstr "Yemen"
+
+#: apps/core/countries.py:26
+msgid "ليبيا"
+msgstr "Libya"
+
+#: apps/core/countries.py:27
+msgid "تونس"
+msgstr "Tunisia"
+
+#: apps/core/countries.py:28
+msgid "الجزائر"
+msgstr "Algeria"
+
+#: apps/core/countries.py:29
+msgid "المغرب"
+msgstr "Morocco"
+
+#: apps/core/countries.py:30
+msgid "السودان"
+msgstr "Sudan"
+
+#: apps/core/countries.py:31
+msgid "الصومال"
+msgstr "Somalia"
+
+#: apps/core/countries.py:32
+msgid "موريتانيا"
+msgstr "Mauritania"
+
+#: apps/core/countries.py:33
+msgid "جيبوتي"
+msgstr "Djibouti"
+
+#: apps/core/countries.py:34
+msgid "جزر القمر"
+msgstr "Comoros"
+
+#: apps/core/countries.py:35
+msgid "الولايات المتحدة الأمريكية"
+msgstr "United States"
+
+#: apps/core/countries.py:36
+msgid "المملكة المتحدة"
+msgstr "United Kingdom"
+
+#: apps/core/countries.py:37
+msgid "كندا"
+msgstr "Canada"
+
+#: apps/core/countries.py:38
+msgid "فرنسا"
+msgstr "France"
+
+#: apps/core/countries.py:39
+msgid "ألمانيا"
+msgstr "Germany"
+
+#: apps/core/countries.py:40
+msgid "إيطاليا"
+msgstr "Italy"
+
+#: apps/core/countries.py:41
+msgid "إسبانيا"
+msgstr "Spain"
+
+#: apps/core/countries.py:42
+msgid "تركيا"
+msgstr "Turkey"
+
+#: apps/core/countries.py:43
+msgid "الهند"
+msgstr "India"
+
+#: apps/core/countries.py:44
+msgid "باكستان"
+msgstr "Pakistan"
+
+#: apps/core/countries.py:45
+msgid "الصين"
+msgstr "China"
+
+#: apps/core/countries.py:46
+msgid "ماليزيا"
+msgstr "Malaysia"
+
+#: apps/core/countries.py:47
+msgid "إندونيسيا"
+msgstr "Indonesia"
+
+#: apps/core/countries.py:48
+msgid "أستراليا"
+msgstr "Australia"
+
+#: apps/specialists/forms.py:10
+msgid "العربية"
+msgstr "Arabic"
+
+#: apps/specialists/forms.py:11
+msgid "الإنجليزية"
+msgstr "English"
+
+#: apps/specialists/forms.py:12
+msgid "الفرنسية"
+msgstr "French"
+
+#: apps/specialists/forms.py:13
+msgid "الألمانية"
+msgstr "German"
+
+#: apps/specialists/forms.py:14
+msgid "الإسبانية"
+msgstr "Spanish"
+
+#: apps/specialists/forms.py:15
+msgid "الإيطالية"
+msgstr "Italian"
+
+#: apps/specialists/forms.py:16
+msgid "التركية"
+msgstr "Turkish"
+
+#: apps/specialists/forms.py:17
+msgid "الأردية"
+msgstr "Urdu"
+
+#: apps/specialists/forms.py:18
+msgid "الصينية"
+msgstr "Chinese"
+
+#: apps/specialists/forms.py:25 templates/specialists/apply.html:18
+#: templates/specialists/apply.html:133
+msgid "شهادة التخرج"
+msgstr "Degree certificate"
+
+#: apps/specialists/forms.py:26 apps/specialists/forms.py:76
+#: templates/specialists/apply.html:19
+msgid "رخصة مزاولة المهنة"
+msgstr "Practice license"
+
+#: apps/specialists/forms.py:27 apps/specialists/forms.py:77
+#: templates/specialists/apply.html:20
+msgid "شهادة نقابة الأطباء"
+msgstr "Medical syndicate card"
+
+#: apps/specialists/forms.py:28 templates/specialists/apply.html:21
+msgid "شهادة الدراسات العليا (ماجستير أو دكتوراه)"
+msgstr "Postgraduate certificate (Master's or PhD)"
+
+#: apps/specialists/forms.py:31
+msgid "شهادة الماجستير في علم النفس الاكلينيكي"
+msgstr "Master's certificate in clinical psychology"
+
+#: apps/specialists/forms.py:32 apps/specialists/forms.py:36
+#: apps/specialists/forms.py:79 templates/specialists/apply.html:29
+#: templates/specialists/apply.html:37
+msgid "إثبات وثيقة الإشراف"
+msgstr "Proof of supervision document"
+
+#: apps/specialists/forms.py:35
+msgid "شهادة الماجستير في علم النفس"
+msgstr "Master's certificate in psychology"
+
+#: apps/specialists/forms.py:45 templates/specialists/apply.html:49
+msgid "الفئة"
+msgstr "Category"
+
+#: apps/specialists/forms.py:50
+msgid "الاسم بالكامل (بالعربية)"
+msgstr "Full name (in Arabic)"
+
+#: apps/specialists/forms.py:51
+msgid "الاسم بالكامل (بالإنجليزية)"
+msgstr "Full name (in English)"
+
+#: apps/specialists/forms.py:52
+msgid "اللقب"
+msgstr "Title"
+
+#: apps/specialists/forms.py:57
+msgid "رقم التليفون"
+msgstr "Phone number"
+
+#: apps/specialists/forms.py:58
+msgid "اسم المستخدم"
+msgstr "Username"
+
+#: apps/specialists/forms.py:59
+msgid "سنة الميلاد"
+msgstr "Birth year"
+
+#: apps/specialists/forms.py:60
+msgid "الجنس"
+msgstr "Gender"
+
+#: apps/specialists/forms.py:61
+msgid "الجنسية"
+msgstr "Nationality"
+
+#: apps/specialists/forms.py:62
+msgid "بلد الإقامة"
+msgstr "Country of residence"
+
+#: apps/specialists/forms.py:64
+msgid "اللغات المتحدث بها بطلاقة"
+msgstr "Languages spoken fluently"
+
+#: apps/specialists/forms.py:70
+msgid "سنوات الخبرة"
+msgstr "Years of experience"
+
+#: apps/specialists/forms.py:74
+msgid "شهادة الماجستير / شهادة التخرج"
+msgstr "Master's certificate / degree certificate"
+
+#: apps/specialists/forms.py:78
+msgid "شهادة الدراسات العليا"
+msgstr "Postgraduate certificate"
+
+#: apps/specialists/forms.py:100
+msgid "اسم المستخدم مستخدم بالفعل."
+msgstr "This username is already in use."
+
+#: apps/specialists/forms.py:125
+#, python-format
+msgid "مطلوب %(years)s سنوات خبرة على الأقل لهذه الفئة."
+msgstr "At least %(years)s years of experience are required for this category."
+
+#: apps/specialists/forms.py:131
+#, python-format
+msgid "هذا المستند مطلوب: %(doc)s"
+msgstr "This document is required: %(doc)s"
+
+#: apps/specialists/models.py:24 templates/specialists/apply.html:16
+msgid "طبيب نفسي"
+msgstr "Psychiatrist"
+
+#: apps/specialists/models.py:25 templates/specialists/apply.html:25
+msgid "معالج نفسي اكلينيكي"
+msgstr "Clinical psychologist"
+
+#: apps/specialists/models.py:26 templates/specialists/apply.html:33
+msgid "مرشد نفسي"
+msgstr "Psychological counselor"
+
+#: apps/specialists/models.py:29
+msgid "سيد"
+msgstr "Mr."
+
+#: apps/specialists/models.py:30
+msgid "سيدة"
+msgstr "Mrs."
+
+#: apps/specialists/models.py:31
+msgid "آنسة"
+msgstr "Ms."
+
+#: apps/specialists/models.py:32
+msgid "دكتور"
+msgstr "Dr."
+
+#: apps/specialists/models.py:34
+msgid "ذكر"
+msgstr "Male"
+
+#: apps/specialists/models.py:34
+msgid "أنثى"
+msgstr "Female"
+
+#: templates/accounts/email/activation_email.txt:1
+#: templates/accounts/email/password_reset_email.txt:1
+msgid "مرحبًا"
+msgstr "Hello"
+
+#: templates/accounts/email/activation_email.txt:3
+msgid "شكرًا لتسجيلك في منصة احتواء. لتفعيل حسابك، برجاء زيارة الرابط التالي:"
+msgstr ""
+"Thanks for signing up on the Ehtiwaa platform. To activate your account, "
+"please visit the following link:"
+
+#: templates/accounts/email/activation_email.txt:7
+msgid "هذا الرابط صالح لمدة 48 ساعة."
+msgstr "This link is valid for 48 hours."
+
+#: templates/accounts/email/activation_email.txt:9
+msgid "إذا لم تقم بإنشاء هذا الحساب، برجاء تجاهل هذه الرسالة."
+msgstr "If you didn't create this account, please ignore this message."
+
+#: templates/accounts/email/activation_email.txt:11
+#: templates/accounts/email/password_reset_email.txt:9
+msgid "فريق احتواء"
+msgstr "The Ehtiwaa team"
+
+#: templates/accounts/email/password_reset_email.txt:3
+msgid ""
+"لإعادة تعيين كلمة المرور الخاصة بحسابك في منصة احتواء، برجاء زيارة الرابط "
+"التالي:"
+msgstr ""
+"To reset your Ehtiwaa account password, please visit the following link:"
+
+#: templates/accounts/email/password_reset_email.txt:7
+msgid "إذا لم تطلب إعادة تعيين كلمة المرور، برجاء تجاهل هذه الرسالة."
+msgstr "If you didn't request a password reset, please ignore this message."
+
+#: templates/accounts/email/password_reset_subject.txt:1
+#: templates/accounts/password_reset.html:3
+#: templates/accounts/password_reset.html:11
+msgid "استعادة كلمة المرور"
+msgstr "Reset password"
+
+#: templates/accounts/email/password_reset_subject.txt:1
+#: templates/accounts/login.html:3 templates/accounts/password_reset.html:3
+#: templates/accounts/password_reset_complete.html:3
+#: templates/accounts/password_reset_confirm.html:3
+#: templates/accounts/password_reset_done.html:3
+#: templates/accounts/profile_edit.html:3 templates/accounts/signup.html:3
+#: templates/accounts/signup_check_email.html:3 templates/base.html:7
+#: templates/core/privacy.html:3 templates/core/terms.html:3
+#: templates/partials/footer.html:6 templates/partials/header.html:6
+#: templates/specialists/apply.html:3
+msgid "احتواء"
+msgstr "Ehtiwaa"
+
+#: templates/accounts/login.html:3 templates/accounts/login.html:11
+#: templates/accounts/login.html:47
+#: templates/accounts/password_reset_complete.html:13
+#: templates/accounts/signup.html:83 templates/accounts/welcome.html:35
+#: templates/partials/header.html:58
+msgid "تسجيل الدخول"
+msgstr "Log in"
+
+#: templates/accounts/login.html:10 templates/accounts/password_reset.html:10
+#: templates/accounts/signup.html:10 templates/accounts/welcome.html:10
+#: templates/specialists/apply.html:10
+msgid "→ رجوع"
+msgstr "← Back"
+
+#: templates/accounts/login.html:12
+msgid "مرحبًا بعودتك إلى احتواء"
+msgstr "Welcome back to Ehtiwaa"
+
+#: templates/accounts/login.html:27 templates/accounts/welcome.html:23
+msgid "المتابعة باستخدام Google"
+msgstr "Continue with Google"
+
+#: templates/accounts/login.html:30 templates/accounts/welcome.html:26
+msgid "أو"
+msgstr "or"
+
+#: templates/accounts/login.html:45
+msgid "نسيت كلمة المرور؟"
+msgstr "Forgot your password?"
+
+#: templates/accounts/login.html:52
+msgid "ليس لديك حساب؟"
+msgstr "Don't have an account?"
+
+#: templates/accounts/login.html:52 templates/accounts/signup.html:18
+#: templates/accounts/welcome.html:30
+msgid "إنشاء حساب جديد"
+msgstr "Create a new account"
+
+#: templates/accounts/password_reset.html:12
+msgid "أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور"
+msgstr "Enter your email and we'll send you a link to reset your password"
+
+#: templates/accounts/password_reset.html:21
+msgid "إرسال رابط الاستعادة"
+msgstr "Send reset link"
+
+#: templates/accounts/password_reset_complete.html:3
+#: templates/accounts/password_reset_complete.html:10
+msgid "تم تغيير كلمة المرور"
+msgstr "Password changed"
+
+#: templates/accounts/password_reset_complete.html:11
+msgid "يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة."
+msgstr "You can now log in with your new password."
+
+#: templates/accounts/password_reset_confirm.html:3
+#: templates/accounts/password_reset_confirm.html:10
+msgid "تعيين كلمة مرور جديدة"
+msgstr "Set a new password"
+
+#: templates/accounts/password_reset_confirm.html:15
+#: templates/accounts/profile_edit.html:100
+msgid "كلمة المرور الجديدة"
+msgstr "New password"
+
+#: templates/accounts/password_reset_confirm.html:25
+#: templates/accounts/profile_edit.html:110
+msgid "حفظ كلمة المرور"
+msgstr "Save password"
+
+#: templates/accounts/password_reset_confirm.html:29
+msgid "رابط إعادة التعيين غير صالح أو منتهي الصلاحية."
+msgstr "The reset link is invalid or has expired."
+
+#: templates/accounts/password_reset_confirm.html:30
+msgid "طلب رابط جديد"
+msgstr "Request a new link"
+
+#: templates/accounts/password_reset_done.html:3
+msgid "تم إرسال الرابط"
+msgstr "Link sent"
+
+#: templates/accounts/password_reset_done.html:10
+#: templates/accounts/signup_check_email.html:10
+msgid "راجع بريدك الإلكتروني"
+msgstr "Check your email"
+
+#: templates/accounts/password_reset_done.html:11
+msgid ""
+"إذا كان البريد مسجلًا لدينا، ستصلك رسالة تحتوي على رابط إعادة تعيين كلمة "
+"المرور."
+msgstr ""
+"If this email is registered with us, you'll receive a message with a "
+"password reset link."
+
+#: templates/accounts/password_reset_done.html:12
+#: templates/accounts/signup_check_email.html:19
+msgid "الذهاب إلى تسجيل الدخول"
+msgstr "Go to login"
+
+#: templates/accounts/profile_edit.html:3
+#: templates/accounts/profile_edit.html:11 templates/partials/header.html:50
+msgid "الملف الشخصي"
+msgstr "Profile"
+
+#: templates/accounts/profile_edit.html:14 templates/partials/header.html:53
+msgid "تسجيل الخروج"
+msgstr "Log out"
+
+#: templates/accounts/profile_edit.html:25
+msgid "البيانات الشخصية"
+msgstr "Personal information"
+
+#: templates/accounts/profile_edit.html:78
+msgid "حفظ التغييرات"
+msgstr "Save changes"
+
+#: templates/accounts/profile_edit.html:84
+#: templates/accounts/profile_edit.html:110
+msgid "تغيير كلمة المرور"
+msgstr "Change password"
+
+#: templates/accounts/profile_edit.html:84
+msgid "تعيين كلمة مرور"
+msgstr "Set a password"
+
+#: templates/accounts/profile_edit.html:87
+msgid ""
+"حسابك مُسجَّل عبر جوجل وليس له كلمة مرور بعد — عيّن واحدة هنا لتقدر تسجّل الدخول "
+"بالبريد الإلكتروني أيضًا."
+msgstr ""
+"Your account is signed up via Google and doesn't have a password yet — set "
+"one here so you can also log in with your email."
+
+#: templates/accounts/profile_edit.html:94
+msgid "كلمة المرور الحالية"
+msgstr "Current password"
+
+#: templates/accounts/profile_edit.html:105
+msgid "تأكيد كلمة المرور الجديدة"
+msgstr "Confirm new password"
+
+#: templates/accounts/signup.html:3 templates/accounts/signup.html:76
+#: templates/partials/header.html:59
+msgid "إنشاء حساب"
+msgstr "Sign up"
+
+#: templates/accounts/signup.html:19
+msgid "الخطوة الأولى: بياناتك الأساسية"
+msgstr "Step one: your basic details"
+
+#: templates/accounts/signup.html:48
+msgid "التالي"
+msgstr "Next"
+
+#: templates/accounts/signup.html:71 templates/specialists/apply.html:187
+#, python-format
+msgid ""
+"أوافق على <a href=\"%(terms_url)s\" target=\"_blank\">الشروط والأحكام</a> "
+"و<a href=\"%(privacy_url)s\" target=\"_blank\">سياسة الخصوصية</a>"
+msgstr ""
+"I agree to the <a href=\"%(terms_url)s\" target=\"_blank\">Terms & "
+"Conditions</a> and <a href=\"%(privacy_url)s\" target=\"_blank\">Privacy "
+"Policy</a>"
+
+#: templates/accounts/signup.html:77
+msgid "رجوع"
+msgstr "Back"
+
+#: templates/accounts/signup.html:83 templates/accounts/welcome.html:35
+msgid "لديك حساب بالفعل؟"
+msgstr "Already have an account?"
+
+#: templates/accounts/signup_check_email.html:3
+msgid "تفعيل حسابك"
+msgstr "Activate your account"
+
+#: templates/accounts/signup_check_email.html:13
+#, python-format
+msgid ""
+"أرسلنا رابط تفعيل إلى <strong>%(email)s</strong>. برجاء فتحه لتفعيل حسابك."
+msgstr ""
+"We sent an activation link to <strong>%(email)s</strong>. Please open it to "
+"activate your account."
+
+#: templates/accounts/signup_check_email.html:15
+msgid "أرسلنا رابط تفعيل إلى بريدك الإلكتروني. برجاء فتحه لتفعيل حسابك."
+msgstr ""
+"We sent an activation link to your email. Please open it to activate your "
+"account."
+
+#: templates/accounts/welcome.html:3
+msgid "مرحبًا بك في احتواء"
+msgstr "Welcome to Ehtiwaa"
+
+#: templates/accounts/welcome.html:11
+msgid "مرحبًا في احتواء"
+msgstr "Welcome to Ehtiwaa"
+
+#: templates/accounts/welcome.html:12
+msgid "اختر طريقة التسجيل المفضلة لديك، وابدأ رحلتك في ثوانٍ معدودة"
+msgstr "Choose your preferred sign-up method and start your journey in seconds"
+
+#: templates/accounts/welcome.html:31 templates/specialists/apply.html:3
+msgid "انضم كمعالج"
+msgstr "Join as a therapist"
+
+#: templates/core/privacy.html:3 templates/core/privacy.html:6
+#: templates/partials/footer.html:26
+msgid "سياسة الخصوصية"
+msgstr "Privacy Policy"
+
+#: templates/core/privacy.html:7
+msgid ""
+"هذه صفحة مبدئية لسياسة الخصوصية. سيتم استبدال هذا النص بالمحتوى القانوني "
+"الكامل قبل الإطلاق."
+msgstr ""
+"This is a placeholder privacy policy page. This text will be replaced with "
+"the full legal content before launch."
+
+#: templates/core/terms.html:3 templates/core/terms.html:6
+#: templates/partials/footer.html:25
+msgid "الشروط والأحكام"
+msgstr "Terms & Conditions"
+
+#: templates/core/terms.html:7
+msgid ""
+"هذه صفحة مبدئية للشروط والأحكام. سيتم استبدال هذا النص بالمحتوى القانوني "
+"الكامل قبل الإطلاق."
+msgstr ""
+"This is a placeholder terms & conditions page. This text will be replaced "
+"with the full legal content before launch."
+
+#: templates/partials/footer.html:8
+msgid ""
+"منصة احتواء تجمعك بأفضل الأخصائيين النفسيين والدورات والموارد لدعم صحتك "
+"النفسية."
+msgstr ""
+"Ehtiwaa connects you with the best mental health specialists, courses, and "
+"resources to support your mental wellbeing."
+
+#: templates/partials/footer.html:12
+msgid "روابط سريعة"
+msgstr "Quick links"
+
+#: templates/partials/footer.html:14 templates/partials/header.html:9
+#: templates/partials/header.html:73
+msgid "الرئيسية"
+msgstr "Home"
+
+#: templates/partials/footer.html:15 templates/partials/header.html:13
+#: templates/partials/header.html:74
+msgid "دليل الأخصائيين"
+msgstr "Specialists directory"
+
+#: templates/partials/footer.html:16 templates/partials/header.html:18
+#: templates/partials/header.html:75
+msgid "الدورات"
+msgstr "Courses"
+
+#: templates/partials/footer.html:17 templates/partials/header.html:20
+#: templates/partials/header.html:77
+msgid "المتجر"
+msgstr "Store"
+
+#: templates/partials/footer.html:18 templates/partials/header.html:21
+#: templates/partials/header.html:78
+msgid "المنتدى"
+msgstr "Forum"
+
+#: templates/partials/footer.html:23
+msgid "السياسات"
+msgstr "Policies"
+
+#: templates/partials/footer.html:27
+msgid "سياسة الإلغاء والاسترداد"
+msgstr "Cancellation & refund policy"
+
+#: templates/partials/footer.html:32
+msgid "تواصل معنا"
+msgstr "Contact us"
+
+#: templates/partials/footer.html:43
+msgid "© 2026 احتواء. جميع الحقوق محفوظة."
+msgstr "© 2026 Ehtiwaa. All rights reserved."
+
+#: templates/partials/header.html:11
+msgid "الاستشارات"
+msgstr "Consultations"
+
+#: templates/partials/header.html:14
+msgid "حجز استشارة"
+msgstr "Book a consultation"
+
+#: templates/partials/header.html:15
+msgid "محرك المطابقة"
+msgstr "Matching engine"
+
+#: templates/partials/header.html:19 templates/partials/header.html:76
+msgid "المقالات"
+msgstr "Articles"
+
+#: templates/partials/header.html:31
+msgid "بحث"
+msgstr "Search"
+
+#: templates/partials/header.html:37
+msgid "المساعدة"
+msgstr "Help"
+
+#: templates/partials/header.html:62
+msgid "القائمة"
+msgstr "Menu"
+
+#: templates/specialists/apply.html:11
+msgid "نموذج طلب انضمام كمعالج لفريق احتواء"
+msgstr "Application form to join the Ehtiwaa team as a therapist"
+
+#: templates/specialists/apply.html:14
+msgid "المعايير المطلوبة لكل فئة"
+msgstr "Requirements for each category"
+
+#: templates/specialists/apply.html:27
+msgid "ماجستير العلوم أو الآداب في علم النفس الاكلينيكي"
+msgstr "Master of Science or Arts in Clinical Psychology"
+
+#: templates/specialists/apply.html:28
+msgid "خمس سنوات خبرة اكلينيكية"
+msgstr "Five years of clinical experience"
+
+#: templates/specialists/apply.html:35
+msgid "ماجستير العلوم أو الآداب في علم النفس"
+msgstr "Master of Science or Arts in Psychology"
+
+#: templates/specialists/apply.html:36
+msgid "خمس سنوات خبرة إرشاد نفسي"
+msgstr "Five years of counseling experience"
+
+#: templates/specialists/apply.html:60
+msgid "المعلومات الشخصية"
+msgstr "Personal information"
+
+#: templates/specialists/apply.html:119
+msgid "اضغط مع الاستمرار على Ctrl (أو Cmd) لاختيار أكثر من لغة"
+msgstr "Hold Ctrl (or Cmd) to select more than one language"
+
+#: templates/specialists/apply.html:123
+msgid "المستندات المطلوبة"
+msgstr "Required documents"
+
+#: templates/specialists/apply.html:134
+msgid "شهادة الماجستير (علم النفس الاكلينيكي أو علم النفس)"
+msgstr "Master's certificate (clinical psychology or psychology)"
+
+#: templates/specialists/apply.html:192
+msgid "إرسال الطلب"
+msgstr "Submit application"

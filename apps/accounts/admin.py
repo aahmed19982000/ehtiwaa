@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import EmailVerification, Profile, User
+from .models import Profile, User
 
 
 class EhtiwaaUserAdmin(UserAdmin):
@@ -14,4 +14,3 @@ class EhtiwaaUserAdmin(UserAdmin):
 
 admin.site.register(User, EhtiwaaUserAdmin)
 admin.site.register(Profile)
-admin.site.register(EmailVerification)

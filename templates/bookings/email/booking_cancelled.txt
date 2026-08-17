@@ -1,0 +1,11 @@
+{% load i18n %}{% trans "مرحبًا" %} {{ booking.client.first_name|default:booking.client.email }}،
+
+{% blocktrans with specialist=booking.specialist.full_name_ar %}تم إلغاء حجزك مع {{ specialist }} الذي كان مقررًا يوم:{% endblocktrans %}
+
+{{ booking.scheduled_start|date:"l j F Y" }} — {{ booking.scheduled_start|time:"H:i" }}
+
+{% if booking.cancellation_reason %}{% trans "السبب" %}: {{ booking.cancellation_reason }}{% endif %}
+
+{% trans "يمكنك حجز موعد جديد في أي وقت من دليل الأخصائيين." %}
+
+{% trans "فريق احتواء" %}

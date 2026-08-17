@@ -1,1 +1,133 @@
-# Create your views here.
+from datetime import date, datetime, timedelta
+
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+from django.views import View
+from django.views.generic import DetailView, ListView
+
+from apps.notifications.services import notify_booking_cancelled, notify_booking_created
+from apps.specialists.models import Specialist
+
+from . import google_calendar
+from .forms import BookingForm
+from .models import Booking
+from .services import SLOT_LOOKAHEAD_DAYS, get_session_duration_minutes, get_slots_for_date
+
+
+class BookingCreateView(LoginRequiredMixin, View):
+    template_name = "bookings/book.html"
+
+    def get_specialist(self):
+        return get_object_or_404(Specialist, pk=self.kwargs["specialist_pk"], status="approved")
+
+    def get_selected_date(self, request):
+        raw = request.GET.get("date") or request.POST.get("date")
+        if raw:
+            try:
+                return date.fromisoformat(raw)
+            except ValueError:
+                pass
+        return timezone.localdate()
+
+    def build_context(self, specialist, selected_date, slots, form):
+        return {
+            "specialist": specialist,
+            "selected_date": selected_date,
+            "date_options": [timezone.localdate() + timedelta(days=i) for i in range(SLOT_LOOKAHEAD_DAYS)],
+            "slots": slots,
+            "form": form,
+        }
+
+    def get(self, request, specialist_pk):
+        specialist = self.get_specialist()
+        selected_date = self.get_selected_date(request)
+        duration = get_session_duration_minutes(specialist)
+        slots = get_slots_for_date(specialist, selected_date, duration)
+        form = BookingForm(
+            initial={"date": selected_date, "contact_phone": request.user.phone or ""},
+            available_slots=slots,
+        )
+        return render(request, self.template_name, self.build_context(specialist, selected_date, slots, form))
+
+    def post(self, request, specialist_pk):
+        specialist = self.get_specialist()
+        selected_date = self.get_selected_date(request)
+        duration = get_session_duration_minutes(specialist)
+        slots = get_slots_for_date(specialist, selected_date, duration)
+        form = BookingForm(request.POST, available_slots=slots)
+
+        if form.is_valid():
+            naive_start = datetime.strptime(form.cleaned_data["time_slot"], "%Y-%m-%dT%H:%M")  # noqa: DTZ007 — localized on the next line
+            start = timezone.make_aware(naive_start)
+            end = start + timedelta(minutes=duration)
+            # Re-check right before creating — someone else may have booked
+            # this exact slot between the page load and this submission.
+            already_taken = Booking.objects.filter(
+                specialist=specialist,
+                status__in=["pending", "confirmed"],
+                scheduled_start__lt=end,
+                scheduled_end__gt=start,
+            ).exists()
+            if already_taken:
+                form.add_error(None, _("للأسف تم حجز هذا الموعد للتو، برجاء اختيار موعد آخر."))
+            else:
+                booking = Booking.objects.create(
+                    client=request.user,
+                    specialist=specialist,
+                    status="pending",
+                    scheduled_start=start,
+                    scheduled_end=end,
+                    contact_phone=form.cleaned_data["contact_phone"],
+                    notes=form.cleaned_data["notes"],
+                )
+                meet_link, event_id = google_calendar.create_meeting_for_booking(booking)
+                if meet_link:
+                    booking.meeting_link = meet_link
+                    booking.calendar_event_id = event_id
+                    booking.save(update_fields=["meeting_link", "calendar_event_id"])
+                notify_booking_created(booking)
+                messages.success(request, _("تم إرسال طلب الحجز بنجاح."))
+                return redirect("bookings:detail", pk=booking.pk)
+
+        slots = get_slots_for_date(specialist, selected_date, duration)
+        return render(request, self.template_name, self.build_context(specialist, selected_date, slots, form))
+
+
+class BookingDetailView(LoginRequiredMixin, DetailView):
+    model = Booking
+    template_name = "bookings/detail.html"
+    context_object_name = "booking"
+
+    def get_queryset(self):
+        return Booking.objects.filter(client=self.request.user).select_related("specialist")
+
+
+class BookingListView(LoginRequiredMixin, ListView):
+    model = Booking
+    template_name = "bookings/list.html"
+    context_object_name = "bookings"
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Booking.objects.filter(client=self.request.user).select_related("specialist")
+
+
+class BookingCancelView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        booking = get_object_or_404(Booking, pk=pk, client=request.user)
+        if booking.can_be_cancelled():
+            booking.status = "cancelled"
+            booking.cancelled_at = timezone.now()
+            booking.cancelled_by = request.user
+            booking.cancellation_reason = request.POST.get("reason", "")
+            booking.save(update_fields=["status", "cancelled_at", "cancelled_by", "cancellation_reason"])
+            if booking.calendar_event_id:
+                google_calendar.delete_event(booking.calendar_event_id)
+            notify_booking_cancelled(booking)
+            messages.success(request, _("تم إلغاء الحجز."))
+        else:
+            messages.error(request, _("لا يمكن إلغاء هذا الحجز."))
+        return redirect("bookings:list")

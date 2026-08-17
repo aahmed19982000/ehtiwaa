@@ -21,6 +21,9 @@ media/
 .env.*
 !.env.example
 
+# Service account keys / other credential files — never committed
+secrets/
+
 # IDE
 .vscode/
 .idea/

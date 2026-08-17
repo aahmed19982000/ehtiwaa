@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "تفاصيل الحجز" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/bookings.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container booking-page">
+  <a href="{% url 'bookings:list' %}" class="auth-card__back">{% trans "→ رجوع لحجوزاتي" %}</a>
+  <h1>{% trans "تفاصيل الحجز" %}</h1>
+
+  <div class="booking-card">
+    <span class="booking-status booking-status--{{ booking.status }}">{{ booking.get_status_display }}</span>
+    <h2>{{ booking.specialist.get_title_display }} {{ booking.specialist.full_name_ar }}</h2>
+    <p class="booking-card__datetime">
+      {{ booking.scheduled_start|date:"l j F Y" }} — {{ booking.scheduled_start|time:"H:i" }} {% trans "إلى" %} {{ booking.scheduled_end|time:"H:i" }}
+    </p>
+    {% if booking.contact_phone %}<p>{% trans "رقم التواصل" %}: {{ booking.contact_phone }}</p>{% endif %}
+    {% if booking.notes %}<p>{% trans "ملاحظات" %}: {{ booking.notes }}</p>{% endif %}
+    {% if booking.meeting_link and booking.status != "cancelled" %}
+    <p>
+      <a href="{{ booking.meeting_link }}" target="_blank" rel="noopener" class="btn btn-primary">{% trans "الدخول لجلسة Google Meet" %}</a>
+    </p>
+    {% endif %}
+
+    {% if booking.status == "cancelled" %}
+    <p class="booking-card__cancelled">
+      {% trans "تم إلغاء هذا الحجز." %}
+      {% if booking.cancellation_reason %}{% trans "السبب" %}: {{ booking.cancellation_reason }}{% endif %}
+    </p>
+    {% elif booking.can_be_cancelled %}
+    <form method="post" action="{% url 'bookings:cancel' booking.pk %}" class="booking-card__cancel-form">
+      {% csrf_token %}
+      <p class="help-text">
+        {% if booking.is_within_free_cancellation_window %}
+        {% trans "يمكنك إلغاء هذا الحجز مجانًا." %}
+        {% else %}
+        {% trans "الموعد بعد أقل من 24 ساعة — تجاوزت نافذة الإلغاء المجاني." %}
+        {% endif %}
+      </p>
+      <button type="submit" class="btn btn-outline">{% trans "إلغاء الحجز" %}</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

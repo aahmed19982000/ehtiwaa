@@ -10,11 +10,13 @@ urlpatterns = [
     # of /accounts/welcome/, matching the shorter URL shape used elsewhere.
     path("signup/", views.WelcomeView.as_view(), name="welcome"),
     path("signup/account/", views.SignupView.as_view(), name="signup"),
-    path("signup/check-email/", views.SignupCheckEmailView.as_view(), name="signup-check-email"),
-    path("verify-email/<str:token>/", views.VerifyEmailView.as_view(), name="verify-email"),
     path("login/", views.LoginView.as_view(), name="login"),
+    path("login/forgot-password/", views.ForgotPasswordView.as_view(), name="forgot-password"),
     path("logout/", auth_views.LogoutView.as_view(next_page="home"), name="logout"),
     path("profile/", views.ProfileEditView.as_view(), name="profile"),
+    # Kept only as a fallback recovery path for staff/admin accounts, which
+    # still authenticate locally via ModelBackend — not linked from any
+    # public page, since Auth0 owns password reset for everyone else.
     path(
         "password/reset/",
         auth_views.PasswordResetView.as_view(

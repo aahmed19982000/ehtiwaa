@@ -28,9 +28,14 @@
    AUTH0_CLIENT_ID=...
    AUTH0_CLIENT_SECRET=...
    ```
+5. من تبويب "Advanced" في إعدادات التطبيق → "Grant Types"، فعّل "Password" — صفحة التسجيل الخاصة بنا (`accounts:signup`) تنشئ الحساب مباشرة عبر Auth0 Authentication API (`dbconnections/signup`) ثم تسجّل الدخول عبر Resource Owner Password Grant بدلاً من التوجيه لصفحة Auth0 المستضافة، وهذا الـ grant type غير مفعّل افتراضيًا.
+6. (اختياري) اسم الـ Database connection الافتراضي هو `Username-Password-Authentication`؛ إن كان مختلفًا في الـ tenant عندك، اضبطه عبر `.env`:
+   ```
+   AUTH0_DB_CONNECTION=...
+   ```
 
 ## ملاحظات
 
-- كلا الزرين اختياريان بجانب تسجيل الدخول المحلي بالبريد/الجوال وكلمة المرور — ليسا بديلاً عنه.
-- عند أول تسجيل دخول عبر مزود اجتماعي، يُنشأ حساب `accounts.User` تلقائيًا (أو يُربط بحساب محلي موجود بنفس البريد الإلكتروني) عبر `apps.accounts.adapters.EhtiwaaSocialAccountAdapter`.
+- زر الدخول بجوجل وصفحة تسجيل الدخول (`accounts:login`) يوجّهان لصفحة Auth0 المستضافة (Universal Login). صفحة التسجيل (`accounts:signup`) هي فورم مخصص بتصميمنا، لكنها تُنشئ الحساب داخل نفس الـ Auth0 tenant عبر الـ API مباشرة — كلاهما يستخدم نفس الـ Database connection، لذا يمكن لأي مستخدم تسجيل الدخول من صفحة `accounts:login` بعد إنشاء حسابه من `accounts:signup`.
+- عند أول تسجيل دخول عبر مزود اجتماعي (أو إنشاء حساب من فورمنا)، يُنشأ حساب `accounts.User` تلقائيًا (أو يُربط بحساب محلي موجود بنفس البريد الإلكتروني) عبر `apps.accounts.adapters.EhtiwaaSocialAccountAdapter`.
 - لا تُدفع بيانات الاعتماد الفعلية إلى Git — `.env` مستبعد عبر `.gitignore`، ويُستخدم `.env.example` كمرجع فقط.

@@ -5,51 +5,72 @@
 <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
 {% endblock %}
 {% block content %}
-<div class="auth-shell">
+<div class="auth-shell auth-shell--split">
   <div class="auth-card">
-    <a href="{% url 'home' %}" class="auth-card__back">→ رجوع</a>
-    <h1>تسجيل الدخول</h1>
-    <p class="auth-card__subtitle">مرحبًا بعودتك إلى احتواء</p>
+    <a href="{% url 'accounts:welcome' %}" class="auth-card__back">→ رجوع</a>
+
+    <h1>أهلًا بعودتك!</h1>
+    <p class="auth-card__subtitle">سعداء برؤيتك تاني في احتواء</p>
 
     {% if form.non_field_errors %}
     <div class="alert alert-error">{{ form.non_field_errors.0 }}</div>
     {% endif %}
 
-    {% if auth0_enabled %}
     <div class="auth-social">
       {% comment %}
       Routed through Auth0, but with connection=google-oauth2 so Auth0 skips
       its own chooser page and redirects straight to Google's real login.
       {% endcomment %}
-      <a href="{% provider_login_url 'auth0' process='login' auth_params='connection=google-oauth2' %}" class="btn-social">
+      <a href="{% provider_login_url 'auth0' process='login' auth_params='connection=google-oauth2&prompt=login' %}" class="btn-social">
         {% include "partials/icons/google.html" %}
         <span>المتابعة باستخدام Google</span>
       </a>
     </div>
     <div class="auth-divider">أو</div>
-    {% endif %}
 
     <form method="post" novalidate>
       {% csrf_token %}
-      <div class="form-field">
-        <label for="{{ form.identifier.id_for_label }}">{{ form.identifier.label }}</label>
-        {{ form.identifier }}
-        {{ form.identifier.errors }}
+      {% firstof request.POST.next request.GET.next as next_url %}
+      {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}">{% endif %}
+
+      <div data-signup-step="1" class="signup-step is-active">
+        <div class="form-field">
+          <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+          {{ form.email }}
+          {{ form.email.errors }}
+        </div>
+        <button type="button" class="btn btn-primary" data-signup-next>استمر</button>
       </div>
-      <div class="form-field">
-        <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
-        {{ form.password }}
-        {{ form.password.errors }}
-      </div>
-      <p><a href="{% url 'accounts:password-reset' %}">نسيت كلمة المرور؟</a></p>
-      <div class="auth-actions">
-        <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
+
+      <div data-signup-step="2" class="signup-step">
+        <div class="form-field">
+          <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+          {{ form.password }}
+          {{ form.password.errors }}
+        </div>
+        <p class="auth-footer-link"><a href="{% url 'accounts:forgot-password' %}">نسيت كلمة المرور؟</a></p>
+        <div class="auth-actions">
+          <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
+          <button type="button" class="btn btn-outline" data-signup-back>رجوع</button>
+        </div>
       </div>
     </form>
 
     <p class="auth-footer-link">
-      ليس لديك حساب؟ <a href="{% url 'accounts:welcome' %}">إنشاء حساب جديد</a>
+      ليس لديك حساب؟ <a href="{% url 'accounts:signup' %}">إنشاء حساب</a>
     </p>
   </div>
+
+  <div class="auth-illustration">
+    <svg class="auth-illustration__art" viewBox="0 0 240 240" aria-hidden="true">
+      <circle cx="120" cy="120" r="118" fill="var(--color-bg-lavender-1)"/>
+      <path d="M120 176c-2 0-4-.7-5.6-2.1C90 152.6 74 137.8 74 114.6 74 96.6 87.6 83 104.8 83c8.9 0 17.5 4.1 23.2 10.7C133.7 87.1 142.3 83 151.2 83 168.4 83 182 96.6 182 114.6c0 23.2-16 38-40.4 59.3-1.6 1.4-3.6 2.1-5.6 2.1z" fill="var(--color-primary)"/>
+    </svg>
+    <h2 class="auth-illustration__title">استمر في رحلتك نحو صحة نفسية أفضل</h2>
+    <p class="auth-illustration__text">نحن سعداء إنك رجعت — بياناتك محمية وسرية بالكامل.</p>
+  </div>
 </div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/accounts.js' %}"></script>
 {% endblock %}
