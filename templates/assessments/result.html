@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "نتيجة" %} {{ assessment.title }} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/assessments.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container assessment-result-page">
+  <p class="assessment-result-page__kicker">{% blocktrans with title=assessment.title %}نتيجة {{ title }}{% endblocktrans %}</p>
+
+  {% if attempt.result_level %}
+  <div class="level-badge level-badge--{{ attempt.result_level.level }}">{% blocktrans with label=attempt.result_level.get_level_display %}مستوى {{ label }}{% endblocktrans %}</div>
+  <p class="assessment-result-page__desc">{{ attempt.result_level.description }}</p>
+  {% else %}
+  <p class="assessment-result-page__desc">{% trans "لم يتم تحديد مستوى لهذه النتيجة." %}</p>
+  {% endif %}
+
+  <div class="disclaimer-box disclaimer-box--center">
+    {% trans "هذه النتيجة إرشادية فقط ولا تمثل تشخيصًا. للحصول على تقييم دقيق، يُنصح بالتحدث مع أخصائي." %}
+  </div>
+
+  <div class="assessment-result-page__actions">
+    <a href="{% url 'specialists:directory' %}" class="btn btn-accent">{% trans "احجز استشارة مع أخصائي" %}</a>
+    <div class="assessment-result-page__links">
+      <form method="post" action="{% url 'assessments:start' assessment.slug %}">
+        {% csrf_token %}
+        <button type="submit" class="link-btn">{% trans "أعد الاختبار" %}</button>
+      </form>
+      <button type="button" class="link-btn" data-copy-link data-url="{{ request.build_absolute_uri }}">{% trans "شارك النتيجة" %}</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/assessments.js' %}"></script>
+{% endblock %}

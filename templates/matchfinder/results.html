@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "نتائج محرك المطابقة" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/matchfinder.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container matchfinder-results">
+  <h1>{% trans "دول أنسب الأخصائيين ليك بناءً على إجاباتك" %}</h1>
+
+  {% if matches %}
+  <div class="matchfinder-results__grid">
+    {% for item in matches %}
+    <div class="match-card">
+      {% if item.specialist.user.profile.avatar %}
+      <img class="match-card__photo" src="{{ item.specialist.user.profile.avatar.url }}" alt="{{ item.specialist.full_name_ar }}">
+      {% else %}
+      <span class="match-card__photo match-card__photo--placeholder">{{ item.specialist.full_name_ar|default:item.specialist.full_name_en|first }}</span>
+      {% endif %}
+      <div class="match-card__name">{{ item.specialist.full_name_ar|default:item.specialist.full_name_en }}</div>
+      {% if item.specialist.specialties.all %}
+      <div class="match-card__specialty">{% for tag in item.specialist.specialties.all %}{{ tag.name }}{% if not forloop.last %}، {% endif %}{% endfor %}</div>
+      {% endif %}
+      <div class="rating-badge match-card__rating">★ {{ item.specialist.average_rating }}</div>
+      {% if item.specialist.next_available_date %}
+      <span class="badge badge--success">{% blocktrans with date=item.specialist.next_available_date|date:"j F" %}متاح/ة {{ date }}{% endblocktrans %}</span>
+      {% endif %}
+      {% if item.specialist.hourly_rate %}
+      <div class="match-card__price">{% blocktrans with price=item.specialist.hourly_rate %}{{ price }} ج.م / جلسة{% endblocktrans %}</div>
+      {% endif %}
+      {% if item.reason %}<div class="match-card__reason">{{ item.reason }}</div>{% endif %}
+      <a href="{% url 'specialists:detail' item.specialist.pk %}" class="btn btn-accent match-card__cta">{% trans "عرض الملف والحجز" %}</a>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="matchfinder-results__more"><a href="{% url 'specialists:directory' %}">{% trans "مش مقتنع بالترشيحات؟ تصفح كل الأخصائيين" %}</a></div>
+  {% else %}
+  <div class="empty-state">
+    <p>{% trans "معندناش أخصائيين متاحين للترشيح حالياً." %}</p>
+    <a href="{% url 'specialists:directory' %}" class="btn btn-primary">{% trans "تصفح دليل الأخصائيين" %}</a>
+  </div>
+  {% endif %}
+
+  <p class="matchfinder-results__disclaimer">{% trans "هذه ترشيحات أولية بناءً على إجاباتك، ولستَ ملزماً باختيارها." %}</p>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{{ assessment.title }} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/assessments.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container assessment-take-page">
+  <div class="disclaimer-box disclaimer-box--compact">
+    <span class="disclaimer-box__icon">i</span>
+    <span>{% trans "هذه الاختبارات أداة إرشادية أولية، ولا تُغني عن استشارة أخصائي مختص. النتيجة ليست تشخيصًا طبيًا." %}</span>
+  </div>
+
+  <div class="assessment-progress">
+    <div class="assessment-progress__label">
+      <span>{% blocktrans with current=question_number total=total_questions %}سؤال {{ current }} من {{ total }}{% endblocktrans %}</span>
+      <span>{{ assessment.title }}</span>
+    </div>
+    <div class="assessment-progress__bar"><span style="width:{{ progress_percent }}%"></span></div>
+  </div>
+
+  <h1 class="assessment-take-page__question">{{ question.text }}</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="likert-options">
+      {% for option in question.options.all %}
+      <label class="likert-option">
+        <input type="radio" name="option" value="{{ option.pk }}" {% if option.pk == selected_option_id %}checked{% endif %}>
+        <span>{{ option.text }}</span>
+      </label>
+      {% endfor %}
+    </div>
+
+    <div class="assessment-take-page__actions">
+      {% if question_number > 1 %}
+      <a href="{% url 'assessments:take' attempt.share_token question_number|add:'-1' %}" class="btn btn-outline">{% trans "السابق" %}</a>
+      {% else %}
+      <span></span>
+      {% endif %}
+      <button type="submit" class="btn btn-primary">{% trans "التالي" %}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

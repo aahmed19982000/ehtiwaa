@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "محرك المطابقة" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/matchfinder.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container matchfinder-intro">
+  <h1>{% trans "خلّينا نساعدك تلاقي الأخصائي المناسب" %}</h1>
+  <p class="matchfinder-intro__lead">{% trans "٣ دقائق بس، إجاباتك خاصة تماماً." %}</p>
+  <p class="matchfinder-intro__note">{% trans "هذه ليست استشارة أو تشخيص، فقط أسئلة لفهم احتياجك وترشيح الأخصائي الأنسب." %}</p>
+  <form method="post" action="{% url 'matchfinder:start' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-accent matchfinder-intro__cta">{% trans "ابدأ" %}</button>
+  </form>
+  <div><a href="{% url 'specialists:directory' %}" class="matchfinder-intro__skip">{% trans "تفضل تتصفح دليل الأخصائيين بنفسك؟" %}</a></div>
+</div>
+{% endblock %}

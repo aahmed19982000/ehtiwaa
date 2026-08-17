@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "اختبارات ومقاييس نفسية ذاتية" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/assessments.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container assessment-list-page">
+  <div class="disclaimer-box">
+    <span class="disclaimer-box__icon">i</span>
+    <span>{% trans "هذه الاختبارات أداة إرشادية للتعرف على حالتك بشكل أولي، ولا تُغني عن استشارة أخصائي مختص. النتيجة ليست تشخيصًا طبيًا." %}</span>
+  </div>
+
+  <h1>{% trans "اختبارات ومقاييس نفسية ذاتية" %}</h1>
+  <p class="assessment-list-page__subtitle">{% trans "تقييم إرشادي أولي لمساعدتك على فهم حالتك بشكل عام — وليس تشخيصًا طبيًا." %}</p>
+
+  {% if categories %}
+  <div class="topic-chips" data-topic-chips>
+    <button type="button" class="topic-chip is-active" data-topic-chip="">{% trans "الكل" %}</button>
+    {% for category in categories %}
+    <button type="button" class="topic-chip" data-topic-chip="{{ category }}">{{ category }}</button>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if assessments %}
+  <div class="assessment-grid">
+    {% for assessment in assessments %}
+    <div class="assessment-card" data-topic-card="{{ assessment.category }}">
+      <span class="assessment-card__icon">٭</span>
+      <h3>{{ assessment.title }}</h3>
+      {% if assessment.description %}<p class="assessment-card__desc">{{ assessment.description }}</p>{% endif %}
+      <p class="assessment-card__meta">{% blocktrans with count=assessment.questions_count minutes=assessment.estimated_minutes %}{{ count }} سؤال · {{ minutes }} دقائق{% endblocktrans %}</p>
+      <form method="post" action="{% url 'assessments:start' assessment.slug %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-accent assessment-card__cta">{% trans "ابدأ الاختبار" %}</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <p>{% trans "لسه معندناش اختبارات متاحة حاليًا." %}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/assessments.js' %}"></script>
+{% endblock %}

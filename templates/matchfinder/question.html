@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "محرك المطابقة" %} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/matchfinder.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container matchfinder-question">
+  <div class="matchfinder-progress">
+    <div class="matchfinder-progress__label">{% blocktrans with current=question_number total=total_questions %}سؤال {{ current }} من {{ total }}{% endblocktrans %}</div>
+    <div class="matchfinder-progress__bar"><span style="width:{{ progress_percent }}%"></span></div>
+  </div>
+
+  <h1 class="matchfinder-question__text">{{ question.text }}</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="choice-grid">
+      {% for choice in question.choices.all %}
+      <label class="choice-card">
+        <input type="radio" name="choice" value="{{ choice.pk }}">
+        <span>{{ choice.label }}</span>
+      </label>
+      {% endfor %}
+    </div>
+
+    <div class="matchfinder-question__actions">
+      {% if question_number > 1 %}
+      <a href="{% url 'matchfinder:question' run_token question_number|add:'-1' %}" class="btn btn-outline">{% trans "السابق" %}</a>
+      {% else %}
+      <span></span>
+      {% endif %}
+      <button type="submit" class="btn btn-primary">{% trans "التالي" %}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
