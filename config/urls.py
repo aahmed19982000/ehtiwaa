@@ -8,12 +8,17 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from django.views.generic import TemplateView
 
 from apps.accounts.views import Auth0RedirectView
+from apps.core.views import HomeView
+from apps.payments.views import PaymobWebhookView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    # Server-to-server callback from Paymob — must stay outside
+    # i18n_patterns (no /ar/ or /en/ prefix) since that's the exact URL
+    # registered on Paymob's own dashboard as the webhook endpoint.
+    path("payments/webhooks/paymob/", PaymobWebhookView.as_view(), name="paymob-webhook"),
     # {% url 'set_language' %} — POSTed to by the language switcher in the header.
     path("i18n/", include("django.conf.urls.i18n")),
     # OAuth callback paths stay under /accounts/social/ — this exact prefix is
@@ -38,7 +43,7 @@ urlpatterns = [
 # Arabic (the default LANGUAGE_CODE) stays unprefixed so existing /login/,
 # /signup/, etc. URLs keep working; English is served under /en/.
 urlpatterns += i18n_patterns(
-    path("", TemplateView.as_view(template_name="base.html"), name="home"),
+    path("", HomeView.as_view(), name="home"),
     path("", include("apps.core.urls", namespace="core")),
     # Mounted at root (not /accounts/) for short user-facing URLs — /signup/,
     # /login/, /profile/, etc.
@@ -48,6 +53,17 @@ urlpatterns += i18n_patterns(
     # (/specialists/join/...) — see apps/specialists/urls.py.
     path("specialists/", include("apps.specialists.urls", namespace="specialists")),
     path("bookings/", include("apps.bookings.urls", namespace="bookings")),
+    path("courses/", include("apps.courses.urls", namespace="courses")),
+    path("store/", include("apps.store.urls", namespace="store")),
+    path("articles/", include("apps.content.urls", namespace="content")),
+    path("assessments/", include("apps.assessments.urls", namespace="assessments")),
+    path("match-finder/", include("apps.matchfinder.urls", namespace="matchfinder")),
+    path("forum/", include("apps.forum.urls", namespace="forum")),
+    path("support/", include("apps.support.urls", namespace="support")),
+    path("reviews/", include("apps.reviews.urls", namespace="reviews")),
+    path("payments/", include("apps.payments.urls", namespace="payments")),
+    path("dashboard/", include("apps.dashboard.urls", namespace="dashboard")),
+    path("panel/", include("apps.adminpanel.urls", namespace="adminpanel")),
     prefix_default_language=False,
 )
 

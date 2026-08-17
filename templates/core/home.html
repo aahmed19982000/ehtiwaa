@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "احتواء" %} — {% trans "محتوى موثوق، دورات، واستشارات متخصصة في مكان واحد" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/specialists.css' %}">
+<link rel="stylesheet" href="{% static 'css/courses.css' %}">
+<link rel="stylesheet" href="{% static 'css/content.css' %}">
+{% endblock %}
+{% block content %}
+
+<div class="home-hero">
+  <div class="page-container home-hero__inner">
+    <div class="home-hero__content">
+      <h1>{% trans "محتوى موثوق، دورات، واستشارات متخصصة في مكان واحد" %}</h1>
+      <p>{% trans "منصة عربية تجمع المقالات التوعوية والدورات التدريبية والجلسات الاستشارية مع أخصائيين معتمدين، بخطوات واضحة من الاختيار إلى الحجز." %}</p>
+      <div class="home-hero__actions">
+        <a href="{% url 'specialists:directory' %}" class="btn btn-accent">{% trans "احجز استشارتك الأولى" %}</a>
+        <a href="{% url 'courses:list' %}" class="btn btn-outline">{% trans "استكشف الدورات" %}</a>
+      </div>
+      {% if stats.specialists_count %}
+      <a href="{% url 'specialists:directory' %}" class="home-hero__trust">
+        {% if specialists %}
+        <span class="home-avatar-stack">
+          {% for specialist in specialists %}
+          {% if specialist.user.profile.avatar %}
+          <img src="{{ specialist.user.profile.avatar.url }}" alt="" class="home-avatar-stack__item">
+          {% else %}
+          <span class="home-avatar-stack__item home-avatar-stack__item--placeholder">{{ specialist.full_name_ar|default:specialist.full_name_en|first }}</span>
+          {% endif %}
+          {% endfor %}
+        </span>
+        {% endif %}
+        <span>{% blocktrans with count=stats.specialists_count %}أكثر من {{ count }} أخصائي معتمد جاهز لمساعدتك{% endblocktrans %}</span>
+      </a>
+      {% endif %}
+    </div>
+    <div class="home-hero__art">
+      <img src="{% static 'img/hero.jpg' %}" alt="">
+    </div>
+  </div>
+</div>
+
+{% if specialty_tags %}
+<section class="home-section">
+  <div class="page-container">
+    <h2 class="home-section__title home-section__title--center">{% trans "إيه اللي بتواجهه؟" %}</h2>
+    <p class="home-section__subtitle">{% trans "اختر التخصص الأقرب لحالتك، أو خلّينا نساعدك تختار." %}</p>
+    <div class="home-concern-grid">
+      {% for tag in specialty_tags %}
+      <a href="{% url 'specialists:directory' %}?q={{ tag.name|urlencode }}" class="home-concern-chip">{{ tag.name }}</a>
+      {% endfor %}
+      <a href="{% url 'matchfinder:intro' %}" class="home-concern-chip home-concern-chip--accent">{% trans "مش متأكد؟ اعمل اختبار المطابقة" %}</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if hero_banner %}
+<div class="page-container home-ad-wrap">
+  <a href="{{ hero_banner.link_url|default:'#' }}" class="home-ad-banner">
+    <img src="{{ hero_banner.image.url }}" alt="" class="home-ad-banner__bg">
+    <div class="home-ad-banner__body">
+      <span class="badge badge--ad">{% trans "إعلان" %}</span>
+      {% if hero_banner.title %}<div class="home-ad-banner__title">{{ hero_banner.title }}</div>{% endif %}
+    </div>
+  </a>
+</div>
+{% endif %}
+
+<section class="home-section home-section--bordered">
+  <div class="page-container">
+    <h2 class="home-section__title home-section__title--center">{% trans "كيف تعمل المنصة" %}</h2>
+    <div class="home-steps-grid">
+      <div class="home-step">
+        <div class="home-step__number">1</div>
+        <div class="home-step__title">{% trans "اختر الخدمة" %}</div>
+        <p class="home-step__desc">{% trans "استشارة، دورة، أو مقال — حسب ما تحتاجه الآن." %}</p>
+      </div>
+      <div class="home-step">
+        <div class="home-step__number">2</div>
+        <div class="home-step__title">{% trans "اختر الأخصائي أو الدورة" %}</div>
+        <p class="home-step__desc">{% trans "تصفّح الملفات والتخصصات وابدأ بالمناسب لك." %}</p>
+      </div>
+      <div class="home-step">
+        <div class="home-step__number">3</div>
+        <div class="home-step__title">{% trans "احجز وادفع بأمان" %}</div>
+        <p class="home-step__desc">{% trans "خطوات دفع قليلة، وسياسة استرداد واضحة قبل الشراء." %}</p>
+      </div>
+      <div class="home-step">
+        <div class="home-step__number">4</div>
+        <div class="home-step__title">{% trans "ابدأ رحلتك" %}</div>
+        <p class="home-step__desc">{% trans "جلستك الأولى، أول درس في الدورة، أو مقال يفتح لك بداية." %}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if specialists or courses %}
+<section class="home-section">
+  <div class="page-container">
+    <div class="home-tabs" data-home-tabs>
+      <button type="button" class="home-tabs__label is-active" data-tab-btn="specialists">{% trans "أبرز الأخصائيين" %}</button>
+      <button type="button" class="home-tabs__label" data-tab-btn="courses">{% trans "أبرز الدورات" %}</button>
+    </div>
+
+    <div class="home-tab-row" data-tab-panel="specialists">
+      {% for specialist in specialists %}
+      <a href="{% url 'specialists:detail' specialist.pk %}" class="specialist-card home-tab-row__card">
+        {% if specialist.user.profile.avatar %}
+        <img class="specialist-card__photo" src="{{ specialist.user.profile.avatar.url }}" alt="{{ specialist.full_name_ar }}">
+        {% else %}
+        <span class="specialist-card__photo specialist-card__photo--placeholder">{{ specialist.full_name_ar|default:specialist.full_name_en|first }}</span>
+        {% endif %}
+        <div class="specialist-card__body">
+          <h3>{{ specialist.get_title_display }} {{ specialist.full_name_ar|default:specialist.full_name_en }}</h3>
+          <p class="specialist-card__category">{{ specialist.get_category_display }}</p>
+          <div class="specialist-card__meta">
+            <span class="rating-badge">★ {{ specialist.average_rating }}</span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+
+    <div class="home-tab-row" data-tab-panel="courses" hidden>
+      {% for course in courses %}
+      <a href="{% url 'courses:detail' course.slug %}" class="course-card home-tab-row__card">
+        {% if course.cover_image %}
+        <img class="course-card__cover" src="{{ course.cover_image.url }}" alt="{{ course.title }}">
+        {% else %}
+        <span class="course-card__cover course-card__cover--placeholder">{{ course.title|first }}</span>
+        {% endif %}
+        <div class="course-card__body">
+          {% if course.category %}<p class="course-card__category">{{ course.category }}</p>{% endif %}
+          <h3>{{ course.title }}</h3>
+          <div class="course-card__meta">
+            {% if course.average_rating %}<span class="rating-badge">★ {{ course.average_rating }}</span>{% endif %}
+          </div>
+          <p class="course-card__price">{% blocktrans with price=course.price %}{{ price }} ج.م{% endblocktrans %}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="home-section home-section--bordered home-stats">
+  <div class="page-container home-stats-grid">
+    <div class="home-stat">
+      <div class="home-stat__value">{{ stats.specialists_count }}</div>
+      <div class="home-stat__label">{% trans "أخصائي معتمد" %}</div>
+    </div>
+    <div class="home-stat">
+      <div class="home-stat__value">{{ stats.users_count }}</div>
+      <div class="home-stat__label">{% trans "مستخدم" %}</div>
+    </div>
+    <div class="home-stat">
+      <div class="home-stat__value">{{ stats.completed_count }}</div>
+      <div class="home-stat__label">{% trans "جلسة ودورة مكتملة" %}</div>
+    </div>
+    <div class="home-stat">
+      <div class="home-stat__value">{{ stats.avg_rating|floatformat:1 }}</div>
+      <div class="home-stat__label">{% trans "متوسط التقييم" %}</div>
+    </div>
+  </div>
+</section>
+
+{% if small_banners %}
+<div class="page-container home-small-ads-wrap">
+  <div class="home-section__title home-section__title--small">{% trans "شركاء وإعلانات" %}</div>
+  <div class="home-small-ads-grid">
+    {% for banner in small_banners %}
+    <a href="{{ banner.link_url|default:'#' }}" class="home-small-ad">
+      <span class="badge badge--ad home-small-ad__badge">{% trans "إعلان" %}</span>
+      <img src="{{ banner.image.url }}" alt="" class="home-small-ad__img">
+      {% if banner.title %}<span class="home-small-ad__title">{{ banner.title }}</span>{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+{% if articles %}
+<section class="home-section">
+  <div class="page-container">
+    <h2 class="home-section__title">{% trans "أحدث المقالات" %}</h2>
+    <div class="article-grid">
+      {% for article in articles %}
+      <a href="{% url 'content:detail' article.slug %}" class="article-card">
+        {% if article.cover_image %}
+        <img class="article-card__cover" src="{{ article.cover_image.url }}" alt="{{ article.title }}">
+        {% else %}
+        <span class="article-card__cover article-card__cover--placeholder">{{ article.title|first }}</span>
+        {% endif %}
+        <div class="article-card__body">
+          {% if article.category %}<span class="badge badge--category">{{ article.category }}</span>{% endif %}
+          <h3>{{ article.title }}</h3>
+          <p class="article-card__meta">{% blocktrans with minutes=article.reading_time_minutes %}{{ minutes }} دقائق قراءة{% endblocktrans %}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    <a href="{% url 'content:list' %}" class="home-section__more">{% trans "عرض كل المقالات" %} ←</a>
+  </div>
+</section>
+{% endif %}
+
+{% if videos %}
+<section class="home-section">
+  <div class="page-container">
+    <h2 class="home-section__title">{% trans "فيديوهات تعليمية" %}</h2>
+    <div class="home-videos-grid">
+      {% for video in videos %}
+      <a href="{{ video.video_url }}" target="_blank" rel="noopener" class="home-video-card">
+        <div class="home-video-card__thumb-wrap">
+          {% if video.thumbnail %}
+          <img class="home-video-card__thumb" src="{{ video.thumbnail.url }}" alt="{{ video.title }}">
+          {% else %}
+          <span class="home-video-card__thumb home-video-card__thumb--placeholder">{{ video.title|first }}</span>
+          {% endif %}
+          <span class="home-video-card__play">▶</span>
+          <span class="home-video-card__duration">{{ video.duration_display }}</span>
+        </div>
+        <div class="home-video-card__body">
+          {% if video.category %}<span class="badge badge--category">{{ video.category }}</span>{% endif %}
+          <h3>{{ video.title }}</h3>
+          <p class="home-video-card__meta">{% blocktrans with views=video.views_count %}{{ views }} مشاهدة{% endblocktrans %}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="home-section home-section--bordered">
+  <div class="page-container">
+    <div class="home-benefits-grid">
+      <div class="home-benefit">
+        <div class="home-benefit__icon">🔒</div>
+        <div class="home-benefit__title">{% trans "خصوصية وسرية تامة" %}</div>
+        <p class="home-benefit__desc">{% trans "بياناتك وجلساتك محمية بالكامل، ومفيش أي مشاركة لمعلوماتك مع طرف ثالث." %}</p>
+      </div>
+      <div class="home-benefit">
+        <div class="home-benefit__icon">✓</div>
+        <div class="home-benefit__title">{% trans "أخصائيون معتمدون فقط" %}</div>
+        <p class="home-benefit__desc">{% trans "كل أخصائي بيمر بمراجعة دقيقة للمؤهلات والتراخيص قبل ما ينضم للمنصة." %}</p>
+      </div>
+      <div class="home-benefit">
+        <div class="home-benefit__icon">🕐</div>
+        <div class="home-benefit__title">{% trans "مرونة في المواعيد" %}</div>
+        <p class="home-benefit__desc">{% trans "احجز جلستك في الوقت اللي يناسبك، من غير قوائم انتظار." %}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if testimonials %}
+<section class="home-section home-testimonials">
+  <div class="page-container">
+    <h2 class="home-section__title home-section__title--center">{% trans "آراء المستخدمين" %}</h2>
+    <div class="home-testimonials-grid">
+      {% for testimonial in testimonials %}
+      <div class="home-testimonial-card">
+        <div class="rating-badge">★★★★★</div>
+        <p class="home-testimonial-card__quote">{{ testimonial.quote }}</p>
+        <div class="home-testimonial-card__author">
+          {% if testimonial.photo %}
+          <img class="home-testimonial-card__photo" src="{{ testimonial.photo.url }}" alt="{{ testimonial.author_name }}">
+          {% else %}
+          <span class="home-testimonial-card__photo home-testimonial-card__photo--placeholder">{{ testimonial.author_name|first }}</span>
+          {% endif %}
+          <div>
+            <span class="home-testimonial-card__name">{{ testimonial.author_name }}</span>
+            {% if testimonial.author_title %}<span class="home-testimonial-card__title">{{ testimonial.author_title }}</span>{% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock %}
