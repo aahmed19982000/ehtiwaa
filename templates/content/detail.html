@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{{ article.title }} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/content.css' %}">
+{% endblock %}
+{% block content %}
+<div class="page-container article-detail">
+  {% if article.category %}<span class="badge badge--category">{{ article.category }}</span>{% endif %}
+  <h1 class="article-detail__title">{{ article.title }}</h1>
+
+  <div class="article-detail__byline">
+    {% if article.author %}
+    {% if article.author.user.profile.avatar %}
+    <img src="{{ article.author.user.profile.avatar.url }}" alt="{{ article.author.full_name_ar }}">
+    {% endif %}
+    <span>{{ article.author.full_name_ar|default:article.author.full_name_en }}</span>
+    <span>·</span>
+    {% endif %}
+    {% if article.published_at %}<span>{% blocktrans with duration=article.published_at|timesince %}منذ {{ duration }}{% endblocktrans %}</span><span>·</span>{% endif %}
+    <span>{% blocktrans with minutes=article.reading_time_minutes %}{{ minutes }} دقائق قراءة{% endblocktrans %}</span>
+  </div>
+
+  {% if article.cover_image %}
+  <div class="article-detail__hero">
+    <img src="{{ article.cover_image.url }}" alt="{{ article.title }}">
+  </div>
+  {% endif %}
+
+  <div class="article-detail__body">{{ article.body|safe }}</div>
+
+  {% if article.tags %}
+  <div class="tag-pills">
+    {% for tag in article.tags %}
+    <span class="tag-pill">{{ tag }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if article.author %}
+  <div class="author-card">
+    {% if article.author.user.profile.avatar %}
+    <img class="author-card__photo" src="{{ article.author.user.profile.avatar.url }}" alt="{{ article.author.full_name_ar }}">
+    {% else %}
+    <span class="author-card__photo author-card__photo--placeholder">{{ article.author.full_name_ar|default:article.author.full_name_en|first }}</span>
+    {% endif %}
+    <div class="author-card__info">
+      <div class="author-card__name">{{ article.author.full_name_ar|default:article.author.full_name_en }}</div>
+      <div class="author-card__headline">{{ article.author.headline }}</div>
+    </div>
+    <a href="{% url 'specialists:detail' article.author.pk %}" class="btn btn-outline">{% trans "عرض الملف" %}</a>
+  </div>
+  {% endif %}
+
+  {% if related_articles %}
+  <div class="related-articles">
+    <h2>{% trans "مقالات ذات صلة" %}</h2>
+    <div class="related-articles__grid">
+      {% for related in related_articles %}
+      <a href="{% url 'content:detail' related.slug %}" class="related-article-card">
+        {% if related.cover_image %}
+        <img src="{{ related.cover_image.url }}" alt="{{ related.title }}">
+        {% else %}
+        <span class="related-article-card__placeholder">{{ related.title|first }}</span>
+        {% endif %}
+        <div class="related-article-card__body">
+          <div class="related-article-card__title">{{ related.title }}</div>
+          <div class="related-article-card__meta">{{ related.category }}{% if related.category %} · {% endif %}{% blocktrans with minutes=related.reading_time_minutes %}{{ minutes }} دقائق{% endblocktrans %}</div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
