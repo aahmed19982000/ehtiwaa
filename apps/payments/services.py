@@ -75,9 +75,12 @@ def handle_payment_succeeded(payment):
     # particular order actually contains.
     from apps.bookings.services import confirm_bookings_from_paid_order
     from apps.courses.services import enroll_from_paid_order
+    from apps.store.services import clear_cart_items_for_paid_order, decrement_stock_for_paid_order
 
     enroll_from_paid_order(order)
     confirm_bookings_from_paid_order(order)
+    decrement_stock_for_paid_order(order)
+    clear_cart_items_for_paid_order(order)
 
 
 def handle_payment_failed(payment, reason=""):
