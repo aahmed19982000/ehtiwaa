@@ -5,7 +5,11 @@ from django.core.management.base import BaseCommand, CommandError
 
 from apps.bookings.google_calendar import CALENDAR_SCOPES
 
-ENV_KEYS = ["GOOGLE_CALENDAR_CLIENT_ID", "GOOGLE_CALENDAR_CLIENT_SECRET", "GOOGLE_CALENDAR_REFRESH_TOKEN"]
+ENV_KEYS = [
+    "GOOGLE_CALENDAR_CLIENT_ID",
+    "GOOGLE_CALENDAR_CLIENT_SECRET",
+    "GOOGLE_CALENDAR_REFRESH_TOKEN",
+]
 
 
 class Command(BaseCommand):
@@ -64,7 +68,9 @@ class Command(BaseCommand):
 
         env_path = Path(settings.BASE_DIR) / ".env"
         if not env_path.exists():
-            self.stdout.write(self.style.WARNING(f".env not found at {env_path} — add these manually:"))
+            self.stdout.write(
+                self.style.WARNING(f".env not found at {env_path} — add these manually:")
+            )
             for key, value in values.items():
                 self.stdout.write(f"{key}={value}")
             return
@@ -81,4 +87,6 @@ class Command(BaseCommand):
                 lines.append(f"{key}={value}")
 
         env_path.write_text("\n".join(lines) + "\n")
-        self.stdout.write(self.style.SUCCESS(f"Updated {env_path} — restart the dev server to pick it up."))
+        self.stdout.write(
+            self.style.SUCCESS(f"Updated {env_path} — restart the dev server to pick it up.")
+        )

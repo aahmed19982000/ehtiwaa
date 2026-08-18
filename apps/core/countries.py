@@ -50,7 +50,5 @@ COUNTRIES = [
 ]
 
 COUNTRY_CHOICES = [(code, name) for code, name, _dial in COUNTRIES]
-DIAL_CODE_CHOICES = [
-    (dial, format_lazy("{} {}", name, dial)) for _code, name, dial in COUNTRIES
-]
+DIAL_CODE_CHOICES = [(dial, format_lazy("{} {}", name, dial)) for _code, name, dial in COUNTRIES]
 DEFAULT_DIAL_CODE = "+20"

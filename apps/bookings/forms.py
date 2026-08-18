@@ -16,5 +16,7 @@ class BookingForm(forms.Form):
         # choices — ChoiceField rejects anything else server-side, so a
         # tampered/stale "booked" value can't be submitted.
         self.fields["time_slot"].choices = [
-            (slot["value"], slot["label"]) for slot in available_slots if slot["status"] == "available"
+            (slot["value"], slot["label"])
+            for slot in available_slots
+            if slot["status"] == "available"
         ]

@@ -13,8 +13,6 @@ urlpatterns = [
     path("<int:pk>/", views.SpecialistDetailView.as_view(), name="detail"),
     path("join/", views.SpecialistLandingView.as_view(), name="landing"),
     path("join/apply/", views.SpecialistApplyView.as_view(), name="apply"),
-    path(
-        "join/apply/documents/", views.SpecialistDocumentsView.as_view(), name="apply-documents"
-    ),
+    path("join/apply/documents/", views.SpecialistDocumentsView.as_view(), name="apply-documents"),
     path("join/pending/", views.SpecialistApplyPendingView.as_view(), name="apply-pending"),
 ]

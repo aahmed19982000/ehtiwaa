@@ -11,7 +11,8 @@ from .models import Profile, User
 class LoginForm(forms.Form):
     email = forms.EmailField(label=_("البريد الإلكتروني"))
     password = forms.CharField(
-        label=_("كلمة المرور"), widget=forms.PasswordInput(attrs={"autocomplete": "current-password"})
+        label=_("كلمة المرور"),
+        widget=forms.PasswordInput(attrs={"autocomplete": "current-password"}),
     )
 
 

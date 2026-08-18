@@ -37,11 +37,18 @@ def signup(*, email, password, name):
     if resp.ok:
         return resp.json()
 
-    data = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
+    data = (
+        resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
+    )
     code = data.get("code") or data.get("name")
     if code == "user_exists":
         raise Auth0Error("هذا البريد الإلكتروني مسجّل بحساب موجود بالفعل.")
-    if code in ("invalid_password", "PasswordStrengthError", "PasswordDictionaryError", "PasswordNoUserInfoError"):
+    if code in (
+        "invalid_password",
+        "PasswordStrengthError",
+        "PasswordDictionaryError",
+        "PasswordNoUserInfoError",
+    ):
         raise Auth0Error(_password_policy_message(data))
     raise Auth0Error(data.get("description") or "تعذّر إنشاء الحساب. برجاء المحاولة مرة أخرى.")
 
@@ -91,7 +98,9 @@ def login(*, email, password, generic_error=None):
     if resp.ok:
         return resp.json()
 
-    data = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
+    data = (
+        resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
+    )
     if data.get("error") == "invalid_grant":
         raise Auth0Error("البريد الإلكتروني أو كلمة المرور غير صحيحة.")
     raise Auth0Error(generic_error)
