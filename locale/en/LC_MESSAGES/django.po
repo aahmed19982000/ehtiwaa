@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-18 20:15+0300\n"
+"POT-Creation-Date: 2026-08-18 21:30+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,13 +28,13 @@ msgstr ""
 
 #: apps/accounts/forms.py:12 apps/accounts/forms.py:20
 #: apps/accounts/forms.py:25 apps/accounts/forms.py:77
-#: apps/specialists/forms.py:138 apps/support/forms.py:11
+#: apps/specialists/forms.py:171 apps/support/forms.py:15
 #: templates/accounts/password_reset.html:16
 msgid "البريد الإلكتروني"
 msgstr "Email"
 
 #: apps/accounts/forms.py:14 apps/accounts/forms.py:31
-#: apps/specialists/forms.py:140 templates/accounts/profile_edit.html:83
+#: apps/specialists/forms.py:173 templates/accounts/profile_edit.html:83
 msgid "كلمة المرور"
 msgstr "Password"
 
@@ -42,7 +42,7 @@ msgstr "Password"
 msgid "الاسم"
 msgstr "Name"
 
-#: apps/accounts/forms.py:27 apps/specialists/forms.py:110
+#: apps/accounts/forms.py:27 apps/specialists/forms.py:143
 msgid "مفتاح الدولة"
 msgstr "Country code"
 
@@ -50,29 +50,29 @@ msgstr "Country code"
 msgid "رقم الهاتف"
 msgstr "Phone number"
 
-#: apps/accounts/forms.py:34 apps/specialists/forms.py:143
+#: apps/accounts/forms.py:34 apps/specialists/forms.py:176
 msgid "8 أحرف على الأقل."
 msgstr "At least 8 characters."
 
-#: apps/accounts/forms.py:37 apps/specialists/forms.py:146
+#: apps/accounts/forms.py:37 apps/specialists/forms.py:179
 #: templates/accounts/password_reset_confirm.html:20
 msgid "تأكيد كلمة المرور"
 msgstr "Confirm password"
 
-#: apps/accounts/forms.py:41 apps/specialists/forms.py:126
+#: apps/accounts/forms.py:41 apps/specialists/forms.py:159
 msgid "أوافق على الشروط والأحكام وسياسة الخصوصية"
 msgstr "I agree to the Terms & Conditions and Privacy Policy"
 
 #: apps/accounts/forms.py:47 apps/accounts/forms.py:101
-#: apps/specialists/forms.py:153
+#: apps/specialists/forms.py:186
 msgid "هذا البريد الإلكتروني مستخدم بالفعل."
 msgstr "This email is already in use."
 
-#: apps/accounts/forms.py:63 apps/specialists/forms.py:172
+#: apps/accounts/forms.py:63 apps/specialists/forms.py:205
 msgid "رقم الهاتف مستخدم بالفعل."
 msgstr "This phone number is already in use."
 
-#: apps/accounts/forms.py:69 apps/specialists/forms.py:179
+#: apps/accounts/forms.py:69 apps/specialists/forms.py:212
 msgid "كلمتا المرور غير متطابقتين."
 msgstr "The passwords don't match."
 
@@ -105,7 +105,7 @@ msgstr "Login isn't available right now."
 msgid "التسجيل غير متاح حاليًا."
 msgstr "Signup isn't available right now."
 
-#: apps/accounts/views.py:94 apps/specialists/views.py:140
+#: apps/accounts/views.py:94 apps/specialists/views.py:161
 msgid "تم إنشاء حسابك، لكن تعذّر تسجيل دخولك تلقائيًا."
 msgstr "Your account was created, but we couldn't log you in automatically."
 
@@ -142,21 +142,21 @@ msgstr "Choose a time"
 msgid "رقم للتواصل"
 msgstr "Contact number"
 
-#: apps/bookings/views.py:87
+#: apps/bookings/views.py:105
 msgid "للأسف تم حجز هذا الموعد للتو، برجاء اختيار موعد آخر."
 msgstr "Unfortunately this slot was just booked — please choose another time."
 
-#: apps/bookings/views.py:104
+#: apps/bookings/views.py:113
 msgid "تم إرسال طلب الحجز — أكمل الدفع لتأكيد موعدك."
 msgstr ""
 "Your booking request has been sent — complete payment to confirm your "
 "appointment."
 
-#: apps/bookings/views.py:146
+#: apps/bookings/views.py:155
 msgid "تم إلغاء الحجز."
 msgstr "The booking has been cancelled."
 
-#: apps/bookings/views.py:148
+#: apps/bookings/views.py:157
 msgid "لا يمكن إلغاء هذا الحجز."
 msgstr "This booking can't be cancelled."
 
@@ -304,17 +304,26 @@ msgstr "Indonesia"
 msgid "أستراليا"
 msgstr "Australia"
 
-#: apps/core/validators.py:50
+#: apps/core/validators.py:71
 #, python-format
 msgid ""
 "حجم الملف كبير جدًا (%(size)s). الحد الأقصى المسموح به %(max)s ميجابايت."
 msgstr ""
 "The file is too large (%(size)s). The maximum allowed size is %(max)s MB."
 
-#: apps/core/validators.py:72
+#: apps/core/validators.py:93
 #, python-format
 msgid "نوع الملف غير مدعوم. الأنواع المسموح بها: %(extensions)s"
 msgstr "This file type isn't supported. Allowed types: %(extensions)s"
+
+#: apps/core/validators.py:127
+#, python-format
+msgid ""
+"محتوى الملف لا يطابق نوعه المعلن (%(ext)s). برجاء التأكد من رفع الملف "
+"الصحيح."
+msgstr ""
+"The file's content doesn't match its claimed type (%(ext)s). Please make "
+"sure you're uploading the correct file."
 
 #: apps/courses/views.py:109
 msgid "أنت مسجّل بالفعل في هذه الدورة."
@@ -420,223 +429,267 @@ msgstr "Thanks for your rating!"
 msgid "برجاء اختيار تقييم صحيح."
 msgstr "Please choose a valid rating."
 
-#: apps/specialists/forms.py:20 templates/specialists/apply.html:23
+#: apps/specialists/forms.py:28 templates/specialists/apply.html:23
 msgid "شهادة التخرج"
 msgstr "Degree certificate"
 
-#: apps/specialists/forms.py:21 templates/specialists/apply.html:24
+#: apps/specialists/forms.py:29 templates/specialists/apply.html:24
 msgid "رخصة مزاولة المهنة"
 msgstr "Practice license"
 
-#: apps/specialists/forms.py:22 templates/specialists/apply.html:25
+#: apps/specialists/forms.py:30 templates/specialists/apply.html:25
 msgid "شهادة نقابة الأطباء"
 msgstr "Medical syndicate card"
 
-#: apps/specialists/forms.py:23 templates/specialists/apply.html:26
+#: apps/specialists/forms.py:31 templates/specialists/apply.html:26
 msgid "شهادة الدراسات العليا (ماجستير أو دكتوراه)"
 msgstr "Postgraduate certificate (Master's or PhD)"
 
-#: apps/specialists/forms.py:26
+#: apps/specialists/forms.py:34
 msgid "شهادة الماجستير في علم النفس الاكلينيكي"
 msgstr "Master's certificate in clinical psychology"
 
-#: apps/specialists/forms.py:27 apps/specialists/forms.py:31
+#: apps/specialists/forms.py:35 apps/specialists/forms.py:39
 #: templates/specialists/apply.html:34 templates/specialists/apply.html:42
 msgid "إثبات وثيقة الإشراف"
 msgstr "Proof of supervision document"
 
-#: apps/specialists/forms.py:30
+#: apps/specialists/forms.py:38
 msgid "شهادة الماجستير في علم النفس"
 msgstr "Master's certificate in psychology"
 
-#: apps/specialists/forms.py:39
+#: apps/specialists/forms.py:47
 msgid "الأعلى تقييمًا"
 msgstr "Highest rated"
 
-#: apps/specialists/forms.py:40
+#: apps/specialists/forms.py:48
 msgid "الأقل سعرًا"
 msgstr "Lowest price"
 
-#: apps/specialists/forms.py:41
+#: apps/specialists/forms.py:49
 msgid "الأقرب توفرًا"
 msgstr "Soonest available"
 
-#: apps/specialists/forms.py:50 templates/forum/list.html:19
-#: templates/partials/header.html:32 templates/specialists/directory.html:51
+#: apps/specialists/forms.py:53
+msgid "كل المدد"
+msgstr "All durations"
+
+#: apps/specialists/forms.py:54
+msgid "60 دقيقة"
+msgstr "60 minutes"
+
+#: apps/specialists/forms.py:55
+msgid "30 دقيقة"
+msgstr "30 minutes"
+
+#: apps/specialists/forms.py:59
+msgid "أي تقييم"
+msgstr "Any rating"
+
+#: apps/specialists/forms.py:60
+msgid "4 نجوم فأكثر"
+msgstr "4 stars & up"
+
+#: apps/specialists/forms.py:61
+msgid "3 نجوم فأكثر"
+msgstr "3 stars & up"
+
+#: apps/specialists/forms.py:62
+msgid "نجمتان فأكثر"
+msgstr "2 stars & up"
+
+#: apps/specialists/forms.py:63
+msgid "نجمة فأكثر"
+msgstr "1 star & up"
+
+#: apps/specialists/forms.py:72 templates/forum/list.html:19
+#: templates/partials/header.html:32 templates/specialists/directory.html:65
 msgid "بحث"
 msgstr "Search"
 
-#: apps/specialists/forms.py:52
+#: apps/specialists/forms.py:74
 msgid "التخصص"
 msgstr "Specialty"
 
-#: apps/specialists/forms.py:53
+#: apps/specialists/forms.py:75
 msgid "كل التخصصات"
 msgstr "All specialties"
 
-#: apps/specialists/forms.py:57 apps/specialists/forms.py:114
+#: apps/specialists/forms.py:79 apps/specialists/forms.py:147
 #: templates/specialists/detail.html:59
 msgid "الجنس"
 msgstr "Gender"
 
-#: apps/specialists/forms.py:58 templates/assessments/list.html:19
+#: apps/specialists/forms.py:80 templates/assessments/list.html:19
 #: templates/forum/list.html:24
 msgid "الكل"
 msgstr "All"
 
-#: apps/specialists/forms.py:62
+#: apps/specialists/forms.py:84
 msgid "اللغة"
 msgstr "Language"
 
-#: apps/specialists/forms.py:63
+#: apps/specialists/forms.py:85
 msgid "كل اللغات"
 msgstr "All languages"
 
-#: apps/specialists/forms.py:66
+#: apps/specialists/forms.py:88
+msgid "مدة الجلسة"
+msgstr "Session duration"
+
+#: apps/specialists/forms.py:90
+msgid "الحد الأدنى للتقييم"
+msgstr "Minimum rating"
+
+#: apps/specialists/forms.py:95
+msgid "يقدر يصف دواء"
+msgstr "Can prescribe medication"
+
+#: apps/specialists/forms.py:96
 msgid "السعر من"
 msgstr "Price from"
 
-#: apps/specialists/forms.py:67
+#: apps/specialists/forms.py:97
 msgid "السعر إلى"
 msgstr "Price to"
 
-#: apps/specialists/forms.py:68
+#: apps/specialists/forms.py:98
 msgid "متاح للحجز قريبًا فقط"
 msgstr "Available for booking soon only"
 
-#: apps/specialists/forms.py:70
+#: apps/specialists/forms.py:100
 msgid "الترتيب"
 msgstr "Sort by"
 
-#: apps/specialists/forms.py:78
+#: apps/specialists/forms.py:108
 msgid "السعر الأقصى لازم يكون أكبر من أو يساوي الأدنى."
 msgstr "The maximum price must be greater than or equal to the minimum."
 
-#: apps/specialists/forms.py:101 templates/specialists/apply.html:54
+#: apps/specialists/forms.py:134 templates/specialists/apply.html:54
 msgid "الفئة"
 msgstr "Category"
 
-#: apps/specialists/forms.py:106
+#: apps/specialists/forms.py:139
 msgid "الاسم بالكامل (بالعربية)"
 msgstr "Full name (in Arabic)"
 
-#: apps/specialists/forms.py:107
+#: apps/specialists/forms.py:140
 msgid "الاسم بالكامل (بالإنجليزية)"
 msgstr "Full name (in English)"
 
-#: apps/specialists/forms.py:108
+#: apps/specialists/forms.py:141
 msgid "اللقب"
 msgstr "Title"
 
-#: apps/specialists/forms.py:112
+#: apps/specialists/forms.py:145
 msgid "رقم التليفون"
 msgstr "Phone number"
 
-#: apps/specialists/forms.py:113
+#: apps/specialists/forms.py:146
 msgid "سنة الميلاد"
 msgstr "Birth year"
 
-#: apps/specialists/forms.py:115 templates/specialists/detail.html:70
+#: apps/specialists/forms.py:148 templates/specialists/detail.html:70
 msgid "الجنسية"
 msgstr "Nationality"
 
-#: apps/specialists/forms.py:116
+#: apps/specialists/forms.py:149
 msgid "بلد الإقامة"
 msgstr "Country of residence"
 
-#: apps/specialists/forms.py:118
+#: apps/specialists/forms.py:151
 msgid "اللغات المتحدث بها بطلاقة"
 msgstr "Languages spoken fluently"
 
-#: apps/specialists/forms.py:123
+#: apps/specialists/forms.py:156
 #: templates/adminpanel/pending_specialists.html:27
 msgid "سنوات الخبرة"
 msgstr "Years of experience"
 
-#: apps/specialists/forms.py:187
+#: apps/specialists/forms.py:220
 #, python-format
 msgid "مطلوب %(years)s سنوات خبرة على الأقل لهذه الفئة."
 msgstr ""
 "At least %(years)s years of experience are required for this category."
 
-#: apps/specialists/forms.py:219
+#: apps/specialists/forms.py:252
 #, python-format
 msgid "هذا المستند مطلوب: %(doc)s"
 msgstr "This document is required: %(doc)s"
 
-#: apps/specialists/models.py:9
+#: apps/specialists/models.py:14
 msgid "العربية"
 msgstr "Arabic"
 
-#: apps/specialists/models.py:10
+#: apps/specialists/models.py:15
 msgid "الإنجليزية"
 msgstr "English"
 
-#: apps/specialists/models.py:11
+#: apps/specialists/models.py:16
 msgid "الفرنسية"
 msgstr "French"
 
-#: apps/specialists/models.py:12
+#: apps/specialists/models.py:17
 msgid "الألمانية"
 msgstr "German"
 
-#: apps/specialists/models.py:13
+#: apps/specialists/models.py:18
 msgid "الإسبانية"
 msgstr "Spanish"
 
-#: apps/specialists/models.py:14
+#: apps/specialists/models.py:19
 msgid "الإيطالية"
 msgstr "Italian"
 
-#: apps/specialists/models.py:15
+#: apps/specialists/models.py:20
 msgid "التركية"
 msgstr "Turkish"
 
-#: apps/specialists/models.py:16
+#: apps/specialists/models.py:21
 msgid "الأردية"
 msgstr "Urdu"
 
-#: apps/specialists/models.py:17
+#: apps/specialists/models.py:22
 msgid "الصينية"
 msgstr "Chinese"
 
-#: apps/specialists/models.py:37 templates/specialists/apply.html:21
+#: apps/specialists/models.py:42 templates/specialists/apply.html:21
 msgid "طبيب نفسي"
 msgstr "Psychiatrist"
 
-#: apps/specialists/models.py:38 templates/specialists/apply.html:30
+#: apps/specialists/models.py:43 templates/specialists/apply.html:30
 msgid "معالج نفسي اكلينيكي"
 msgstr "Clinical psychologist"
 
-#: apps/specialists/models.py:39 templates/specialists/apply.html:38
+#: apps/specialists/models.py:44 templates/specialists/apply.html:38
 msgid "مرشد نفسي"
 msgstr "Psychological counselor"
 
-#: apps/specialists/models.py:42
+#: apps/specialists/models.py:47
 msgid "سيد"
 msgstr "Mr."
 
-#: apps/specialists/models.py:43
+#: apps/specialists/models.py:48
 msgid "سيدة"
 msgstr "Mrs."
 
-#: apps/specialists/models.py:44
+#: apps/specialists/models.py:49
 msgid "آنسة"
 msgstr "Ms."
 
-#: apps/specialists/models.py:45
+#: apps/specialists/models.py:50
 msgid "دكتور"
 msgstr "Dr."
 
-#: apps/specialists/models.py:47
+#: apps/specialists/models.py:52
 msgid "ذكر"
 msgstr "Male"
 
-#: apps/specialists/models.py:47
+#: apps/specialists/models.py:52
 msgid "أنثى"
 msgstr "Female"
 
-#: apps/specialists/views.py:169
+#: apps/specialists/views.py:190
 msgid "تعذّر إنشاء الحساب. برجاء المحاولة مرة أخرى."
 msgstr "Couldn't create the account. Please try again."
 
@@ -672,35 +725,35 @@ msgstr "The quantity was updated."
 msgid "سلتك فارغة."
 msgstr "Your cart is empty."
 
-#: apps/support/forms.py:10
+#: apps/support/forms.py:14
 msgid "الاسم الكامل"
 msgstr "Full name"
 
-#: apps/support/forms.py:13
+#: apps/support/forms.py:17
 msgid "التصنيف"
 msgstr "Category"
 
-#: apps/support/forms.py:16
+#: apps/support/forms.py:20
 msgid "اختر التصنيف"
 msgstr "Choose a category"
 
-#: apps/support/forms.py:18
+#: apps/support/forms.py:22
 msgid "الموضوع"
 msgstr "Subject"
 
-#: apps/support/forms.py:20
+#: apps/support/forms.py:24
 msgid "اكتب رسالتك بالتفصيل..."
 msgstr "Write your message in detail..."
 
-#: apps/support/forms.py:23
+#: apps/support/forms.py:27
 msgid "إرفاق ملف أو صورة (اختياري)"
 msgstr "Attach a file or image (optional)"
 
-#: apps/support/views.py:82
+#: apps/support/views.py:84
 msgid "برجاء مراجعة بيانات التذكرة والمحاولة مرة أخرى."
 msgstr "Please review the ticket details and try again."
 
-#: apps/support/views.py:95
+#: apps/support/views.py:97
 msgid "تم إرسال تذكرتك بنجاح، بنرد خلال 24 ساعة في أيام العمل."
 msgstr ""
 "Your ticket has been sent successfully — we'll reply within 24 hours on "
@@ -1086,7 +1139,7 @@ msgstr "Question %(current)s of %(total)s"
 #: templates/assessments/take.html:37 templates/bookings/list.html:28
 #: templates/content/list.html:33 templates/courses/list.html:43
 #: templates/forum/list.html:48 templates/matchfinder/question.html:29
-#: templates/specialists/directory.html:86 templates/store/list.html:44
+#: templates/specialists/directory.html:128 templates/store/list.html:44
 msgid "السابق"
 msgstr "Previous"
 
@@ -1094,7 +1147,7 @@ msgstr "Previous"
 #: templates/content/list.html:37 templates/courses/list.html:47
 #: templates/forum/list.html:52 templates/matchfinder/question.html:33
 #: templates/specialists/apply.html:162
-#: templates/specialists/directory.html:90 templates/store/list.html:48
+#: templates/specialists/directory.html:132 templates/store/list.html:48
 msgid "التالي"
 msgstr "Next"
 
@@ -1237,7 +1290,7 @@ msgstr "My bookings"
 
 #: templates/bookings/list.html:30 templates/content/list.html:35
 #: templates/courses/list.html:45 templates/forum/list.html:50
-#: templates/specialists/directory.html:88 templates/store/list.html:46
+#: templates/specialists/directory.html:130 templates/store/list.html:46
 #, python-format
 msgid "صفحة %(current)s من %(total)s"
 msgstr "Page %(current)s of %(total)s"
@@ -2296,7 +2349,6 @@ msgid "→ رجوع لدليل الأخصائيين"
 msgstr "→ Back to the specialists directory"
 
 #: templates/specialists/detail.html:23
-#: templates/specialists/directory.html:73
 #, python-format
 msgid "%(years)s سنة خبرة"
 msgid_plural "%(years)s سنوات خبرة"
@@ -2309,11 +2361,13 @@ msgid "%(count)s+ جلسة"
 msgstr "%(count)s+ sessions"
 
 #: templates/specialists/detail.html:31
+#: templates/specialists/directory.html:109
 #, python-format
 msgid "%(price)s ج.م / 60 دقيقة"
 msgstr "EGP %(price)s / 60 minutes"
 
 #: templates/specialists/detail.html:35
+#: templates/specialists/directory.html:112
 #, python-format
 msgid "%(price)s ج.م / 30 دقيقة"
 msgstr "EGP %(price)s / 30 minutes"
@@ -2361,21 +2415,42 @@ msgstr ""
 "Find the right therapist or psychiatrist for you from our roster of "
 "certified specialists."
 
-#: templates/specialists/directory.html:53
-#: templates/specialists/directory.html:99
+#: templates/specialists/directory.html:67
+#: templates/specialists/directory.html:141
 msgid "مسح الفلاتر"
 msgstr "Clear filters"
 
-#: templates/specialists/directory.html:76
-#, python-format
-msgid "%(price)s ج.م / الجلسة"
-msgstr "EGP %(price)s / session"
+#: templates/specialists/directory.html:79
+msgid "الأكثر اختيارًا"
+msgstr "Most chosen"
 
-#: templates/specialists/directory.html:98
+#: templates/specialists/directory.html:92
+msgid "تقييم"
+msgstr "reviews"
+
+#: templates/specialists/directory.html:94
+#, python-format
+msgid "+%(count)s جلسة"
+msgstr "+%(count)s sessions"
+
+#: templates/specialists/directory.html:105
+#, python-format
+msgid "أقرب ميعاد متاح: %(when)s"
+msgstr "Next available: %(when)s"
+
+#: templates/specialists/directory.html:118
+msgid "عرض الملف الشخصي"
+msgstr "View profile"
+
+#: templates/specialists/directory.html:119
+msgid "احجز الآن"
+msgstr "Book now"
+
+#: templates/specialists/directory.html:140
 msgid "مفيش أخصائيين مطابقين لبحثك."
 msgstr "No specialists match your search."
 
-#: templates/specialists/directory.html:101
+#: templates/specialists/directory.html:143
 msgid "لسه معندناش أخصائيين متاحين في الدليل حاليًا."
 msgstr "We don't have any specialists available in the directory yet."
 
