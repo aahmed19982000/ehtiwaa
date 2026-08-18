@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-15 18:31+0300\n"
+"POT-Creation-Date: 2026-08-18 20:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,444 +18,777 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: apps/accounts/forms.py:11
-msgid "الأسم"
-msgstr "Name"
+#: apps/accounts/adapters.py:33
+msgid ""
+"هذا البريد الإلكتروني مسجّل بحساب موجود ولم يتم توثيقه بعد من مزود الدخول. "
+"برجاء توثيق بريدك الإلكتروني أولًا ثم إعادة المحاولة."
+msgstr ""
+"This email is registered with an existing account that hasn't been verified "
+"by the login provider yet. Please verify your email first, then try again."
 
-#: apps/accounts/forms.py:12 apps/accounts/forms.py:56
-#: apps/specialists/forms.py:53 templates/accounts/password_reset.html:16
+#: apps/accounts/forms.py:12 apps/accounts/forms.py:20
+#: apps/accounts/forms.py:25 apps/accounts/forms.py:77
+#: apps/specialists/forms.py:138 apps/support/forms.py:11
+#: templates/accounts/password_reset.html:16
 msgid "البريد الإلكتروني"
 msgstr "Email"
 
-#: apps/accounts/forms.py:14 apps/specialists/forms.py:55
-msgid "مفتاح الدولة"
-msgstr "Country code"
-
-#: apps/accounts/forms.py:16 apps/accounts/forms.py:57
-msgid "رقم الهاتف"
-msgstr "Phone number"
-
-#: apps/accounts/forms.py:17 apps/accounts/forms.py:50
-#: apps/specialists/forms.py:81 templates/specialists/apply.html:170
+#: apps/accounts/forms.py:14 apps/accounts/forms.py:31
+#: apps/specialists/forms.py:140 templates/accounts/profile_edit.html:83
 msgid "كلمة المرور"
 msgstr "Password"
 
-#: apps/accounts/forms.py:18 apps/specialists/forms.py:82
+#: apps/accounts/forms.py:24
+msgid "الاسم"
+msgstr "Name"
+
+#: apps/accounts/forms.py:27 apps/specialists/forms.py:110
+msgid "مفتاح الدولة"
+msgstr "Country code"
+
+#: apps/accounts/forms.py:29 apps/accounts/forms.py:78
+msgid "رقم الهاتف"
+msgstr "Phone number"
+
+#: apps/accounts/forms.py:34 apps/specialists/forms.py:143
+msgid "8 أحرف على الأقل."
+msgstr "At least 8 characters."
+
+#: apps/accounts/forms.py:37 apps/specialists/forms.py:146
 #: templates/accounts/password_reset_confirm.html:20
 msgid "تأكيد كلمة المرور"
 msgstr "Confirm password"
 
-#: apps/accounts/forms.py:20 apps/specialists/forms.py:84
+#: apps/accounts/forms.py:41 apps/specialists/forms.py:126
 msgid "أوافق على الشروط والأحكام وسياسة الخصوصية"
 msgstr "I agree to the Terms & Conditions and Privacy Policy"
 
-#: apps/accounts/forms.py:26 apps/accounts/forms.py:80
-#: apps/specialists/forms.py:92
+#: apps/accounts/forms.py:47 apps/accounts/forms.py:101
+#: apps/specialists/forms.py:153
 msgid "هذا البريد الإلكتروني مستخدم بالفعل."
 msgstr "This email is already in use."
 
-#: apps/accounts/forms.py:34 apps/specialists/forms.py:109
-msgid "كلمتا المرور غير متطابقتين."
-msgstr "The passwords don't match."
-
-#: apps/accounts/forms.py:43
+#: apps/accounts/forms.py:63 apps/specialists/forms.py:172
 msgid "رقم الهاتف مستخدم بالفعل."
 msgstr "This phone number is already in use."
 
-#: apps/accounts/forms.py:49
-msgid "البريد الإلكتروني أو رقم الهاتف"
-msgstr "Email or phone number"
+#: apps/accounts/forms.py:69 apps/specialists/forms.py:179
+msgid "كلمتا المرور غير متطابقتين."
+msgstr "The passwords don't match."
 
-#: apps/accounts/forms.py:54
+#: apps/accounts/forms.py:75
 msgid "الاسم الأول"
 msgstr "First name"
 
-#: apps/accounts/forms.py:55
+#: apps/accounts/forms.py:76
 msgid "اسم العائلة"
 msgstr "Last name"
 
-#: apps/accounts/forms.py:63 templates/accounts/profile_edit.html:38
+#: apps/accounts/forms.py:84 templates/accounts/profile_edit.html:38
 msgid "الصورة الشخصية"
 msgstr "Profile photo"
 
-#: apps/accounts/forms.py:64
+#: apps/accounts/forms.py:85
 msgid "نبذة تعريفية"
 msgstr "Bio"
 
-#: apps/accounts/forms.py:65
+#: apps/accounts/forms.py:86
 msgid "المدينة"
 msgstr "City"
 
-#: apps/accounts/services.py:64
-msgid "تفعيل حسابك في احتواء"
-msgstr "Activate your Ehtiwaa account"
+#: apps/accounts/views.py:43 apps/accounts/views.py:129
+#: apps/accounts/views.py:137 templates/accounts/welcome.html:37
+msgid "تسجيل الدخول غير متاح حاليًا."
+msgstr "Login isn't available right now."
 
-#: apps/accounts/views.py:78
-msgid "تم تفعيل حسابك بنجاح."
-msgstr "Your account has been activated successfully."
+#: apps/accounts/views.py:76 apps/accounts/views.py:82
+msgid "التسجيل غير متاح حاليًا."
+msgstr "Signup isn't available right now."
 
-#: apps/accounts/views.py:81
-msgid "رابط التفعيل غير صالح أو منتهي الصلاحية."
-msgstr "The activation link is invalid or has expired."
+#: apps/accounts/views.py:94 apps/specialists/views.py:140
+msgid "تم إنشاء حسابك، لكن تعذّر تسجيل دخولك تلقائيًا."
+msgstr "Your account was created, but we couldn't log you in automatically."
 
-#: apps/accounts/views.py:101
-msgid "بيانات الدخول غير صحيحة."
-msgstr "Invalid login credentials."
+#: apps/accounts/views.py:167 apps/accounts/views.py:173
+msgid "هذه الخدمة غير متاحة حاليًا."
+msgstr "This service isn't available right now."
 
-#: apps/accounts/views.py:104
-msgid "الحساب غير مفعّل بعد، برجاء تفعيله عبر البريد الإلكتروني."
-msgstr "Your account isn't activated yet — please activate it via email."
-
-#: apps/accounts/views.py:141
-msgid "تم حفظ كلمة المرور بنجاح."
-msgstr "Password saved successfully."
-
-#: apps/accounts/views.py:145
+#: apps/accounts/views.py:203
 msgid "تم تحديث الملف الشخصي بنجاح."
 msgstr "Profile updated successfully."
 
-#: apps/core/countries.py:13
+#: apps/adminpanel/forms.py:7 apps/bookings/forms.py:10
+#: templates/adminpanel/pending_specialists.html:50
+msgid "ملاحظات (اختياري)"
+msgstr "Notes (optional)"
+
+#: apps/adminpanel/views.py:46
+msgid "تم اعتماد الأخصائي."
+msgstr "The specialist has been approved."
+
+#: apps/adminpanel/views.py:56
+msgid "تم رفض الطلب."
+msgstr "The application has been rejected."
+
+#: apps/assessments/views.py:77
+msgid "برجاء اختيار إجابة قبل المتابعة."
+msgstr "Please choose an answer before continuing."
+
+#: apps/bookings/forms.py:7 templates/bookings/book.html:31
+msgid "اختر الموعد"
+msgstr "Choose a time"
+
+#: apps/bookings/forms.py:8
+msgid "رقم للتواصل"
+msgstr "Contact number"
+
+#: apps/bookings/views.py:87
+msgid "للأسف تم حجز هذا الموعد للتو، برجاء اختيار موعد آخر."
+msgstr "Unfortunately this slot was just booked — please choose another time."
+
+#: apps/bookings/views.py:104
+msgid "تم إرسال طلب الحجز — أكمل الدفع لتأكيد موعدك."
+msgstr ""
+"Your booking request has been sent — complete payment to confirm your "
+"appointment."
+
+#: apps/bookings/views.py:146
+msgid "تم إلغاء الحجز."
+msgstr "The booking has been cancelled."
+
+#: apps/bookings/views.py:148
+msgid "لا يمكن إلغاء هذا الحجز."
+msgstr "This booking can't be cancelled."
+
+#: apps/core/countries.py:14
 msgid "مصر"
 msgstr "Egypt"
 
-#: apps/core/countries.py:14
+#: apps/core/countries.py:15
 msgid "السعودية"
 msgstr "Saudi Arabia"
 
-#: apps/core/countries.py:15
+#: apps/core/countries.py:16
 msgid "الإمارات"
 msgstr "United Arab Emirates"
 
-#: apps/core/countries.py:16
+#: apps/core/countries.py:17
 msgid "الكويت"
 msgstr "Kuwait"
 
-#: apps/core/countries.py:17
+#: apps/core/countries.py:18
 msgid "قطر"
 msgstr "Qatar"
 
-#: apps/core/countries.py:18
+#: apps/core/countries.py:19
 msgid "البحرين"
 msgstr "Bahrain"
 
-#: apps/core/countries.py:19
+#: apps/core/countries.py:20
 msgid "عُمان"
 msgstr "Oman"
 
-#: apps/core/countries.py:20
+#: apps/core/countries.py:21
 msgid "الأردن"
 msgstr "Jordan"
 
-#: apps/core/countries.py:21
+#: apps/core/countries.py:22
 msgid "لبنان"
 msgstr "Lebanon"
 
-#: apps/core/countries.py:22
+#: apps/core/countries.py:23
 msgid "سوريا"
 msgstr "Syria"
 
-#: apps/core/countries.py:23
+#: apps/core/countries.py:24
 msgid "العراق"
 msgstr "Iraq"
 
-#: apps/core/countries.py:24
+#: apps/core/countries.py:25
 msgid "فلسطين"
 msgstr "Palestine"
 
-#: apps/core/countries.py:25
+#: apps/core/countries.py:26
 msgid "اليمن"
 msgstr "Yemen"
 
-#: apps/core/countries.py:26
+#: apps/core/countries.py:27
 msgid "ليبيا"
 msgstr "Libya"
 
-#: apps/core/countries.py:27
+#: apps/core/countries.py:28
 msgid "تونس"
 msgstr "Tunisia"
 
-#: apps/core/countries.py:28
+#: apps/core/countries.py:29
 msgid "الجزائر"
 msgstr "Algeria"
 
-#: apps/core/countries.py:29
+#: apps/core/countries.py:30
 msgid "المغرب"
 msgstr "Morocco"
 
-#: apps/core/countries.py:30
+#: apps/core/countries.py:31
 msgid "السودان"
 msgstr "Sudan"
 
-#: apps/core/countries.py:31
+#: apps/core/countries.py:32
 msgid "الصومال"
 msgstr "Somalia"
 
-#: apps/core/countries.py:32
+#: apps/core/countries.py:33
 msgid "موريتانيا"
 msgstr "Mauritania"
 
-#: apps/core/countries.py:33
+#: apps/core/countries.py:34
 msgid "جيبوتي"
 msgstr "Djibouti"
 
-#: apps/core/countries.py:34
+#: apps/core/countries.py:35
 msgid "جزر القمر"
 msgstr "Comoros"
 
-#: apps/core/countries.py:35
+#: apps/core/countries.py:36
 msgid "الولايات المتحدة الأمريكية"
 msgstr "United States"
 
-#: apps/core/countries.py:36
+#: apps/core/countries.py:37
 msgid "المملكة المتحدة"
 msgstr "United Kingdom"
 
-#: apps/core/countries.py:37
+#: apps/core/countries.py:38
 msgid "كندا"
 msgstr "Canada"
 
-#: apps/core/countries.py:38
+#: apps/core/countries.py:39
 msgid "فرنسا"
 msgstr "France"
 
-#: apps/core/countries.py:39
+#: apps/core/countries.py:40
 msgid "ألمانيا"
 msgstr "Germany"
 
-#: apps/core/countries.py:40
+#: apps/core/countries.py:41
 msgid "إيطاليا"
 msgstr "Italy"
 
-#: apps/core/countries.py:41
+#: apps/core/countries.py:42
 msgid "إسبانيا"
 msgstr "Spain"
 
-#: apps/core/countries.py:42
+#: apps/core/countries.py:43
 msgid "تركيا"
 msgstr "Turkey"
 
-#: apps/core/countries.py:43
+#: apps/core/countries.py:44
 msgid "الهند"
 msgstr "India"
 
-#: apps/core/countries.py:44
+#: apps/core/countries.py:45
 msgid "باكستان"
 msgstr "Pakistan"
 
-#: apps/core/countries.py:45
+#: apps/core/countries.py:46
 msgid "الصين"
 msgstr "China"
 
-#: apps/core/countries.py:46
+#: apps/core/countries.py:47
 msgid "ماليزيا"
 msgstr "Malaysia"
 
-#: apps/core/countries.py:47
+#: apps/core/countries.py:48
 msgid "إندونيسيا"
 msgstr "Indonesia"
 
-#: apps/core/countries.py:48
+#: apps/core/countries.py:49
 msgid "أستراليا"
 msgstr "Australia"
 
-#: apps/specialists/forms.py:10
-msgid "العربية"
-msgstr "Arabic"
+#: apps/core/validators.py:50
+#, python-format
+msgid ""
+"حجم الملف كبير جدًا (%(size)s). الحد الأقصى المسموح به %(max)s ميجابايت."
+msgstr ""
+"The file is too large (%(size)s). The maximum allowed size is %(max)s MB."
 
-#: apps/specialists/forms.py:11
-msgid "الإنجليزية"
-msgstr "English"
+#: apps/core/validators.py:72
+#, python-format
+msgid "نوع الملف غير مدعوم. الأنواع المسموح بها: %(extensions)s"
+msgstr "This file type isn't supported. Allowed types: %(extensions)s"
 
-#: apps/specialists/forms.py:12
-msgid "الفرنسية"
-msgstr "French"
+#: apps/courses/views.py:109
+msgid "أنت مسجّل بالفعل في هذه الدورة."
+msgstr "You're already enrolled in this course."
 
-#: apps/specialists/forms.py:13
-msgid "الألمانية"
-msgstr "German"
+#: apps/courses/views.py:172
+msgid "مبروك! أتممت الدورة وحصلت على شهادة الإتمام."
+msgstr "Congratulations! You completed the course and earned a certificate."
 
-#: apps/specialists/forms.py:14
-msgid "الإسبانية"
-msgstr "Spanish"
+#: apps/courses/views.py:174
+msgid "تم تسجيل تقدّمك في الدرس."
+msgstr "Your progress on this lesson has been saved."
 
-#: apps/specialists/forms.py:15
-msgid "الإيطالية"
-msgstr "Italian"
+#: apps/dashboard/views.py:123
+msgid "تمت الإزالة من المفضلة."
+msgstr "Removed from your wishlist."
 
-#: apps/specialists/forms.py:16
-msgid "التركية"
-msgstr "Turkish"
+#: apps/dashboard/views.py:125
+msgid "تمت الإضافة للمفضلة."
+msgstr "Added to your wishlist."
 
-#: apps/specialists/forms.py:17
-msgid "الأردية"
-msgstr "Urdu"
+#: apps/forum/forms.py:6
+msgid "عنوان السؤال"
+msgstr "Question title"
 
-#: apps/specialists/forms.py:18
-msgid "الصينية"
-msgstr "Chinese"
+#: apps/forum/forms.py:7
+msgid "تفاصيل السؤال"
+msgstr "Question details"
 
-#: apps/specialists/forms.py:25 templates/specialists/apply.html:18
-#: templates/specialists/apply.html:133
+#: apps/forum/forms.py:8
+msgid "الوسوم (افصل بينها بفاصلة)"
+msgstr "Tags (comma-separated)"
+
+#: apps/forum/forms.py:16
+msgid "إجابتك"
+msgstr "Your answer"
+
+#: apps/forum/forms.py:21 templates/forum/detail.html:25
+#: templates/forum/detail.html:69
+msgid "سبب الإبلاغ (اختياري)"
+msgstr "Reason for reporting (optional)"
+
+#: apps/forum/views.py:67
+msgid "تم نشر سؤالك بنجاح."
+msgstr "Your question has been posted successfully."
+
+#: apps/forum/views.py:128
+msgid "تم نشر إجابتك."
+msgstr "Your answer has been posted."
+
+#: apps/forum/views.py:130
+msgid "برجاء كتابة نص الإجابة."
+msgstr "Please write your answer."
+
+#: apps/forum/views.py:141
+msgid "تم اعتماد الإجابة كأفضل إجابة."
+msgstr "The answer has been marked as the best answer."
+
+#: apps/forum/views.py:143
+msgid "لا يمكنك اعتماد إجابة على سؤال غيرك."
+msgstr "You can't accept an answer on someone else's question."
+
+#: apps/forum/views.py:165 apps/forum/views.py:176
+msgid "تم استلام بلاغك، شكراً لمساعدتك في الحفاظ على المجتمع."
+msgstr ""
+"Your report has been received — thank you for helping keep the community "
+"safe."
+
+#: apps/payments/forms.py:11 templates/payments/checkout.html:25
+msgid "بطاقة ائتمان (فيزا / ماستركارد)"
+msgstr "Credit card (Visa / Mastercard)"
+
+#: apps/payments/forms.py:12 templates/payments/checkout.html:30
+msgid "تحويل بنكي"
+msgstr "Bank transfer"
+
+#: apps/payments/views.py:66
+msgid "الدفع بالبطاقة غير مُفعّل حاليًا — برجاء استخدام التحويل البنكي."
+msgstr "Card payment isn't enabled right now — please use bank transfer."
+
+#: apps/payments/views.py:78
+msgid "تعذّر بدء عملية الدفع. برجاء المحاولة مرة أخرى."
+msgstr "Couldn't start the payment process. Please try again."
+
+#: apps/payments/views.py:140
+msgid "تم رفض البطاقة من البنك المُصدر."
+msgstr "The card was declined by the issuing bank."
+
+#: apps/reviews/forms.py:8
+msgid "التقييم"
+msgstr "Rating"
+
+#: apps/reviews/forms.py:10 templates/courses/detail.html:100
+#: templates/specialists/detail.html:133 templates/store/detail.html:120
+msgid "تعليقك (اختياري)"
+msgstr "Your comment (optional)"
+
+#: apps/reviews/views.py:30
+msgid "شكراً لتقييمك!"
+msgstr "Thanks for your rating!"
+
+#: apps/reviews/views.py:32
+msgid "برجاء اختيار تقييم صحيح."
+msgstr "Please choose a valid rating."
+
+#: apps/specialists/forms.py:20 templates/specialists/apply.html:23
 msgid "شهادة التخرج"
 msgstr "Degree certificate"
 
-#: apps/specialists/forms.py:26 apps/specialists/forms.py:76
-#: templates/specialists/apply.html:19
+#: apps/specialists/forms.py:21 templates/specialists/apply.html:24
 msgid "رخصة مزاولة المهنة"
 msgstr "Practice license"
 
-#: apps/specialists/forms.py:27 apps/specialists/forms.py:77
-#: templates/specialists/apply.html:20
+#: apps/specialists/forms.py:22 templates/specialists/apply.html:25
 msgid "شهادة نقابة الأطباء"
 msgstr "Medical syndicate card"
 
-#: apps/specialists/forms.py:28 templates/specialists/apply.html:21
+#: apps/specialists/forms.py:23 templates/specialists/apply.html:26
 msgid "شهادة الدراسات العليا (ماجستير أو دكتوراه)"
 msgstr "Postgraduate certificate (Master's or PhD)"
 
-#: apps/specialists/forms.py:31
+#: apps/specialists/forms.py:26
 msgid "شهادة الماجستير في علم النفس الاكلينيكي"
 msgstr "Master's certificate in clinical psychology"
 
-#: apps/specialists/forms.py:32 apps/specialists/forms.py:36
-#: apps/specialists/forms.py:79 templates/specialists/apply.html:29
-#: templates/specialists/apply.html:37
+#: apps/specialists/forms.py:27 apps/specialists/forms.py:31
+#: templates/specialists/apply.html:34 templates/specialists/apply.html:42
 msgid "إثبات وثيقة الإشراف"
 msgstr "Proof of supervision document"
 
-#: apps/specialists/forms.py:35
+#: apps/specialists/forms.py:30
 msgid "شهادة الماجستير في علم النفس"
 msgstr "Master's certificate in psychology"
 
-#: apps/specialists/forms.py:45 templates/specialists/apply.html:49
-msgid "الفئة"
-msgstr "Category"
+#: apps/specialists/forms.py:39
+msgid "الأعلى تقييمًا"
+msgstr "Highest rated"
 
-#: apps/specialists/forms.py:50
-msgid "الاسم بالكامل (بالعربية)"
-msgstr "Full name (in Arabic)"
+#: apps/specialists/forms.py:40
+msgid "الأقل سعرًا"
+msgstr "Lowest price"
 
-#: apps/specialists/forms.py:51
-msgid "الاسم بالكامل (بالإنجليزية)"
-msgstr "Full name (in English)"
+#: apps/specialists/forms.py:41
+msgid "الأقرب توفرًا"
+msgstr "Soonest available"
+
+#: apps/specialists/forms.py:50 templates/forum/list.html:19
+#: templates/partials/header.html:32 templates/specialists/directory.html:51
+msgid "بحث"
+msgstr "Search"
 
 #: apps/specialists/forms.py:52
-msgid "اللقب"
-msgstr "Title"
+msgid "التخصص"
+msgstr "Specialty"
 
-#: apps/specialists/forms.py:57
-msgid "رقم التليفون"
-msgstr "Phone number"
+#: apps/specialists/forms.py:53
+msgid "كل التخصصات"
+msgstr "All specialties"
 
-#: apps/specialists/forms.py:58
-msgid "اسم المستخدم"
-msgstr "Username"
-
-#: apps/specialists/forms.py:59
-msgid "سنة الميلاد"
-msgstr "Birth year"
-
-#: apps/specialists/forms.py:60
+#: apps/specialists/forms.py:57 apps/specialists/forms.py:114
+#: templates/specialists/detail.html:59
 msgid "الجنس"
 msgstr "Gender"
 
-#: apps/specialists/forms.py:61
+#: apps/specialists/forms.py:58 templates/assessments/list.html:19
+#: templates/forum/list.html:24
+msgid "الكل"
+msgstr "All"
+
+#: apps/specialists/forms.py:62
+msgid "اللغة"
+msgstr "Language"
+
+#: apps/specialists/forms.py:63
+msgid "كل اللغات"
+msgstr "All languages"
+
+#: apps/specialists/forms.py:66
+msgid "السعر من"
+msgstr "Price from"
+
+#: apps/specialists/forms.py:67
+msgid "السعر إلى"
+msgstr "Price to"
+
+#: apps/specialists/forms.py:68
+msgid "متاح للحجز قريبًا فقط"
+msgstr "Available for booking soon only"
+
+#: apps/specialists/forms.py:70
+msgid "الترتيب"
+msgstr "Sort by"
+
+#: apps/specialists/forms.py:78
+msgid "السعر الأقصى لازم يكون أكبر من أو يساوي الأدنى."
+msgstr "The maximum price must be greater than or equal to the minimum."
+
+#: apps/specialists/forms.py:101 templates/specialists/apply.html:54
+msgid "الفئة"
+msgstr "Category"
+
+#: apps/specialists/forms.py:106
+msgid "الاسم بالكامل (بالعربية)"
+msgstr "Full name (in Arabic)"
+
+#: apps/specialists/forms.py:107
+msgid "الاسم بالكامل (بالإنجليزية)"
+msgstr "Full name (in English)"
+
+#: apps/specialists/forms.py:108
+msgid "اللقب"
+msgstr "Title"
+
+#: apps/specialists/forms.py:112
+msgid "رقم التليفون"
+msgstr "Phone number"
+
+#: apps/specialists/forms.py:113
+msgid "سنة الميلاد"
+msgstr "Birth year"
+
+#: apps/specialists/forms.py:115 templates/specialists/detail.html:70
 msgid "الجنسية"
 msgstr "Nationality"
 
-#: apps/specialists/forms.py:62
+#: apps/specialists/forms.py:116
 msgid "بلد الإقامة"
 msgstr "Country of residence"
 
-#: apps/specialists/forms.py:64
+#: apps/specialists/forms.py:118
 msgid "اللغات المتحدث بها بطلاقة"
 msgstr "Languages spoken fluently"
 
-#: apps/specialists/forms.py:70
+#: apps/specialists/forms.py:123
+#: templates/adminpanel/pending_specialists.html:27
 msgid "سنوات الخبرة"
 msgstr "Years of experience"
 
-#: apps/specialists/forms.py:74
-msgid "شهادة الماجستير / شهادة التخرج"
-msgstr "Master's certificate / degree certificate"
-
-#: apps/specialists/forms.py:78
-msgid "شهادة الدراسات العليا"
-msgstr "Postgraduate certificate"
-
-#: apps/specialists/forms.py:100
-msgid "اسم المستخدم مستخدم بالفعل."
-msgstr "This username is already in use."
-
-#: apps/specialists/forms.py:125
+#: apps/specialists/forms.py:187
 #, python-format
 msgid "مطلوب %(years)s سنوات خبرة على الأقل لهذه الفئة."
-msgstr "At least %(years)s years of experience are required for this category."
+msgstr ""
+"At least %(years)s years of experience are required for this category."
 
-#: apps/specialists/forms.py:131
+#: apps/specialists/forms.py:219
 #, python-format
 msgid "هذا المستند مطلوب: %(doc)s"
 msgstr "This document is required: %(doc)s"
 
-#: apps/specialists/models.py:24 templates/specialists/apply.html:16
+#: apps/specialists/models.py:9
+msgid "العربية"
+msgstr "Arabic"
+
+#: apps/specialists/models.py:10
+msgid "الإنجليزية"
+msgstr "English"
+
+#: apps/specialists/models.py:11
+msgid "الفرنسية"
+msgstr "French"
+
+#: apps/specialists/models.py:12
+msgid "الألمانية"
+msgstr "German"
+
+#: apps/specialists/models.py:13
+msgid "الإسبانية"
+msgstr "Spanish"
+
+#: apps/specialists/models.py:14
+msgid "الإيطالية"
+msgstr "Italian"
+
+#: apps/specialists/models.py:15
+msgid "التركية"
+msgstr "Turkish"
+
+#: apps/specialists/models.py:16
+msgid "الأردية"
+msgstr "Urdu"
+
+#: apps/specialists/models.py:17
+msgid "الصينية"
+msgstr "Chinese"
+
+#: apps/specialists/models.py:37 templates/specialists/apply.html:21
 msgid "طبيب نفسي"
 msgstr "Psychiatrist"
 
-#: apps/specialists/models.py:25 templates/specialists/apply.html:25
+#: apps/specialists/models.py:38 templates/specialists/apply.html:30
 msgid "معالج نفسي اكلينيكي"
 msgstr "Clinical psychologist"
 
-#: apps/specialists/models.py:26 templates/specialists/apply.html:33
+#: apps/specialists/models.py:39 templates/specialists/apply.html:38
 msgid "مرشد نفسي"
 msgstr "Psychological counselor"
 
-#: apps/specialists/models.py:29
+#: apps/specialists/models.py:42
 msgid "سيد"
 msgstr "Mr."
 
-#: apps/specialists/models.py:30
+#: apps/specialists/models.py:43
 msgid "سيدة"
 msgstr "Mrs."
 
-#: apps/specialists/models.py:31
+#: apps/specialists/models.py:44
 msgid "آنسة"
 msgstr "Ms."
 
-#: apps/specialists/models.py:32
+#: apps/specialists/models.py:45
 msgid "دكتور"
 msgstr "Dr."
 
-#: apps/specialists/models.py:34
+#: apps/specialists/models.py:47
 msgid "ذكر"
 msgstr "Male"
 
-#: apps/specialists/models.py:34
+#: apps/specialists/models.py:47
 msgid "أنثى"
 msgstr "Female"
 
-#: templates/accounts/email/activation_email.txt:1
+#: apps/specialists/views.py:169
+msgid "تعذّر إنشاء الحساب. برجاء المحاولة مرة أخرى."
+msgstr "Couldn't create the account. Please try again."
+
+#: apps/store/views.py:69
+msgid "هذا المنتج غير متوفر حاليًا."
+msgstr "This product isn't available right now."
+
+#: apps/store/views.py:73
+msgid "تمت إضافة المنتج للسلة."
+msgstr "The product was added to your cart."
+
+#: apps/store/views.py:75
+msgid "الكمية المتاحة من هذا المنتج غير كافية."
+msgstr "The available quantity of this product is insufficient."
+
+#: apps/store/views.py:101
+msgid "تم حذف المنتج من السلة."
+msgstr "The product was removed from your cart."
+
+#: apps/store/views.py:105
+msgid "تم حذف المنتج من السلة — غير متوفر بالمخزون."
+msgstr "The product was removed from your cart — it's out of stock."
+
+#: apps/store/views.py:107
+msgid "تم تعديل الكمية حسب المتاح بالمخزون."
+msgstr "The quantity was adjusted to match available stock."
+
+#: apps/store/views.py:109
+msgid "تم تحديث الكمية."
+msgstr "The quantity was updated."
+
+#: apps/store/views.py:119 templates/store/cart.html:61
+msgid "سلتك فارغة."
+msgstr "Your cart is empty."
+
+#: apps/support/forms.py:10
+msgid "الاسم الكامل"
+msgstr "Full name"
+
+#: apps/support/forms.py:13
+msgid "التصنيف"
+msgstr "Category"
+
+#: apps/support/forms.py:16
+msgid "اختر التصنيف"
+msgstr "Choose a category"
+
+#: apps/support/forms.py:18
+msgid "الموضوع"
+msgstr "Subject"
+
+#: apps/support/forms.py:20
+msgid "اكتب رسالتك بالتفصيل..."
+msgstr "Write your message in detail..."
+
+#: apps/support/forms.py:23
+msgid "إرفاق ملف أو صورة (اختياري)"
+msgstr "Attach a file or image (optional)"
+
+#: apps/support/views.py:82
+msgid "برجاء مراجعة بيانات التذكرة والمحاولة مرة أخرى."
+msgstr "Please review the ticket details and try again."
+
+#: apps/support/views.py:95
+msgid "تم إرسال تذكرتك بنجاح، بنرد خلال 24 ساعة في أيام العمل."
+msgstr ""
+"Your ticket has been sent successfully — we'll reply within 24 hours on "
+"business days."
+
+#: templates/404.html:4
+msgid "الصفحة غير موجودة"
+msgstr "Page not found"
+
+#: templates/404.html:4 templates/500.html:6
+#: templates/accounts/email/password_reset_subject.txt:1
+#: templates/accounts/password_reset.html:3
+#: templates/accounts/password_reset_complete.html:3
+#: templates/accounts/password_reset_confirm.html:3
+#: templates/accounts/password_reset_done.html:3
+#: templates/accounts/profile_edit.html:3
+#: templates/adminpanel/pending_specialists.html:3
+#: templates/assessments/list.html:3 templates/assessments/result.html:3
+#: templates/assessments/take.html:3 templates/base.html:7
+#: templates/bookings/detail.html:3
+#: templates/bookings/email/booking_cancelled_subject.txt:1
+#: templates/bookings/email/booking_confirmation_subject.txt:1
+#: templates/bookings/email/booking_payment_confirmed_subject.txt:1
+#: templates/bookings/list.html:3 templates/content/detail.html:3
+#: templates/content/list.html:3 templates/core/home.html:3
+#: templates/core/privacy.html:3 templates/core/terms.html:3
+#: templates/courses/detail.html:3
+#: templates/courses/email/certificate_issued_subject.txt:1
+#: templates/courses/email/enrollment_confirmation_subject.txt:1
+#: templates/courses/lesson.html:3 templates/courses/list.html:3
+#: templates/dashboard/bookings.html:3 templates/dashboard/courses.html:3
+#: templates/dashboard/notifications.html:3 templates/dashboard/orders.html:3
+#: templates/dashboard/wishlist.html:3 templates/forum/ask.html:3
+#: templates/forum/detail.html:3 templates/forum/list.html:3
+#: templates/matchfinder/intro.html:3 templates/matchfinder/question.html:3
+#: templates/matchfinder/results.html:3 templates/partials/footer.html:6
+#: templates/partials/header.html:6
+#: templates/payments/bank_transfer_pending.html:3
+#: templates/payments/checkout.html:3 templates/specialists/apply.html:3
+#: templates/specialists/apply_documents.html:3
+#: templates/specialists/apply_pending.html:3
+#: templates/specialists/detail.html:3 templates/specialists/directory.html:3
+#: templates/specialists/email/application_approved_subject.txt:1
+#: templates/specialists/email/application_rejected_subject.txt:1
+#: templates/specialists/landing.html:3 templates/store/cart.html:3
+#: templates/store/detail.html:3 templates/store/list.html:3
+#: templates/support/category.html:3 templates/support/home.html:3
+msgid "احتواء"
+msgstr "Ehtiwaa"
+
+#: templates/404.html:9
+msgid "الصفحة اللي بتدور عليها مش موجودة"
+msgstr "The page you're looking for doesn't exist"
+
+#: templates/404.html:11
+msgid ""
+"ممكن يكون الرابط اتغيّر أو اتحذف. جرّب ترجع للصفحة الرئيسية أو تستخدم البحث."
+msgstr ""
+"The link may have changed or been removed. Try going back to the homepage or"
+" using search."
+
+#: templates/404.html:13 templates/500.html:46
+msgid "الرجوع للصفحة الرئيسية"
+msgstr "Back to homepage"
+
+#: templates/500.html:6
+msgid "خطأ في الخادم"
+msgstr "Server error"
+
+#: templates/500.html:44
+msgid "حصل خطأ غير متوقع من عندنا"
+msgstr "Something unexpected went wrong on our end"
+
+#: templates/500.html:45
+msgid "الفريق عندنا وصله إشعار بالمشكلة وبنشتغل عليها. جرّب تاني بعد شوية."
+msgstr ""
+"Our team has been notified and is working on it. Please try again shortly."
+
 #: templates/accounts/email/password_reset_email.txt:1
+#: templates/bookings/email/booking_cancelled.txt:1
+#: templates/bookings/email/booking_confirmation.txt:1
+#: templates/bookings/email/booking_payment_confirmed.txt:1
+#: templates/courses/email/certificate_issued.txt:1
+#: templates/courses/email/enrollment_confirmation.txt:1
+#: templates/specialists/email/application_approved.txt:1
+#: templates/specialists/email/application_rejected.txt:1
 msgid "مرحبًا"
 msgstr "Hello"
-
-#: templates/accounts/email/activation_email.txt:3
-msgid "شكرًا لتسجيلك في منصة احتواء. لتفعيل حسابك، برجاء زيارة الرابط التالي:"
-msgstr ""
-"Thanks for signing up on the Ehtiwaa platform. To activate your account, "
-"please visit the following link:"
-
-#: templates/accounts/email/activation_email.txt:7
-msgid "هذا الرابط صالح لمدة 48 ساعة."
-msgstr "This link is valid for 48 hours."
-
-#: templates/accounts/email/activation_email.txt:9
-msgid "إذا لم تقم بإنشاء هذا الحساب، برجاء تجاهل هذه الرسالة."
-msgstr "If you didn't create this account, please ignore this message."
-
-#: templates/accounts/email/activation_email.txt:11
-#: templates/accounts/email/password_reset_email.txt:9
-msgid "فريق احتواء"
-msgstr "The Ehtiwaa team"
 
 #: templates/accounts/email/password_reset_email.txt:3
 msgid ""
@@ -468,63 +801,27 @@ msgstr ""
 msgid "إذا لم تطلب إعادة تعيين كلمة المرور، برجاء تجاهل هذه الرسالة."
 msgstr "If you didn't request a password reset, please ignore this message."
 
+#: templates/accounts/email/password_reset_email.txt:9
+#: templates/bookings/email/booking_cancelled.txt:11
+#: templates/bookings/email/booking_confirmation.txt:11
+#: templates/bookings/email/booking_payment_confirmed.txt:11
+#: templates/courses/email/certificate_issued.txt:7
+#: templates/courses/email/enrollment_confirmation.txt:7
+#: templates/specialists/email/application_approved.txt:7
+#: templates/specialists/email/application_rejected.txt:9
+msgid "فريق احتواء"
+msgstr "The Ehtiwaa team"
+
 #: templates/accounts/email/password_reset_subject.txt:1
 #: templates/accounts/password_reset.html:3
 #: templates/accounts/password_reset.html:11
 msgid "استعادة كلمة المرور"
 msgstr "Reset password"
 
-#: templates/accounts/email/password_reset_subject.txt:1
-#: templates/accounts/login.html:3 templates/accounts/password_reset.html:3
-#: templates/accounts/password_reset_complete.html:3
-#: templates/accounts/password_reset_confirm.html:3
-#: templates/accounts/password_reset_done.html:3
-#: templates/accounts/profile_edit.html:3 templates/accounts/signup.html:3
-#: templates/accounts/signup_check_email.html:3 templates/base.html:7
-#: templates/core/privacy.html:3 templates/core/terms.html:3
-#: templates/partials/footer.html:6 templates/partials/header.html:6
-#: templates/specialists/apply.html:3
-msgid "احتواء"
-msgstr "Ehtiwaa"
-
-#: templates/accounts/login.html:3 templates/accounts/login.html:11
-#: templates/accounts/login.html:47
-#: templates/accounts/password_reset_complete.html:13
-#: templates/accounts/signup.html:83 templates/accounts/welcome.html:35
-#: templates/partials/header.html:58
-msgid "تسجيل الدخول"
-msgstr "Log in"
-
-#: templates/accounts/login.html:10 templates/accounts/password_reset.html:10
-#: templates/accounts/signup.html:10 templates/accounts/welcome.html:10
-#: templates/specialists/apply.html:10
+#: templates/accounts/password_reset.html:10
+#: templates/accounts/welcome.html:10 templates/specialists/apply.html:10
 msgid "→ رجوع"
 msgstr "← Back"
-
-#: templates/accounts/login.html:12
-msgid "مرحبًا بعودتك إلى احتواء"
-msgstr "Welcome back to Ehtiwaa"
-
-#: templates/accounts/login.html:27 templates/accounts/welcome.html:23
-msgid "المتابعة باستخدام Google"
-msgstr "Continue with Google"
-
-#: templates/accounts/login.html:30 templates/accounts/welcome.html:26
-msgid "أو"
-msgstr "or"
-
-#: templates/accounts/login.html:45
-msgid "نسيت كلمة المرور؟"
-msgstr "Forgot your password?"
-
-#: templates/accounts/login.html:52
-msgid "ليس لديك حساب؟"
-msgstr "Don't have an account?"
-
-#: templates/accounts/login.html:52 templates/accounts/signup.html:18
-#: templates/accounts/welcome.html:30
-msgid "إنشاء حساب جديد"
-msgstr "Create a new account"
 
 #: templates/accounts/password_reset.html:12
 msgid "أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور"
@@ -543,18 +840,21 @@ msgstr "Password changed"
 msgid "يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة."
 msgstr "You can now log in with your new password."
 
+#: templates/accounts/password_reset_complete.html:13
+#: templates/accounts/welcome.html:34 templates/partials/header.html:75
+msgid "تسجيل الدخول"
+msgstr "Log in"
+
 #: templates/accounts/password_reset_confirm.html:3
 #: templates/accounts/password_reset_confirm.html:10
 msgid "تعيين كلمة مرور جديدة"
 msgstr "Set a new password"
 
 #: templates/accounts/password_reset_confirm.html:15
-#: templates/accounts/profile_edit.html:100
 msgid "كلمة المرور الجديدة"
 msgstr "New password"
 
 #: templates/accounts/password_reset_confirm.html:25
-#: templates/accounts/profile_edit.html:110
 msgid "حفظ كلمة المرور"
 msgstr "Save password"
 
@@ -571,7 +871,6 @@ msgid "تم إرسال الرابط"
 msgstr "Link sent"
 
 #: templates/accounts/password_reset_done.html:10
-#: templates/accounts/signup_check_email.html:10
 msgid "راجع بريدك الإلكتروني"
 msgstr "Check your email"
 
@@ -584,16 +883,15 @@ msgstr ""
 "password reset link."
 
 #: templates/accounts/password_reset_done.html:12
-#: templates/accounts/signup_check_email.html:19
 msgid "الذهاب إلى تسجيل الدخول"
 msgstr "Go to login"
 
 #: templates/accounts/profile_edit.html:3
-#: templates/accounts/profile_edit.html:11 templates/partials/header.html:50
+#: templates/accounts/profile_edit.html:11 templates/partials/header.html:67
 msgid "الملف الشخصي"
 msgstr "Profile"
 
-#: templates/accounts/profile_edit.html:14 templates/partials/header.html:53
+#: templates/accounts/profile_edit.html:14 templates/partials/header.html:70
 msgid "تسجيل الخروج"
 msgstr "Log out"
 
@@ -606,78 +904,12 @@ msgid "حفظ التغييرات"
 msgstr "Save changes"
 
 #: templates/accounts/profile_edit.html:84
-#: templates/accounts/profile_edit.html:110
-msgid "تغيير كلمة المرور"
-msgstr "Change password"
+msgid "يتم إدارة كلمة المرور عبر صفحة تسجيل الدخول."
+msgstr "Your password is managed through the login page."
 
-#: templates/accounts/profile_edit.html:84
-msgid "تعيين كلمة مرور"
-msgstr "Set a password"
-
-#: templates/accounts/profile_edit.html:87
-msgid ""
-"حسابك مُسجَّل عبر جوجل وليس له كلمة مرور بعد — عيّن واحدة هنا لتقدر تسجّل الدخول "
-"بالبريد الإلكتروني أيضًا."
-msgstr ""
-"Your account is signed up via Google and doesn't have a password yet — set "
-"one here so you can also log in with your email."
-
-#: templates/accounts/profile_edit.html:94
-msgid "كلمة المرور الحالية"
-msgstr "Current password"
-
-#: templates/accounts/profile_edit.html:105
-msgid "تأكيد كلمة المرور الجديدة"
-msgstr "Confirm new password"
-
-#: templates/accounts/signup.html:3 templates/accounts/signup.html:76
-#: templates/partials/header.html:59
-msgid "إنشاء حساب"
-msgstr "Sign up"
-
-#: templates/accounts/signup.html:19
-msgid "الخطوة الأولى: بياناتك الأساسية"
-msgstr "Step one: your basic details"
-
-#: templates/accounts/signup.html:48
-msgid "التالي"
-msgstr "Next"
-
-#: templates/accounts/signup.html:71 templates/specialists/apply.html:187
-#, python-format
-msgid ""
-"أوافق على <a href=\"%(terms_url)s\" target=\"_blank\">الشروط والأحكام</a> "
-"و<a href=\"%(privacy_url)s\" target=\"_blank\">سياسة الخصوصية</a>"
-msgstr ""
-"I agree to the <a href=\"%(terms_url)s\" target=\"_blank\">Terms & "
-"Conditions</a> and <a href=\"%(privacy_url)s\" target=\"_blank\">Privacy "
-"Policy</a>"
-
-#: templates/accounts/signup.html:77
-msgid "رجوع"
-msgstr "Back"
-
-#: templates/accounts/signup.html:83 templates/accounts/welcome.html:35
-msgid "لديك حساب بالفعل؟"
-msgstr "Already have an account?"
-
-#: templates/accounts/signup_check_email.html:3
-msgid "تفعيل حسابك"
-msgstr "Activate your account"
-
-#: templates/accounts/signup_check_email.html:13
-#, python-format
-msgid ""
-"أرسلنا رابط تفعيل إلى <strong>%(email)s</strong>. برجاء فتحه لتفعيل حسابك."
-msgstr ""
-"We sent an activation link to <strong>%(email)s</strong>. Please open it to "
-"activate your account."
-
-#: templates/accounts/signup_check_email.html:15
-msgid "أرسلنا رابط تفعيل إلى بريدك الإلكتروني. برجاء فتحه لتفعيل حسابك."
-msgstr ""
-"We sent an activation link to your email. Please open it to activate your "
-"account."
+#: templates/accounts/profile_edit.html:85
+msgid "الذهاب لصفحة تسجيل الدخول"
+msgstr "Go to the login page"
 
 #: templates/accounts/welcome.html:3
 msgid "مرحبًا بك في احتواء"
@@ -689,11 +921,538 @@ msgstr "Welcome to Ehtiwaa"
 
 #: templates/accounts/welcome.html:12
 msgid "اختر طريقة التسجيل المفضلة لديك، وابدأ رحلتك في ثوانٍ معدودة"
-msgstr "Choose your preferred sign-up method and start your journey in seconds"
+msgstr ""
+"Choose your preferred sign-up method and start your journey in seconds"
 
-#: templates/accounts/welcome.html:31 templates/specialists/apply.html:3
+#: templates/accounts/welcome.html:23
+msgid "المتابعة باستخدام Google"
+msgstr "Continue with Google"
+
+#: templates/accounts/welcome.html:26
+msgid "أو"
+msgstr "or"
+
+#: templates/accounts/welcome.html:29
+msgid "إنشاء حساب جديد"
+msgstr "Create a new account"
+
+#: templates/accounts/welcome.html:30 templates/specialists/apply.html:3
+#: templates/specialists/landing.html:3
 msgid "انضم كمعالج"
 msgstr "Join as a therapist"
+
+#: templates/accounts/welcome.html:34
+msgid "لديك حساب بالفعل؟"
+msgstr "Already have an account?"
+
+#: templates/adminpanel/pending_specialists.html:3
+#: templates/adminpanel/pending_specialists.html:9
+msgid "طلبات انضمام الأخصائيين"
+msgstr "Specialist applications"
+
+#: templates/adminpanel/pending_specialists.html:10
+#, python-format
+msgid "%(count)s طلب بانتظار المراجعة"
+msgid_plural "%(count)s طلبات بانتظار المراجعة"
+msgstr[0] "%(count)s application pending review"
+msgstr[1] "%(count)s applications pending review"
+
+#: templates/adminpanel/pending_specialists.html:19
+#: templates/content/detail.html:20 templates/dashboard/notifications.html:13
+#: templates/forum/detail.html:53 templates/forum/list.html:39
+#: templates/specialists/detail.html:72
+#, python-format
+msgid "منذ %(duration)s"
+msgstr "%(duration)s ago"
+
+#: templates/adminpanel/pending_specialists.html:28
+msgid "رقم الترخيص"
+msgstr "License number"
+
+#: templates/adminpanel/pending_specialists.html:30
+#: templates/specialists/detail.html:63
+msgid "اللغات"
+msgstr "Languages"
+
+#: templates/adminpanel/pending_specialists.html:36
+msgid "المستندات المرفقة"
+msgstr "Attached documents"
+
+#: templates/adminpanel/pending_specialists.html:44
+msgid "لا توجد مستندات مرفقة بعد."
+msgstr "No documents attached yet."
+
+#: templates/adminpanel/pending_specialists.html:51
+msgid "قبول"
+msgstr "Approve"
+
+#: templates/adminpanel/pending_specialists.html:55
+msgid "سبب الرفض (يظهر للأخصائي)"
+msgstr "Rejection reason (shown to the specialist)"
+
+#: templates/adminpanel/pending_specialists.html:56
+msgid "رفض"
+msgstr "Reject"
+
+#: templates/adminpanel/pending_specialists.html:64
+msgid "لا توجد طلبات بانتظار المراجعة حاليًا."
+msgstr "No applications are pending review right now."
+
+#: templates/assessments/list.html:3 templates/assessments/list.html:14
+#: templates/partials/header.html:16
+msgid "اختبارات ومقاييس نفسية ذاتية"
+msgstr "Self-assessment tests and scales"
+
+#: templates/assessments/list.html:11
+msgid ""
+"هذه الاختبارات أداة إرشادية للتعرف على حالتك بشكل أولي، ولا تُغني عن استشارة"
+" أخصائي مختص. النتيجة ليست تشخيصًا طبيًا."
+msgstr ""
+"These tests are a guiding tool for an initial understanding of your "
+"condition, and don't replace consulting a qualified specialist. The result "
+"is not a medical diagnosis."
+
+#: templates/assessments/list.html:15
+msgid ""
+"تقييم إرشادي أولي لمساعدتك على فهم حالتك بشكل عام — وليس تشخيصًا طبيًا."
+msgstr ""
+"An initial guiding assessment to help you understand your general state — "
+"not a medical diagnosis."
+
+#: templates/assessments/list.html:33
+#, python-format
+msgid "%(count)s سؤال · %(minutes)s دقائق"
+msgstr "%(count)s questions · %(minutes)s minutes"
+
+#: templates/assessments/list.html:36
+msgid "ابدأ الاختبار"
+msgstr "Start the test"
+
+#: templates/assessments/list.html:43
+msgid "لسه معندناش اختبارات متاحة حاليًا."
+msgstr "We don't have any tests available yet."
+
+#: templates/assessments/result.html:3
+msgid "نتيجة"
+msgstr "Result"
+
+#: templates/assessments/result.html:9
+#, python-format
+msgid "نتيجة %(title)s"
+msgstr "%(title)s result"
+
+#: templates/assessments/result.html:12
+#, python-format
+msgid "مستوى %(label)s"
+msgstr "%(label)s level"
+
+#: templates/assessments/result.html:15
+msgid "لم يتم تحديد مستوى لهذه النتيجة."
+msgstr "No level has been set for this result."
+
+#: templates/assessments/result.html:19
+msgid ""
+"هذه النتيجة إرشادية فقط ولا تمثل تشخيصًا. للحصول على تقييم دقيق، يُنصح "
+"بالتحدث مع أخصائي."
+msgstr ""
+"This result is for guidance only and doesn't represent a diagnosis. For an "
+"accurate assessment, we recommend speaking with a specialist."
+
+#: templates/assessments/result.html:23
+msgid "احجز استشارة مع أخصائي"
+msgstr "Book a consultation with a specialist"
+
+#: templates/assessments/result.html:27
+msgid "أعد الاختبار"
+msgstr "Retake the test"
+
+#: templates/assessments/result.html:29
+msgid "شارك النتيجة"
+msgstr "Share the result"
+
+#: templates/assessments/take.html:11
+msgid ""
+"هذه الاختبارات أداة إرشادية أولية، ولا تُغني عن استشارة أخصائي مختص. النتيجة"
+" ليست تشخيصًا طبيًا."
+msgstr ""
+"These tests are an initial guiding tool, and don't replace consulting a "
+"qualified specialist. The result is not a medical diagnosis."
+
+#: templates/assessments/take.html:16 templates/matchfinder/question.html:10
+#, python-format
+msgid "سؤال %(current)s من %(total)s"
+msgstr "Question %(current)s of %(total)s"
+
+#: templates/assessments/take.html:37 templates/bookings/list.html:28
+#: templates/content/list.html:33 templates/courses/list.html:43
+#: templates/forum/list.html:48 templates/matchfinder/question.html:29
+#: templates/specialists/directory.html:86 templates/store/list.html:44
+msgid "السابق"
+msgstr "Previous"
+
+#: templates/assessments/take.html:41 templates/bookings/list.html:32
+#: templates/content/list.html:37 templates/courses/list.html:47
+#: templates/forum/list.html:52 templates/matchfinder/question.html:33
+#: templates/specialists/apply.html:162
+#: templates/specialists/directory.html:90 templates/store/list.html:48
+msgid "التالي"
+msgstr "Next"
+
+#: templates/bookings/book.html:3
+msgid "احجز موعد"
+msgstr "Book an appointment"
+
+#: templates/bookings/book.html:10
+msgid "→ رجوع لملف الأخصائي"
+msgstr "→ Back to specialist profile"
+
+#: templates/bookings/book.html:11
+#, python-format
+msgid "احجز موعدًا مع %(name)s"
+msgstr "Book an appointment with %(name)s"
+
+#: templates/bookings/book.html:21
+msgid "اختر اليوم"
+msgstr "Choose a day"
+
+#: templates/bookings/book.html:46
+msgid "لا توجد مواعيد متاحة في هذا اليوم — جرّب يومًا آخر."
+msgstr "No slots available on this day — try another day."
+
+#: templates/bookings/book.html:50
+msgid "بيانات التواصل"
+msgstr "Contact details"
+
+#: templates/bookings/book.html:62
+#: templates/bookings/email/booking_confirmation.txt:9
+#: templates/bookings/email/booking_payment_confirmed.txt:9
+msgid "يمكنك إلغاء الحجز مجانًا حتى 24 ساعة قبل الموعد."
+msgstr ""
+"You can cancel your booking for free up to 24 hours before the appointment."
+
+#: templates/bookings/book.html:63
+msgid "تأكيد الحجز"
+msgstr "Confirm booking"
+
+#: templates/bookings/detail.html:3 templates/bookings/detail.html:10
+msgid "تفاصيل الحجز"
+msgstr "Booking details"
+
+#: templates/bookings/detail.html:9
+msgid "→ رجوع لحجوزاتي"
+msgstr "→ Back to my bookings"
+
+#: templates/bookings/detail.html:16
+#: templates/bookings/email/booking_confirmation.txt:5
+#: templates/bookings/email/booking_payment_confirmed.txt:5
+msgid "إلى"
+msgstr "To"
+
+#: templates/bookings/detail.html:18
+msgid "رقم التواصل"
+msgstr "Contact number"
+
+#: templates/bookings/detail.html:19
+msgid "ملاحظات"
+msgstr "Notes"
+
+#: templates/bookings/detail.html:22
+msgid "الدخول لجلسة Google Meet"
+msgstr "Join the Google Meet session"
+
+#: templates/bookings/detail.html:28
+msgid "تم إلغاء هذا الحجز."
+msgstr "This booking has been cancelled."
+
+#: templates/bookings/detail.html:29
+#: templates/bookings/email/booking_cancelled.txt:7
+msgid "السبب"
+msgstr "Reason"
+
+#: templates/bookings/detail.html:36
+msgid "يمكنك إلغاء هذا الحجز مجانًا."
+msgstr "You can cancel this booking for free."
+
+#: templates/bookings/detail.html:38
+msgid "الموعد بعد أقل من 24 ساعة — تجاوزت نافذة الإلغاء المجاني."
+msgstr ""
+"The appointment is less than 24 hours away — you're past the free "
+"cancellation window."
+
+#: templates/bookings/detail.html:41
+msgid "إلغاء الحجز"
+msgstr "Cancel booking"
+
+#: templates/bookings/email/booking_cancelled.txt:3
+#, python-format
+msgid "تم إلغاء حجزك مع %(specialist)s الذي كان مقررًا يوم:"
+msgstr "Your booking with %(specialist)s, which was scheduled for:"
+
+#: templates/bookings/email/booking_cancelled.txt:9
+msgid "يمكنك حجز موعد جديد في أي وقت من دليل الأخصائيين."
+msgstr ""
+"You can book a new appointment anytime from the specialists directory."
+
+#: templates/bookings/email/booking_cancelled_subject.txt:1
+msgid "تم إلغاء حجزك"
+msgstr "Your booking has been cancelled"
+
+#: templates/bookings/email/booking_confirmation.txt:3
+#, python-format
+msgid "تم استلام طلب حجزك مع %(specialist)s بنجاح، وهو الآن قيد المراجعة."
+msgstr ""
+"Your booking request with %(specialist)s has been received and is now under "
+"review."
+
+#: templates/bookings/email/booking_confirmation.txt:5
+#: templates/bookings/email/booking_payment_confirmed.txt:5
+msgid "الموعد"
+msgstr "Appointment"
+
+#: templates/bookings/email/booking_confirmation.txt:7
+#: templates/bookings/email/booking_payment_confirmed.txt:7
+msgid "رابط الجلسة (Google Meet)"
+msgstr "Session link (Google Meet)"
+
+#: templates/bookings/email/booking_confirmation_subject.txt:1
+msgid "تم استلام طلب حجزك"
+msgstr "Your booking request has been received"
+
+#: templates/bookings/email/booking_payment_confirmed.txt:3
+#, python-format
+msgid "تم تأكيد حجزك مع %(specialist)s بعد إتمام الدفع بنجاح."
+msgstr ""
+"Your booking with %(specialist)s has been confirmed after successful "
+"payment."
+
+#: templates/bookings/email/booking_payment_confirmed_subject.txt:1
+msgid "تم تأكيد حجزك"
+msgstr "Your booking has been confirmed"
+
+#: templates/bookings/list.html:3 templates/bookings/list.html:10
+#: templates/dashboard/base.html:22 templates/dashboard/bookings.html:3
+#: templates/dashboard/bookings.html:4 templates/partials/header.html:65
+msgid "حجوزاتي"
+msgstr "My bookings"
+
+#: templates/bookings/list.html:30 templates/content/list.html:35
+#: templates/courses/list.html:45 templates/forum/list.html:50
+#: templates/specialists/directory.html:88 templates/store/list.html:46
+#, python-format
+msgid "صفحة %(current)s من %(total)s"
+msgstr "Page %(current)s of %(total)s"
+
+#: templates/bookings/list.html:39
+msgid "لسه معملتش أي حجز."
+msgstr "You haven't made any bookings yet."
+
+#: templates/bookings/list.html:40
+msgid "تصفّح دليل الأخصائيين"
+msgstr "Browse the specialists directory"
+
+#: templates/content/detail.html:21 templates/content/list.html:24
+#: templates/core/home.html:200
+#, python-format
+msgid "%(minutes)s دقائق قراءة"
+msgstr "%(minutes)s min read"
+
+#: templates/content/detail.html:51
+msgid "عرض الملف"
+msgstr "View file"
+
+#: templates/content/detail.html:57
+msgid "مقالات ذات صلة"
+msgstr "Related articles"
+
+#: templates/content/detail.html:68
+#, python-format
+msgid "%(minutes)s دقائق"
+msgstr "%(minutes)s minutes"
+
+#: templates/content/list.html:3 templates/content/list.html:9
+#: templates/partials/header.html:20 templates/partials/header.html:93
+msgid "المقالات"
+msgstr "Articles"
+
+#: templates/content/list.html:10
+msgid "محتوى توعوي بإشراف أخصائيين معتمدين."
+msgstr "Educational content supervised by certified specialists."
+
+#: templates/content/list.html:44
+msgid "لسه معندناش مقالات منشورة حاليًا."
+msgstr "We don't have any published articles yet."
+
+#: templates/core/home.html:3 templates/core/home.html:15
+msgid "محتوى موثوق، دورات، واستشارات متخصصة في مكان واحد"
+msgstr ""
+"Trusted content, courses, and specialized consultations, all in one place"
+
+#: templates/core/home.html:16
+msgid ""
+"منصة عربية تجمع المقالات التوعوية والدورات التدريبية والجلسات الاستشارية مع "
+"أخصائيين معتمدين، بخطوات واضحة من الاختيار إلى الحجز."
+msgstr ""
+"An Arabic platform bringing together educational articles, training courses,"
+" and consultation sessions with certified specialists — with clear steps "
+"from choosing to booking."
+
+#: templates/core/home.html:18
+msgid "احجز استشارتك الأولى"
+msgstr "Book your first consultation"
+
+#: templates/core/home.html:19
+msgid "استكشف الدورات"
+msgstr "Explore courses"
+
+#: templates/core/home.html:34
+#, python-format
+msgid "أكثر من %(count)s أخصائي معتمد جاهز لمساعدتك"
+msgstr "Over %(count)s certified specialists ready to help you"
+
+#: templates/core/home.html:47
+msgid "إيه اللي بتواجهه؟"
+msgstr "What are you facing?"
+
+#: templates/core/home.html:48
+msgid "اختر التخصص الأقرب لحالتك، أو خلّينا نساعدك تختار."
+msgstr ""
+"Choose the specialty closest to your situation, or let us help you choose."
+
+#: templates/core/home.html:53
+msgid "مش متأكد؟ اعمل اختبار المطابقة"
+msgstr "Not sure? Take the matching test"
+
+#: templates/core/home.html:64 templates/core/home.html:176
+msgid "إعلان"
+msgstr "Ad"
+
+#: templates/core/home.html:73
+msgid "كيف تعمل المنصة"
+msgstr "How the platform works"
+
+#: templates/core/home.html:77
+msgid "اختر الخدمة"
+msgstr "Choose a service"
+
+#: templates/core/home.html:78
+msgid "استشارة، دورة، أو مقال — حسب ما تحتاجه الآن."
+msgstr ""
+"A consultation, a course, or an article — whatever you need right now."
+
+#: templates/core/home.html:82
+msgid "اختر الأخصائي أو الدورة"
+msgstr "Choose a specialist or course"
+
+#: templates/core/home.html:83
+msgid "تصفّح الملفات والتخصصات وابدأ بالمناسب لك."
+msgstr "Browse profiles and specialties and start with what suits you."
+
+#: templates/core/home.html:87
+msgid "احجز وادفع بأمان"
+msgstr "Book and pay securely"
+
+#: templates/core/home.html:88
+msgid "خطوات دفع قليلة، وسياسة استرداد واضحة قبل الشراء."
+msgstr "A few payment steps, and a clear refund policy before you buy."
+
+#: templates/core/home.html:92
+msgid "ابدأ رحلتك"
+msgstr "Start your journey"
+
+#: templates/core/home.html:93
+msgid "جلستك الأولى، أول درس في الدورة، أو مقال يفتح لك بداية."
+msgstr ""
+"Your first session, the first lesson in a course, or an article to get you "
+"started."
+
+#: templates/core/home.html:103
+msgid "أبرز الأخصائيين"
+msgstr "Featured specialists"
+
+#: templates/core/home.html:104
+msgid "أبرز الدورات"
+msgstr "Featured courses"
+
+#: templates/core/home.html:140 templates/courses/detail.html:126
+#: templates/courses/detail.html:128 templates/courses/list.html:32
+#: templates/courses/list.html:33 templates/payments/checkout.html:43
+#: templates/payments/checkout.html:48 templates/payments/checkout.html:52
+#: templates/payments/checkout.html:56 templates/store/cart.html:32
+#: templates/store/cart.html:46 templates/store/detail.html:46
+#: templates/store/detail.html:48 templates/store/detail.html:96
+#: templates/store/list.html:33 templates/store/list.html:34
+#, python-format
+msgid "%(price)s ج.م"
+msgstr "EGP %(price)s"
+
+#: templates/core/home.html:153
+msgid "أخصائي معتمد"
+msgstr "Certified specialist"
+
+#: templates/core/home.html:157
+msgid "مستخدم"
+msgstr "User"
+
+#: templates/core/home.html:161
+msgid "جلسة ودورة مكتملة"
+msgstr "Completed sessions and courses"
+
+#: templates/core/home.html:165
+msgid "متوسط التقييم"
+msgstr "Average rating"
+
+#: templates/core/home.html:172
+msgid "شركاء وإعلانات"
+msgstr "Partners & sponsors"
+
+#: templates/core/home.html:188
+msgid "أحدث المقالات"
+msgstr "Latest articles"
+
+#: templates/core/home.html:205
+msgid "عرض كل المقالات"
+msgstr "View all articles"
+
+#: templates/core/home.html:213
+msgid "فيديوهات تعليمية"
+msgstr "Educational videos"
+
+#: templates/core/home.html:229
+#, python-format
+msgid "%(views)s مشاهدة"
+msgstr "%(views)s views"
+
+#: templates/core/home.html:243
+msgid "خصوصية وسرية تامة"
+msgstr "Complete privacy and confidentiality"
+
+#: templates/core/home.html:244
+msgid "بياناتك وجلساتك محمية بالكامل، ومفيش أي مشاركة لمعلوماتك مع طرف ثالث."
+msgstr ""
+"Your data and sessions are fully protected, with no sharing of your "
+"information with any third party."
+
+#: templates/core/home.html:248
+msgid "أخصائيون معتمدون فقط"
+msgstr "Certified specialists only"
+
+#: templates/core/home.html:249
+msgid "كل أخصائي بيمر بمراجعة دقيقة للمؤهلات والتراخيص قبل ما ينضم للمنصة."
+msgstr ""
+"Every specialist goes through a thorough review of qualifications and "
+"licenses before joining the platform."
+
+#: templates/core/home.html:253
+msgid "مرونة في المواعيد"
+msgstr "Flexible scheduling"
+
+#: templates/core/home.html:254
+msgid "احجز جلستك في الوقت اللي يناسبك، من غير قوائم انتظار."
+msgstr "Book your session at a time that suits you, with no waiting lists."
+
+#: templates/core/home.html:263
+msgid "آراء المستخدمين"
+msgstr "User reviews"
 
 #: templates/core/privacy.html:3 templates/core/privacy.html:6
 #: templates/partials/footer.html:26
@@ -721,6 +1480,504 @@ msgstr ""
 "This is a placeholder terms & conditions page. This text will be replaced "
 "with the full legal content before launch."
 
+#: templates/courses/certificate_pdf.html:44
+#: templates/payments/invoice_pdf.html:73
+msgid "منصّة احتواء"
+msgstr "Ehtiwaa Platform"
+
+#: templates/courses/certificate_pdf.html:45
+msgid "هذه الشهادة تؤكد أن"
+msgstr "This certificate confirms that"
+
+#: templates/courses/certificate_pdf.html:46
+msgid "شهادة إتمام دورة"
+msgstr "Course completion certificate"
+
+#: templates/courses/certificate_pdf.html:47
+msgid "الطالب/ة"
+msgstr "Student"
+
+#: templates/courses/certificate_pdf.html:49
+msgid "أتمّ/ت بنجاح دورة"
+msgstr "has successfully completed the course"
+
+#: templates/courses/certificate_pdf.html:52
+msgid "رقم الشهادة"
+msgstr "Certificate number"
+
+#: templates/courses/certificate_pdf.html:53
+#: templates/payments/invoice_pdf.html:87
+msgid "تاريخ الإصدار"
+msgstr "Issue date"
+
+#: templates/courses/detail.html:11 templates/partials/footer.html:16
+#: templates/partials/header.html:19 templates/partials/header.html:92
+msgid "الدورات"
+msgstr "Courses"
+
+#: templates/courses/detail.html:28 templates/store/detail.html:42
+#, python-format
+msgid "(%(count)s تقييم)"
+msgstr "(%(count)s reviews)"
+
+#: templates/courses/detail.html:35
+#, python-format
+msgid "تقدّمك: %(percent)s%%"
+msgstr "Your progress: %(percent)s%%"
+
+#: templates/courses/detail.html:46
+msgid "نظرة عامة"
+msgstr "Overview"
+
+#: templates/courses/detail.html:47
+msgid "المحتوى"
+msgstr "Content"
+
+#: templates/courses/detail.html:48 templates/specialists/detail.html:122
+#: templates/store/detail.html:109
+msgid "التقييمات"
+msgstr "Reviews"
+
+#: templates/courses/detail.html:54
+msgid "ماذا ستتعلم"
+msgstr "What you'll learn"
+
+#: templates/courses/detail.html:68
+msgid "معاينة مجانية"
+msgstr "Free preview"
+
+#: templates/courses/detail.html:78
+#, python-format
+msgid "%(minutes)s دقيقة"
+msgstr "%(minutes)s minutes"
+
+#: templates/courses/detail.html:79 templates/courses/lesson.html:25
+msgid "مقفل"
+msgstr "Locked"
+
+#: templates/courses/detail.html:85
+msgid "لم تتم إضافة محتوى لهذه الدورة بعد."
+msgstr "No content has been added to this course yet."
+
+#: templates/courses/detail.html:92 templates/specialists/detail.html:125
+#: templates/store/detail.html:112
+msgid "أضف تقييمك"
+msgstr "Add your review"
+
+#: templates/courses/detail.html:101 templates/specialists/detail.html:134
+#: templates/store/detail.html:121
+msgid "إرسال التقييم"
+msgstr "Submit rating"
+
+#: templates/courses/detail.html:118 templates/specialists/detail.html:151
+#: templates/store/detail.html:138
+msgid "لا توجد تقييمات بعد."
+msgstr "No reviews yet."
+
+#: templates/courses/detail.html:135
+msgid "تحميل شهادة الإتمام"
+msgstr "Download completion certificate"
+
+#: templates/courses/detail.html:137
+msgid "استمر في التعلم"
+msgstr "Continue learning"
+
+#: templates/courses/detail.html:142
+msgid "اشترِ الآن"
+msgstr "Buy now"
+
+#: templates/courses/detail.html:145
+msgid "سجّل الدخول للشراء"
+msgstr "Log in to purchase"
+
+#: templates/courses/detail.html:152 templates/store/detail.html:77
+msgid "إزالة من المفضلة ★"
+msgstr "Remove from wishlist ★"
+
+#: templates/courses/detail.html:152 templates/store/detail.html:77
+msgid "أضف للمفضلة ☆"
+msgstr "Add to wishlist ☆"
+
+#: templates/courses/detail.html:158
+msgid "وصول مدى الحياة"
+msgstr "Lifetime access"
+
+#: templates/courses/detail.html:159
+msgid "شهادة معتمدة"
+msgstr "Certified certificate"
+
+#: templates/courses/detail.html:160
+msgid "دعم أثناء الدورة"
+msgstr "Support throughout the course"
+
+#: templates/courses/detail.html:162
+msgid "استرداد كامل خلال 7 أيام من الشراء"
+msgstr "Full refund within 7 days of purchase"
+
+#: templates/courses/email/certificate_issued.txt:3
+#, python-format
+msgid "أتممت دورة \"%(course)s\" بنجاح — مبروك!"
+msgstr ""
+"You have successfully completed the \"%(course)s\" course — congratulations!"
+
+#: templates/courses/email/certificate_issued.txt:5
+msgid "يمكنك تحميل شهادة الإتمام الآن من صفحة الدورة في لوحة المستخدم."
+msgstr ""
+"You can now download your completion certificate from the course page in "
+"your dashboard."
+
+#: templates/courses/email/certificate_issued_subject.txt:1
+msgid "مبروك! حصلت على شهادة إتمام"
+msgstr "Congratulations! You've earned a completion certificate"
+
+#: templates/courses/email/enrollment_confirmation.txt:3
+#, python-format
+msgid "تم تأكيد الدفع وتفعيل وصولك لدورة \"%(course)s\" بنجاح."
+msgstr ""
+"Your payment has been confirmed and your access to the \"%(course)s\" course"
+" has been activated."
+
+#: templates/courses/email/enrollment_confirmation.txt:5
+msgid "يمكنك الآن مشاهدة محتوى الدورة والبدء في التعلّم من لوحة المستخدم."
+msgstr ""
+"You can now view the course content and start learning from your dashboard."
+
+#: templates/courses/email/enrollment_confirmation_subject.txt:1
+msgid "تم تفعيل اشتراكك في الدورة"
+msgstr "Your course enrollment has been activated"
+
+#: templates/courses/lesson.html:9
+msgid "→ رجوع لتفاصيل الدورة"
+msgstr "→ Back to course details"
+
+#: templates/courses/lesson.html:49
+msgid "تم إكمال هذا الدرس ✓"
+msgstr "This lesson is complete ✓"
+
+#: templates/courses/lesson.html:51
+msgid "الدرس التالي"
+msgstr "Next lesson"
+
+#: templates/courses/lesson.html:56
+msgid "إكمال الدرس"
+msgstr "Complete lesson"
+
+#: templates/courses/lesson.html:63
+msgid "هذا الدرس مقفل — أكمل الاشتراك في الدورة للوصول لهذا المحتوى."
+msgstr ""
+"This lesson is locked — complete your enrollment in the course to access "
+"this content."
+
+#: templates/courses/lesson.html:64
+msgid "الرجوع لصفحة الدورة"
+msgstr "Back to the course page"
+
+#: templates/courses/list.html:3 templates/courses/list.html:9
+msgid "الدورات التعليمية"
+msgstr "Educational courses"
+
+#: templates/courses/list.html:10
+msgid ""
+"دورات عملية بإشراف أخصائيين معتمدين، بمحتوى فيديو ومتابعة تقدّم وشهادة "
+"إتمام."
+msgstr ""
+"Practical courses supervised by certified specialists, with video content, "
+"progress tracking, and a completion certificate."
+
+#: templates/courses/list.html:29
+#, python-format
+msgid "%(count)s درس"
+msgid_plural "%(count)s دروس"
+msgstr[0] "%(count)s lesson"
+msgstr[1] "%(count)s lessons"
+
+#: templates/courses/list.html:54
+msgid "لسه معندناش دورات متاحة حاليًا."
+msgstr "We don't have any courses available yet."
+
+#: templates/dashboard/base.html:23 templates/dashboard/courses.html:3
+#: templates/dashboard/courses.html:4 templates/partials/header.html:66
+msgid "دوراتي"
+msgstr "My courses"
+
+#: templates/dashboard/base.html:24 templates/dashboard/orders.html:3
+#: templates/dashboard/orders.html:4
+msgid "طلباتي وفواتيري"
+msgstr "My orders & invoices"
+
+#: templates/dashboard/base.html:25 templates/dashboard/wishlist.html:3
+#: templates/dashboard/wishlist.html:4
+msgid "المفضلة"
+msgstr "Wishlist"
+
+#: templates/dashboard/base.html:26 templates/dashboard/notifications.html:3
+#: templates/dashboard/notifications.html:4
+msgid "الإشعارات"
+msgstr "Notifications"
+
+#: templates/dashboard/base.html:27
+msgid "ملفي الشخصي"
+msgstr "My profile"
+
+#: templates/dashboard/bookings.html:27
+msgid "لا توجد حجوزات بعد."
+msgstr "No bookings yet."
+
+#: templates/dashboard/bookings.html:28
+msgid "تصفح الأخصائيين"
+msgstr "Browse specialists"
+
+#: templates/dashboard/courses.html:21
+#, python-format
+msgid "%(percent)s%%"
+msgstr "%(percent)s%%"
+
+#: templates/dashboard/courses.html:27
+msgid "لسه معندكش دورات مسجَّل بها."
+msgstr "You're not enrolled in any courses yet."
+
+#: templates/dashboard/courses.html:28
+msgid "تصفح الدورات"
+msgstr "Browse courses"
+
+#: templates/dashboard/notifications.html:18
+msgid "تحديد كمقروء"
+msgstr "Mark as read"
+
+#: templates/dashboard/notifications.html:26
+msgid "لا توجد إشعارات بعد."
+msgstr "No notifications yet."
+
+#: templates/dashboard/orders.html:9 templates/payments/invoice_pdf.html:95
+msgid "الوصف"
+msgstr "Description"
+
+#: templates/dashboard/orders.html:10
+msgid "التاريخ"
+msgstr "Date"
+
+#: templates/dashboard/orders.html:11
+msgid "المبلغ"
+msgstr "Amount"
+
+#: templates/dashboard/orders.html:12
+msgid "الحالة"
+msgstr "Status"
+
+#: templates/dashboard/orders.html:18
+#: templates/payments/bank_transfer_pending.html:17
+#, python-format
+msgid "%(total)s ج.م"
+msgstr "EGP %(total)s"
+
+#: templates/dashboard/orders.html:22
+msgid "تحميل الفاتورة"
+msgstr "Download invoice"
+
+#: templates/dashboard/orders.html:30
+msgid "لا توجد طلبات بعد."
+msgstr "No orders yet."
+
+#: templates/dashboard/wishlist.html:18
+msgid "دورة"
+msgstr "Course"
+
+#: templates/dashboard/wishlist.html:18
+msgid "منتج"
+msgstr "Product"
+
+#: templates/dashboard/wishlist.html:26
+msgid "قائمة المفضلة فارغة — أضف دورات أو منتجات لتظهر هنا."
+msgstr "Your wishlist is empty — add courses or products to see them here."
+
+#: templates/forum/ask.html:3 templates/forum/ask.html:10
+#: templates/forum/list.html:14
+msgid "اطرح سؤالاً"
+msgstr "Ask a question"
+
+#: templates/forum/ask.html:9
+msgid "→ رجوع للمنتدى"
+msgstr "→ Back to the forum"
+
+#: templates/forum/ask.html:29
+msgid "نشر السؤال"
+msgstr "Post question"
+
+#: templates/forum/detail.html:11
+#, python-format
+msgid "سُئل منذ %(duration)s"
+msgstr "Asked %(duration)s ago"
+
+#: templates/forum/detail.html:11
+#, python-format
+msgid "%(count)s مشاهدة"
+msgstr "%(count)s views"
+
+#: templates/forum/detail.html:22
+msgid "إبلاغ عن هذا السؤال"
+msgstr "Report this question"
+
+#: templates/forum/detail.html:26 templates/forum/detail.html:70
+msgid "إرسال البلاغ"
+msgstr "Submit report"
+
+#: templates/forum/detail.html:31
+#, python-format
+msgid "الإجابات (%(count)s)"
+msgid_plural "الإجابات (%(count)s)"
+msgstr[0] "Answers (%(count)s)"
+msgstr[1] "Answers (%(count)s)"
+
+#: templates/forum/detail.html:43
+msgid "أخصائي"
+msgstr "Specialist"
+
+#: templates/forum/detail.html:45
+msgid "عضو"
+msgstr "Member"
+
+#: templates/forum/detail.html:48
+msgid "أفضل إجابة"
+msgstr "Best answer"
+
+#: templates/forum/detail.html:53
+#, python-format
+msgid "%(count)s وجد هذا مفيداً"
+msgid_plural "%(count)s وجدوا هذا مفيداً"
+msgstr[0] "%(count)s found this helpful"
+msgstr[1] "%(count)s found this helpful"
+
+#: templates/forum/detail.html:57
+msgid "وجدت هذا مفيداً"
+msgstr "Found this helpful"
+
+#: templates/forum/detail.html:62
+msgid "اعتماد كأفضل إجابة"
+msgstr "Mark as best answer"
+
+#: templates/forum/detail.html:66
+msgid "إبلاغ"
+msgstr "Report"
+
+#: templates/forum/detail.html:77
+msgid "لا توجد إجابات بعد — كن أول من يجيب."
+msgstr "No answers yet — be the first to answer."
+
+#: templates/forum/detail.html:84
+msgid "نشر الإجابة"
+msgstr "Post answer"
+
+#: templates/forum/detail.html:87
+msgid "سجّل الدخول"
+msgstr "Log in"
+
+#: templates/forum/detail.html:87
+msgid "للمشاركة بإجابة."
+msgstr "to post an answer."
+
+#: templates/forum/detail.html:93
+msgid "أسئلة ذات صلة"
+msgstr "Related questions"
+
+#: templates/forum/detail.html:101
+msgid "لا توجد أسئلة ذات صلة حالياً."
+msgstr "No related questions right now."
+
+#: templates/forum/list.html:3 templates/forum/list.html:11
+msgid "المنتدى المجتمعي"
+msgstr "Community forum"
+
+#: templates/forum/list.html:12
+msgid "اسأل، وشارك إجابتك مع أعضاء المجتمع والأخصائيين."
+msgstr "Ask, and share your answers with community members and specialists."
+
+#: templates/forum/list.html:18
+msgid "ابحث في الأسئلة..."
+msgstr "Search questions..."
+
+#: templates/forum/list.html:39
+#, python-format
+msgid "%(count)s إجابة"
+msgid_plural "%(count)s إجابات"
+msgstr[0] "%(count)s answer"
+msgstr[1] "%(count)s answers"
+
+#: templates/forum/list.html:59
+msgid "لا توجد أسئلة مطابقة حالياً."
+msgstr "No matching questions right now."
+
+#: templates/forum/list.html:60
+msgid "كن أول من يسأل"
+msgstr "Be the first to ask"
+
+#: templates/matchfinder/intro.html:3 templates/matchfinder/question.html:3
+#: templates/partials/header.html:15
+msgid "محرك المطابقة"
+msgstr "Matching engine"
+
+#: templates/matchfinder/intro.html:9
+msgid "خلّينا نساعدك تلاقي الأخصائي المناسب"
+msgstr "Let us help you find the right specialist"
+
+#: templates/matchfinder/intro.html:10
+msgid "٣ دقائق بس، إجاباتك خاصة تماماً."
+msgstr "Just 3 minutes, and your answers are completely private."
+
+#: templates/matchfinder/intro.html:11
+msgid ""
+"هذه ليست استشارة أو تشخيص، فقط أسئلة لفهم احتياجك وترشيح الأخصائي الأنسب."
+msgstr ""
+"This isn't a consultation or a diagnosis — just questions to understand your"
+" needs and recommend the most suitable specialist."
+
+#: templates/matchfinder/intro.html:14
+msgid "ابدأ"
+msgstr "Start"
+
+#: templates/matchfinder/intro.html:16
+msgid "تفضل تتصفح دليل الأخصائيين بنفسك؟"
+msgstr "Prefer to browse the specialists directory yourself?"
+
+#: templates/matchfinder/results.html:3
+msgid "نتائج محرك المطابقة"
+msgstr "Matching engine results"
+
+#: templates/matchfinder/results.html:9
+msgid "دول أنسب الأخصائيين ليك بناءً على إجاباتك"
+msgstr "These are the best-matched specialists for you based on your answers"
+
+#: templates/matchfinder/results.html:26
+#, python-format
+msgid "متاح/ة %(date)s"
+msgstr "Available %(date)s"
+
+#: templates/matchfinder/results.html:29
+#, python-format
+msgid "%(price)s ج.م / جلسة"
+msgstr "EGP %(price)s / session"
+
+#: templates/matchfinder/results.html:32
+msgid "عرض الملف والحجز"
+msgstr "View profile and book"
+
+#: templates/matchfinder/results.html:36
+msgid "مش مقتنع بالترشيحات؟ تصفح كل الأخصائيين"
+msgstr "Not convinced by the recommendations? Browse all specialists"
+
+#: templates/matchfinder/results.html:39
+msgid "معندناش أخصائيين متاحين للترشيح حالياً."
+msgstr "We don't have any specialists available to recommend right now."
+
+#: templates/matchfinder/results.html:40
+msgid "تصفح دليل الأخصائيين"
+msgstr "Browse the specialists directory"
+
+#: templates/matchfinder/results.html:44
+msgid "هذه ترشيحات أولية بناءً على إجاباتك، ولستَ ملزماً باختيارها."
+msgstr ""
+"These are initial recommendations based on your answers, and you're not "
+"obligated to choose them."
+
 #: templates/partials/footer.html:8
 msgid ""
 "منصة احتواء تجمعك بأفضل الأخصائيين النفسيين والدورات والموارد لدعم صحتك "
@@ -734,27 +1991,24 @@ msgid "روابط سريعة"
 msgstr "Quick links"
 
 #: templates/partials/footer.html:14 templates/partials/header.html:9
-#: templates/partials/header.html:73
+#: templates/partials/header.html:90
 msgid "الرئيسية"
 msgstr "Home"
 
 #: templates/partials/footer.html:15 templates/partials/header.html:13
-#: templates/partials/header.html:74
+#: templates/partials/header.html:91 templates/specialists/directory.html:3
+#: templates/specialists/directory.html:9
 msgid "دليل الأخصائيين"
 msgstr "Specialists directory"
 
-#: templates/partials/footer.html:16 templates/partials/header.html:18
-#: templates/partials/header.html:75
-msgid "الدورات"
-msgstr "Courses"
-
-#: templates/partials/footer.html:17 templates/partials/header.html:20
-#: templates/partials/header.html:77
+#: templates/partials/footer.html:17 templates/partials/header.html:21
+#: templates/partials/header.html:94 templates/store/list.html:3
+#: templates/store/list.html:9
 msgid "المتجر"
 msgstr "Store"
 
-#: templates/partials/footer.html:18 templates/partials/header.html:21
-#: templates/partials/header.html:78
+#: templates/partials/footer.html:18 templates/partials/header.html:22
+#: templates/partials/header.html:95
 msgid "المنتدى"
 msgstr "Forum"
 
@@ -766,7 +2020,7 @@ msgstr "Policies"
 msgid "سياسة الإلغاء والاسترداد"
 msgstr "Cancellation & refund policy"
 
-#: templates/partials/footer.html:32
+#: templates/partials/footer.html:32 templates/support/home.html:99
 msgid "تواصل معنا"
 msgstr "Contact us"
 
@@ -782,94 +2036,626 @@ msgstr "Consultations"
 msgid "حجز استشارة"
 msgstr "Book a consultation"
 
-#: templates/partials/header.html:15
-msgid "محرك المطابقة"
-msgstr "Matching engine"
-
-#: templates/partials/header.html:19 templates/partials/header.html:76
-msgid "المقالات"
-msgstr "Articles"
-
-#: templates/partials/header.html:31
-msgid "بحث"
-msgstr "Search"
-
-#: templates/partials/header.html:37
+#: templates/partials/header.html:38
 msgid "المساعدة"
 msgstr "Help"
 
-#: templates/partials/header.html:62
+#: templates/partials/header.html:45 templates/store/cart.html:3
+#: templates/store/cart.html:9 templates/store/detail.html:87
+msgid "سلة التسوق"
+msgstr "Shopping cart"
+
+#: templates/partials/header.html:76
+msgid "إنشاء حساب"
+msgstr "Sign up"
+
+#: templates/partials/header.html:79
 msgid "القائمة"
 msgstr "Menu"
+
+#: templates/payments/bank_transfer_pending.html:3
+msgid "بانتظار تأكيد التحويل"
+msgstr "Awaiting transfer confirmation"
+
+#: templates/payments/bank_transfer_pending.html:9
+msgid "طلبك قيد الانتظار"
+msgstr "Your order is pending"
+
+#: templates/payments/bank_transfer_pending.html:10
+msgid ""
+"حوّل مبلغ الطلب إلى الحساب البنكي التالي، وسيقوم فريقنا بتأكيد طلبك خلال يوم"
+" عمل من استلام التحويل."
+msgstr ""
+"Transfer the order amount to the bank account below, and our team will "
+"confirm your order within one business day of receiving the transfer."
+
+#: templates/payments/bank_transfer_pending.html:13
+msgid "البنك"
+msgstr "Bank"
+
+#: templates/payments/bank_transfer_pending.html:14
+msgid "اسم الحساب"
+msgstr "Account name"
+
+#: templates/payments/bank_transfer_pending.html:15
+msgid "رقم الحساب"
+msgstr "Account number"
+
+#: templates/payments/bank_transfer_pending.html:16
+msgid "الآيبان (IBAN)"
+msgstr "IBAN"
+
+#: templates/payments/bank_transfer_pending.html:17
+msgid "المبلغ المطلوب"
+msgstr "Amount due"
+
+#: templates/payments/bank_transfer_pending.html:20
+msgid ""
+"برجاء إرسال صورة إيصال التحويل مع رقم الطلب إلى فريق الدعم لتسريع التأكيد."
+msgstr ""
+"Please send a photo of the transfer receipt along with your order number to "
+"our support team to speed up confirmation."
+
+#: templates/payments/bank_transfer_pending.html:20
+#, python-format
+msgid "رقم الطلب: %(pk)s"
+msgstr "Order number: %(pk)s"
+
+#: templates/payments/bank_transfer_pending.html:23
+msgid "تواصل مع الدعم"
+msgstr "Contact support"
+
+#: templates/payments/bank_transfer_pending.html:24
+msgid "الذهاب إلى طلباتي"
+msgstr "Go to my orders"
+
+#: templates/payments/checkout.html:3 templates/payments/checkout.html:9
+msgid "تأكيد الدفع"
+msgstr "Confirm payment"
+
+#: templates/payments/checkout.html:13
+msgid ""
+"تم رفض البطاقة من البنك المُصدر. تحقق من البيانات أو استخدم بطاقة أخرى، أو "
+"جرّب التحويل البنكي."
+msgstr ""
+"The card was declined by the issuing bank. Check your card details or use "
+"another card, or try a bank transfer."
+
+#: templates/payments/checkout.html:21
+msgid "طريقة الدفع"
+msgstr "Payment method"
+
+#: templates/payments/checkout.html:26
+msgid "غير مُفعّل حاليًا"
+msgstr "Not enabled right now"
+
+#: templates/payments/checkout.html:34
+msgid ""
+"الدفع بالبطاقة قيد الإعداد — يمكنك إتمام الطلب الآن عبر التحويل البنكي."
+msgstr ""
+"Card payment is being set up — you can complete your order now via bank "
+"transfer."
+
+#: templates/payments/checkout.html:39
+msgid "ملخص الطلب"
+msgstr "Order summary"
+
+#: templates/payments/checkout.html:47 templates/payments/invoice_pdf.html:114
+#: templates/store/cart.html:45
+msgid "الإجمالي الفرعي"
+msgstr "Subtotal"
+
+#: templates/payments/checkout.html:51
+#, python-format
+msgid "ضريبة القيمة المضافة (14%%)"
+msgstr "VAT (14%%)"
+
+#: templates/payments/checkout.html:55 templates/payments/invoice_pdf.html:98
+#: templates/payments/invoice_pdf.html:116
+msgid "الإجمالي"
+msgstr "Total"
+
+#: templates/payments/checkout.html:58
+msgid "استرداد كامل خلال 7 أيام من الشراء دون رسوم."
+msgstr "Full refund within 7 days of purchase, no fees."
+
+#: templates/payments/checkout.html:59
+msgid "أكمل الدفع"
+msgstr "Complete payment"
+
+#: templates/payments/checkout.html:60
+msgid "معاملتك مشفّرة بالكامل"
+msgstr "Your transaction is fully encrypted"
+
+#: templates/payments/invoice_pdf.html:75
+msgid "فاتورة"
+msgstr "Invoice"
+
+#: templates/payments/invoice_pdf.html:82
+msgid "فوترة إلى"
+msgstr "Billed to"
+
+#: templates/payments/invoice_pdf.html:96
+msgid "الكمية"
+msgstr "Quantity"
+
+#: templates/payments/invoice_pdf.html:97
+msgid "سعر الوحدة"
+msgstr "Unit price"
+
+#: templates/payments/invoice_pdf.html:106
+#: templates/payments/invoice_pdf.html:107
+#: templates/payments/invoice_pdf.html:114
+#: templates/payments/invoice_pdf.html:115
+#: templates/payments/invoice_pdf.html:116
+msgid "ج.م"
+msgstr "EGP"
+
+#: templates/payments/invoice_pdf.html:115
+#, python-format
+msgid "ضريبة القيمة المضافة (%(rate)s%%)"
+msgstr "VAT (%(rate)s%%)"
+
+#: templates/payments/invoice_pdf.html:119
+msgid "شكرًا لثقتك في منصة احتواء."
+msgstr "Thank you for trusting Ehtiwaa."
 
 #: templates/specialists/apply.html:11
 msgid "نموذج طلب انضمام كمعالج لفريق احتواء"
 msgstr "Application form to join the Ehtiwaa team as a therapist"
 
-#: templates/specialists/apply.html:14
+#: templates/specialists/apply.html:13
+#, python-format
+msgid "تم تسجيل الدخول باسم %(email)s"
+msgstr "Logged in as %(email)s"
+
+#: templates/specialists/apply.html:15
+msgid "املأ بياناتك عشان ننشئلك حساب ونستلم طلبك في نفس الوقت."
+msgstr ""
+"Fill in your details so we can create your account and receive your "
+"application at the same time."
+
+#: templates/specialists/apply.html:19
 msgid "المعايير المطلوبة لكل فئة"
 msgstr "Requirements for each category"
 
-#: templates/specialists/apply.html:27
+#: templates/specialists/apply.html:32
 msgid "ماجستير العلوم أو الآداب في علم النفس الاكلينيكي"
 msgstr "Master of Science or Arts in Clinical Psychology"
 
-#: templates/specialists/apply.html:28
+#: templates/specialists/apply.html:33
 msgid "خمس سنوات خبرة اكلينيكية"
 msgstr "Five years of clinical experience"
 
-#: templates/specialists/apply.html:35
+#: templates/specialists/apply.html:40
 msgid "ماجستير العلوم أو الآداب في علم النفس"
 msgstr "Master of Science or Arts in Psychology"
 
-#: templates/specialists/apply.html:36
+#: templates/specialists/apply.html:41
 msgid "خمس سنوات خبرة إرشاد نفسي"
 msgstr "Five years of counseling experience"
 
-#: templates/specialists/apply.html:60
+#: templates/specialists/apply.html:65
 msgid "المعلومات الشخصية"
 msgstr "Personal information"
 
-#: templates/specialists/apply.html:119
-msgid "اضغط مع الاستمرار على Ctrl (أو Cmd) لاختيار أكثر من لغة"
-msgstr "Hold Ctrl (or Cmd) to select more than one language"
+#: templates/specialists/apply.html:157
+#, python-format
+msgid ""
+"أوافق على <a href=\"%(terms_url)s\" target=\"_blank\">الشروط والأحكام</a> "
+"و<a href=\"%(privacy_url)s\" target=\"_blank\">سياسة الخصوصية</a>"
+msgstr ""
+"I agree to the <a href=\"%(terms_url)s\" target=\"_blank\">Terms & "
+"Conditions</a> and <a href=\"%(privacy_url)s\" target=\"_blank\">Privacy "
+"Policy</a>"
 
-#: templates/specialists/apply.html:123
+#: templates/specialists/apply_documents.html:3
+#: templates/specialists/apply_documents.html:10
 msgid "المستندات المطلوبة"
 msgstr "Required documents"
 
-#: templates/specialists/apply.html:134
-msgid "شهادة الماجستير (علم النفس الاكلينيكي أو علم النفس)"
-msgstr "Master's certificate (clinical psychology or psychology)"
+#: templates/specialists/apply_documents.html:11
+msgid "خطوة أخيرة — ارفع المستندات المطلوبة عشان يقدر فريقنا يراجع طلبك."
+msgstr ""
+"One last step — upload the required documents so our team can review your "
+"application."
 
-#: templates/specialists/apply.html:192
+#: templates/specialists/apply_documents.html:27
 msgid "إرسال الطلب"
 msgstr "Submit application"
 
-#: templates/404.html:4
-msgid "الصفحة غير موجودة"
-msgstr "Page not found"
+#: templates/specialists/apply_pending.html:3
+msgid "طلب الانضمام"
+msgstr "Application to join"
 
-#: templates/404.html:8
-msgid "الصفحة اللي بتدور عليها مش موجودة"
-msgstr "The page you're looking for doesn't exist"
+#: templates/specialists/apply_pending.html:10
+msgid "تم استلام طلبك"
+msgstr "Your application has been received"
 
-#: templates/404.html:10
-msgid "ممكن يكون الرابط اتغيّر أو اتحذف. جرّب ترجع للصفحة الرئيسية أو تستخدم البحث."
-msgstr "The link may have changed or been removed. Try going back to the homepage or using search."
+#: templates/specialists/apply_pending.html:13
+msgid ""
+"شكرًا لتقديم طلب الانضمام كمعالج. سيقوم فريقنا بمراجعته والتواصل معك قريبًا."
+msgstr ""
+"Thank you for submitting your application to join as a therapist. Our team "
+"will review it and get in touch with you soon."
 
-#: templates/404.html:13 templates/500.html:33
-msgid "الرجوع للصفحة الرئيسية"
-msgstr "Back to homepage"
+#: templates/specialists/apply_pending.html:15
+msgid "حالة الطلب:"
+msgstr "Application status:"
 
-#: templates/500.html:5
-msgid "خطأ في الخادم"
-msgstr "Server error"
+#: templates/specialists/apply_pending.html:17
+msgid "لم نجد طلب انضمام مرتبط بحسابك بعد."
+msgstr "We haven't found an application linked to your account yet."
 
-#: templates/500.html:29
-msgid "حصل خطأ غير متوقع من عندنا"
-msgstr "Something unexpected went wrong on our end"
+#: templates/specialists/apply_pending.html:21
+msgid "الذهاب إلى الملف الشخصي"
+msgstr "Go to profile"
 
-#: templates/500.html:30
-msgid "الفريق عندنا وصله إشعار بالمشكلة وبنشتغل عليها. جرّب تاني بعد شوية."
-msgstr "Our team has been notified and is working on it. Please try again shortly."
+#: templates/specialists/detail.html:10
+msgid "→ رجوع لدليل الأخصائيين"
+msgstr "→ Back to the specialists directory"
+
+#: templates/specialists/detail.html:23
+#: templates/specialists/directory.html:73
+#, python-format
+msgid "%(years)s سنة خبرة"
+msgid_plural "%(years)s سنوات خبرة"
+msgstr[0] "%(years)s year of experience"
+msgstr[1] "%(years)s years of experience"
+
+#: templates/specialists/detail.html:25
+#, python-format
+msgid "%(count)s+ جلسة"
+msgstr "%(count)s+ sessions"
+
+#: templates/specialists/detail.html:31
+#, python-format
+msgid "%(price)s ج.م / 60 دقيقة"
+msgstr "EGP %(price)s / 60 minutes"
+
+#: templates/specialists/detail.html:35
+#, python-format
+msgid "%(price)s ج.م / 30 دقيقة"
+msgstr "EGP %(price)s / 30 minutes"
+
+#: templates/specialists/detail.html:38
+msgid "جميع الأسعار تشمل ضريبة القيمة المضافة ورسوم الخدمة."
+msgstr "All prices include VAT and service fees."
+
+#: templates/specialists/detail.html:40
+msgid "اختر موعد الجلسة"
+msgstr "Choose a session time"
+
+#: templates/specialists/detail.html:50
+msgid "نبذة"
+msgstr "About"
+
+#: templates/specialists/detail.html:56
+msgid "معلومات إضافية"
+msgstr "Additional information"
+
+#: templates/specialists/detail.html:72
+msgid "تاريخ الانضمام"
+msgstr "Joined on"
+
+#: templates/specialists/detail.html:78
+msgid "مجالات التخصص"
+msgstr "Areas of specialty"
+
+#: templates/specialists/detail.html:89
+msgid "الخبرة"
+msgstr "Experience"
+
+#: templates/specialists/detail.html:96 templates/specialists/detail.html:113
+msgid "الآن"
+msgstr "Now"
+
+#: templates/specialists/detail.html:106
+msgid "التعليم"
+msgstr "Education"
+
+#: templates/specialists/directory.html:10
+msgid ""
+"دوّر على المعالج أو الطبيب النفسي المناسب لك من نخبة الأخصائيين المعتمدين."
+msgstr ""
+"Find the right therapist or psychiatrist for you from our roster of "
+"certified specialists."
+
+#: templates/specialists/directory.html:53
+#: templates/specialists/directory.html:99
+msgid "مسح الفلاتر"
+msgstr "Clear filters"
+
+#: templates/specialists/directory.html:76
+#, python-format
+msgid "%(price)s ج.م / الجلسة"
+msgstr "EGP %(price)s / session"
+
+#: templates/specialists/directory.html:98
+msgid "مفيش أخصائيين مطابقين لبحثك."
+msgstr "No specialists match your search."
+
+#: templates/specialists/directory.html:101
+msgid "لسه معندناش أخصائيين متاحين في الدليل حاليًا."
+msgstr "We don't have any specialists available in the directory yet."
+
+#: templates/specialists/email/application_approved.txt:3
+msgid "تهانينا! تمت مراجعة طلب انضمامك كأخصائي على منصة احتواء واعتماده."
+msgstr ""
+"Congratulations! Your application to join Ehtiwaa as a specialist has been "
+"reviewed and approved."
+
+#: templates/specialists/email/application_approved.txt:5
+msgid ""
+"أصبح ملفك التعريفي ظاهرًا الآن في دليل الأخصائيين، ويمكن للعملاء حجز جلسات "
+"معك."
+msgstr ""
+"Your profile is now visible in the specialists directory, and clients can "
+"book sessions with you."
+
+#: templates/specialists/email/application_approved_subject.txt:1
+msgid "تم اعتماد طلبك كأخصائي"
+msgstr "Your specialist application has been approved"
+
+#: templates/specialists/email/application_rejected.txt:3
+msgid ""
+"بعد مراجعة طلب انضمامك كأخصائي على منصة احتواء، نأسف لإبلاغك بتعذّر اعتماده "
+"حاليًا."
+msgstr ""
+"After reviewing your application to join Ehtiwaa as a specialist, we regret "
+"to inform you that it could not be approved at this time."
+
+#: templates/specialists/email/application_rejected.txt:5
+msgid "ملاحظات المراجعة"
+msgstr "Review notes"
+
+#: templates/specialists/email/application_rejected.txt:7
+msgid "يمكنك التواصل مع فريق الدعم لمزيد من التفاصيل أو إعادة التقديم لاحقًا."
+msgstr "You can contact our support team for more details, or reapply later."
+
+#: templates/specialists/email/application_rejected_subject.txt:1
+msgid "تحديث بخصوص طلب الانضمام كأخصائي"
+msgstr "Update on your specialist application"
+
+#: templates/specialists/landing.html:11
+msgid "انضم لاحتواء وابدأ رحلتك في مساعدة الآخرين"
+msgstr "Join Ehtiwaa and start your journey helping others"
+
+#: templates/specialists/landing.html:13
+msgid ""
+"مارس العلاج النفسي عبر الإنترنت وتواصل مع آلاف العملاء من جميع أنحاء الوطن "
+"العربي. انضم إلينا مع نخبة من الأطباء والمعالجين النفسيين، وابدأ في بناء "
+"عيادتك الرقمية بمرونة تامة في المواعيد والمكان."
+msgstr ""
+"Practice psychotherapy online and connect with thousands of clients from "
+"across the Arab world. Join our roster of psychiatrists and therapists, and "
+"start building your digital practice with complete flexibility in timing and"
+" location."
+
+#: templates/specialists/landing.html:15 templates/specialists/landing.html:72
+msgid "انضم إلينا الآن"
+msgstr "Join us now"
+
+#: templates/specialists/landing.html:27
+msgid "احتواء بتقدملك ايه؟"
+msgstr "What does Ehtiwaa offer you?"
+
+#: templates/specialists/landing.html:30
+msgid "خصوصية وأمان"
+msgstr "Privacy and security"
+
+#: templates/specialists/landing.html:31
+msgid "منصة مشفّرة بالكامل تحافظ على سرية بيانات عملائك وجلساتك."
+msgstr ""
+"A fully encrypted platform that keeps your clients' data and sessions "
+"confidential."
+
+#: templates/specialists/landing.html:34
+msgid "سهولة التواصل"
+msgstr "Easy communication"
+
+#: templates/specialists/landing.html:35
+msgid "تواصل مع عملائك بأسهل الطرق عبر الشات ومكالمات الفيديو."
+msgstr "Connect with your clients the easy way, through chat and video calls."
+
+#: templates/specialists/landing.html:38
+msgid "جلسات عن بُعد"
+msgstr "Remote sessions"
+
+#: templates/specialists/landing.html:39
+msgid "قدّم جلساتك من أي مكان وفي أي وقت يناسبك، ووفّر الوقت والتكلفة."
+msgstr ""
+"Deliver your sessions from anywhere, at any time that suits you, and save "
+"time and cost."
+
+#: templates/specialists/landing.html:42
+msgid "سجل العميل"
+msgstr "Client record"
+
+#: templates/specialists/landing.html:43
+msgid "اطّلع على تاريخ الجلسات السابقة مع كل عميل لتقديم رعاية أفضل."
+msgstr "Review each client's session history to provide better care."
+
+#: templates/specialists/landing.html:46
+msgid "ملاحظات منظمة"
+msgstr "Organized notes"
+
+#: templates/specialists/landing.html:47
+msgid "دوّن ملاحظاتك وتابع تقدّم كل عميل بشكل منظم وآمن."
+msgstr ""
+"Take notes and track each client's progress in an organized, secure way."
+
+#: templates/specialists/landing.html:50
+msgid "عملاء من كل مكان"
+msgstr "Clients from everywhere"
+
+#: templates/specialists/landing.html:51
+msgid "وسّع نطاق عملك ونمِّ خبرتك مع عملاء من جميع أنحاء الوطن العربي."
+msgstr ""
+"Expand your practice and grow your experience with clients from across the "
+"Arab world."
+
+#: templates/specialists/landing.html:57
+msgid "إزاي تبدأ؟"
+msgstr "How to get started"
+
+#: templates/specialists/landing.html:61
+msgid ""
+"املأ نموذج الطلب ببياناتك الشخصية والمهنية — هيتم إنشاء حسابك تلقائيًا معاه."
+msgstr ""
+"Fill in the application form with your personal and professional details — "
+"your account will be created automatically along with it."
+
+#: templates/specialists/landing.html:65
+msgid "ارفع الشهادات والمستندات المطلوبة لفئتك."
+msgstr "Upload the certificates and documents required for your category."
+
+#: templates/specialists/landing.html:69
+msgid "انتظر مراجعة فريقنا وتفعيل حسابك كمعالج."
+msgstr "Wait for our team to review and activate your account as a therapist."
+
+#: templates/store/cart.html:23
+#, python-format
+msgid "%(price)s ج.م / قطعة"
+msgstr "EGP %(price)s / item"
+
+#: templates/store/cart.html:27 templates/store/detail.html:65
+msgid "إنقاص الكمية"
+msgstr "Decrease quantity"
+
+#: templates/store/cart.html:29 templates/store/detail.html:67
+msgid "زيادة الكمية"
+msgstr "Increase quantity"
+
+#: templates/store/cart.html:30
+msgid "تحديث"
+msgstr "Update"
+
+#: templates/store/cart.html:36
+msgid "حذف"
+msgstr "Remove"
+
+#: templates/store/cart.html:51 templates/store/detail.html:99
+msgid "إتمام الشراء"
+msgstr "Checkout"
+
+#: templates/store/cart.html:54
+msgid "سجّل الدخول لإتمام الشراء"
+msgstr "Log in to check out"
+
+#: templates/store/cart.html:62
+msgid "تصفّح المتجر"
+msgstr "Browse the store"
+
+#: templates/store/detail.html:10
+msgid "→ رجوع للمتجر"
+msgstr "→ Back to the store"
+
+#: templates/store/detail.html:49
+#, python-format
+msgid "وفّر %(percent)s%%"
+msgstr "Save %(percent)s%%"
+
+#: templates/store/detail.html:54 templates/store/list.html:27
+msgid "متوفر"
+msgstr "In stock"
+
+#: templates/store/detail.html:56 templates/store/list.html:29
+msgid "غير متوفر"
+msgstr "Out of stock"
+
+#: templates/store/detail.html:69
+msgid "أضف للسلة"
+msgstr "Add to cart"
+
+#: templates/store/detail.html:82
+msgid "شحن مجاني للطلبات فوق 250 ج.م، إرجاع مجاني خلال 14 يوماً."
+msgstr "Free shipping on orders over EGP 250, free returns within 14 days."
+
+#: templates/store/detail.html:94
+#, python-format
+msgid "الكمية: %(qty)s"
+msgstr "Quantity: %(qty)s"
+
+#: templates/store/detail.html:102
+msgid "سلتك فارغة"
+msgstr "Your cart is empty"
+
+#: templates/store/detail.html:103
+msgid "أضف منتجات من المتجر لتظهر هنا."
+msgstr "Add products from the store to see them here."
+
+#: templates/store/list.html:10
+msgid "أدوات ومنتجات تدعم رحلتك النفسية اليومية."
+msgstr "Tools and products that support your daily mental wellness journey."
+
+#: templates/store/list.html:55
+msgid "لسه معندناش منتجات متاحة حاليًا."
+msgstr "We don't have any products available yet."
+
+#: templates/support/category.html:3 templates/support/home.html:3
+msgid "مركز المساعدة"
+msgstr "Help center"
+
+#: templates/support/category.html:9
+msgid "→ رجوع لمركز المساعدة"
+msgstr "→ Back to the help center"
+
+#: templates/support/category.html:23
+msgid "لا توجد مقالات في هذا التصنيف بعد."
+msgstr "No articles in this category yet."
+
+#: templates/support/home.html:9
+msgid "كيف نقدر نساعدك؟"
+msgstr "How can we help you?"
+
+#: templates/support/home.html:11
+msgid "ابحث عن سؤالك... (مثال: كيف ألغي حجز جلسة)"
+msgstr "Search for your question... (e.g. how do I cancel a session)"
+
+#: templates/support/home.html:17
+msgid "تصفّح حسب التصنيف"
+msgstr "Browse by category"
+
+#: templates/support/home.html:25
+#, python-format
+msgid "%(count)s مقالة"
+msgid_plural "%(count)s مقالات"
+msgstr[0] "%(count)s article"
+msgstr[1] "%(count)s articles"
+
+#: templates/support/home.html:33
+msgid "الأسئلة الأكثر شيوعاً"
+msgstr "Most common questions"
+
+#: templates/support/home.html:44
+msgid "لسه محتاج مساعدة؟"
+msgstr "Still need help?"
+
+#: templates/support/home.html:76
+msgid "إرسال التذكرة"
+msgstr "Submit ticket"
+
+#: templates/support/home.html:77
+msgid "بنرد خلال 24 ساعة في أيام العمل."
+msgstr "We'll reply within 24 hours on business days."
+
+#: templates/support/home.html:84
+msgid "واتساب"
+msgstr "WhatsApp"
+
+#: templates/support/home.html:84
+msgid "تواصل مباشر خلال ساعات العمل"
+msgstr "Direct contact during business hours"
+
+#: templates/support/home.html:89
+msgid "بريد الدعم"
+msgstr "Support email"
+
+#: templates/support/home.html:93
+msgid "ساعات العمل"
+msgstr "Business hours"
+
+#: templates/support/home.html:93
+msgid "الأحد - الخميس، 9ص - 6م"
+msgstr "Sunday - Thursday, 9am - 6pm"
