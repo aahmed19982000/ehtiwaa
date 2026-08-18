@@ -4,8 +4,14 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.accounts.models import User
 from apps.core.countries import COUNTRY_CHOICES, DEFAULT_DIAL_CODE, DIAL_CODE_CHOICES
+from apps.core.validators import validate_document_extension, validate_document_size
 
 from .models import LANGUAGE_CHOICES, Specialist
+
+# Shared by every credential-document field below — rejects disallowed
+# extensions (e.g. .exe, .php) and files over the size cap. See
+# apps/core/validators.py.
+DOCUMENT_VALIDATORS = [validate_document_extension, validate_document_size]
 
 # Required credential documents per category — used both to render the
 # right upload fields and (server-side) to enforce them in clean().
@@ -78,7 +84,15 @@ class SpecialistDirectoryFilterForm(forms.Form):
         data = self.cleaned_data if hasattr(self, "cleaned_data") else {}
         return any(
             data.get(field)
-            for field in ("q", "category", "gender", "language", "price_min", "price_max", "available_only")
+            for field in (
+                "q",
+                "category",
+                "gender",
+                "language",
+                "price_min",
+                "price_max",
+                "available_only",
+            )
         )
 
 
@@ -106,9 +120,7 @@ class SpecialistApplicationForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,
     )
 
-    years_of_experience = forms.IntegerField(
-        label=_("سنوات الخبرة"), required=False, min_value=0
-    )
+    years_of_experience = forms.IntegerField(label=_("سنوات الخبرة"), required=False, min_value=0)
 
     agree_terms = forms.BooleanField(
         label=_("أوافق على الشروط والأحكام وسياسة الخصوصية"), required=True
@@ -183,11 +195,11 @@ class SpecialistDocumentsForm(forms.Form):
     exists, so the specialist's category is already known and this only
     renders/requires the document fields relevant to it."""
 
-    degree_certificate = forms.FileField(required=False)
-    license_file = forms.FileField(required=False)
-    syndicate_card = forms.FileField(required=False)
-    postgraduate_certificate = forms.FileField(required=False)
-    supervision_proof = forms.FileField(required=False)
+    degree_certificate = forms.FileField(required=False, validators=DOCUMENT_VALIDATORS)
+    license_file = forms.FileField(required=False, validators=DOCUMENT_VALIDATORS)
+    syndicate_card = forms.FileField(required=False, validators=DOCUMENT_VALIDATORS)
+    postgraduate_certificate = forms.FileField(required=False, validators=DOCUMENT_VALIDATORS)
+    supervision_proof = forms.FileField(required=False, validators=DOCUMENT_VALIDATORS)
 
     def __init__(self, *args, category=None, **kwargs):
         self.category = category
@@ -204,9 +216,7 @@ class SpecialistDocumentsForm(forms.Form):
         cleaned_data = super().clean()
         for field_name, doc_label in self.required_documents:
             if not cleaned_data.get(field_name):
-                self.add_error(
-                    field_name, _("هذا المستند مطلوب: %(doc)s") % {"doc": doc_label}
-                )
+                self.add_error(field_name, _("هذا المستند مطلوب: %(doc)s") % {"doc": doc_label})
         return cleaned_data
 
     def documents(self):

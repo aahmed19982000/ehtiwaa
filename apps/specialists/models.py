@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import TimeStampedModel
+from apps.core.validators import validate_document_extension, validate_document_size
 
 LANGUAGE_CHOICES = [
     ("ar", _("العربية")),
@@ -140,7 +141,13 @@ class CredentialDocument(TimeStampedModel):
         "specialists.Specialist", on_delete=models.CASCADE, related_name="credential_documents"
     )
     label = models.CharField(max_length=255)
-    file = models.FileField(upload_to="specialists/credentials/")
+    # Validated again here (not just in SpecialistDocumentsForm) so the
+    # Django admin, a future API, or any other write path can't bypass the
+    # extension/size checks.
+    file = models.FileField(
+        upload_to="specialists/credentials/",
+        validators=[validate_document_extension, validate_document_size],
+    )
 
     def __str__(self):
         return f"CredentialDocument<{self.specialist_id}:{self.label}>"

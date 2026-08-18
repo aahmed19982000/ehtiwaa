@@ -3,6 +3,7 @@ from django.contrib.postgres.search import SearchVector, SearchVectorField
 from django.db import models
 
 from apps.core.models import TimeStampedModel
+from apps.core.validators import validate_document_extension, validate_document_size
 
 
 class HelpCategory(TimeStampedModel):
@@ -98,7 +99,12 @@ class SupportTicket(TimeStampedModel):
     )
     subject = models.CharField(max_length=255)
     body = models.TextField()
-    attachment = models.FileField(upload_to="support/attachments/", null=True, blank=True)
+    attachment = models.FileField(
+        upload_to="support/attachments/",
+        null=True,
+        blank=True,
+        validators=[validate_document_extension, validate_document_size],
+    )
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="open")
 
     def __str__(self):

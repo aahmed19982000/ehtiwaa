@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from apps.core.models import TimeStampedModel
+from apps.core.validators import validate_image_extension, validate_image_size
 
 
 class User(AbstractUser):
@@ -28,7 +29,12 @@ class Profile(TimeStampedModel):
     GENDER_CHOICES = [("male", "male"), ("female", "female")]
 
     user = models.OneToOneField("accounts.User", on_delete=models.CASCADE, related_name="profile")
-    avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
+    avatar = models.ImageField(
+        upload_to="avatars/",
+        null=True,
+        blank=True,
+        validators=[validate_image_extension, validate_image_size],
+    )
     bio = models.TextField(blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True)
