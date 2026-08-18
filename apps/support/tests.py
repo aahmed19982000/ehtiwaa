@@ -1,10 +1,40 @@
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 
+from .forms import TicketForm
 from .models import SupportTicket
 
 User = get_user_model()
+
+
+class TicketFormAttachmentTests(TestCase):
+    def _valid_data(self):
+        return {
+            "full_name": "Test User",
+            "email": "ticket-tester@example.com",
+            "subject": "Need help",
+            "body": "Details about the issue.",
+        }
+
+    def test_script_content_disguised_with_allowed_extension_rejected(self):
+        # Same content-vs-extension gap as apps/specialists — a script
+        # renamed to ".pdf" passes the extension allowlist but not the
+        # magic-byte content check.
+        disguised_script = SimpleUploadedFile(
+            "receipt.pdf", b"#!/bin/sh\nrm -rf /\n", content_type="application/pdf"
+        )
+        form = TicketForm(data=self._valid_data(), files={"attachment": disguised_script})
+        self.assertFalse(form.is_valid())
+        self.assertIn("محتوى الملف لا يطابق نوعه المعلن", str(form.errors["attachment"]))
+
+    def test_genuine_pdf_attachment_accepted(self):
+        real_pdf = SimpleUploadedFile(
+            "receipt.pdf", b"%PDF-1.4\nreal content", content_type="application/pdf"
+        )
+        form = TicketForm(data=self._valid_data(), files={"attachment": real_pdf})
+        self.assertTrue(form.is_valid(), form.errors)
 
 
 class TicketOwnershipTests(TestCase):

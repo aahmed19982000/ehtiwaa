@@ -1,7 +1,11 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.validators import validate_document_extension, validate_document_size
+from apps.core.validators import (
+    validate_document_content,
+    validate_document_extension,
+    validate_document_size,
+)
 
 from .models import HelpCategory
 
@@ -22,5 +26,5 @@ class TicketForm(forms.Form):
     attachment = forms.FileField(
         label=_("إرفاق ملف أو صورة (اختياري)"),
         required=False,
-        validators=[validate_document_extension, validate_document_size],
+        validators=[validate_document_extension, validate_document_size, validate_document_content],
     )

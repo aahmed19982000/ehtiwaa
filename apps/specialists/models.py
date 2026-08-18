@@ -3,7 +3,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import TimeStampedModel
-from apps.core.validators import validate_document_extension, validate_document_size
+from apps.core.validators import (
+    validate_document_content,
+    validate_document_extension,
+    validate_document_size,
+)
 
 LANGUAGE_CHOICES = [
     ("ar", _("العربية")),
@@ -146,7 +150,7 @@ class CredentialDocument(TimeStampedModel):
     # extension/size checks.
     file = models.FileField(
         upload_to="specialists/credentials/",
-        validators=[validate_document_extension, validate_document_size],
+        validators=[validate_document_extension, validate_document_size, validate_document_content],
     )
 
     def __str__(self):

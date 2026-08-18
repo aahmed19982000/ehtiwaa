@@ -107,6 +107,23 @@ class SpecialistDocumentsFormTests(TestCase):
         self.assertIn("degree_certificate", form.errors)
         self.assertIn("نوع الملف غير مدعوم", str(form.errors["degree_certificate"]))
 
+    def test_script_content_disguised_with_allowed_extension_rejected(self):
+        # A real-world variant of the extension-bypass QA finding: renaming
+        # a script to a document extension passes
+        # FileExtensionAllowlistValidator (it only reads the filename) —
+        # FileContentValidator is what actually catches this, by checking
+        # the file's leading bytes don't start with "%PDF-".
+        disguised_script = SimpleUploadedFile(
+            "certificate.pdf", b"#!/bin/sh\nrm -rf /\n", content_type="application/pdf"
+        )
+        form = SpecialistDocumentsForm(
+            data={},
+            files={"degree_certificate": disguised_script},
+            category="clinical_psychologist",
+        )
+        self.assertFalse(form.is_valid())
+        self.assertIn("محتوى الملف لا يطابق نوعه المعلن", str(form.errors["degree_certificate"]))
+
     def test_oversized_document_rejected(self):
         # DOCUMENT_MAX_SIZE_MB is 10 in apps/core/validators.py.
         big_file = SimpleUploadedFile(

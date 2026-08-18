@@ -4,14 +4,22 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.accounts.models import User
 from apps.core.countries import COUNTRY_CHOICES, DEFAULT_DIAL_CODE, DIAL_CODE_CHOICES
-from apps.core.validators import validate_document_extension, validate_document_size
+from apps.core.validators import (
+    validate_document_content,
+    validate_document_extension,
+    validate_document_size,
+)
 
 from .models import LANGUAGE_CHOICES, Specialist
 
 # Shared by every credential-document field below — rejects disallowed
-# extensions (e.g. .exe, .php) and files over the size cap. See
-# apps/core/validators.py.
-DOCUMENT_VALIDATORS = [validate_document_extension, validate_document_size]
+# extensions (e.g. .exe, .php), files over the size cap, and content that
+# doesn't match the claimed extension. See apps/core/validators.py.
+DOCUMENT_VALIDATORS = [
+    validate_document_extension,
+    validate_document_size,
+    validate_document_content,
+]
 
 # Required credential documents per category — used both to render the
 # right upload fields and (server-side) to enforce them in clean().
