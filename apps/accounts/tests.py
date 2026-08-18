@@ -28,6 +28,17 @@ AUTH0_TEST_SETTINGS = {
     },
 }
 
+# Forces the "Auth0 not configured" branch regardless of what's actually in
+# the developer's .env (e.g. real local Auth0 credentials for manual
+# testing) — _social_provider_flags() reads SOCIALACCOUNT_PROVIDERS, not the
+# AUTH0_* vars directly, so this must stay in sync with that shape.
+AUTH0_NOT_CONFIGURED_SETTINGS = {
+    "SOCIALACCOUNT_PROVIDERS": {
+        "google": {"APPS": []},
+        "auth0": {"AUTH0_URL": "", "APPS": []},
+    },
+}
+
 
 def _tiny_png_bytes(padding=0):
     buf = BytesIO()
@@ -88,7 +99,8 @@ class SignupViewTests(TestCase):
         self.url = reverse("accounts:signup")
 
     def test_get_redirects_when_auth0_not_configured(self):
-        response = self.client.get(self.url)
+        with override_settings(**AUTH0_NOT_CONFIGURED_SETTINGS):
+            response = self.client.get(self.url)
         self.assertRedirects(response, reverse("accounts:welcome"))
 
     def test_post_duplicate_email_does_not_call_auth0(self):
@@ -179,7 +191,8 @@ class LoginViewTests(TestCase):
         self.url = reverse("accounts:login")
 
     def test_get_redirects_when_auth0_not_configured(self):
-        response = self.client.get(self.url)
+        with override_settings(**AUTH0_NOT_CONFIGURED_SETTINGS):
+            response = self.client.get(self.url)
         self.assertRedirects(response, reverse("accounts:welcome"))
 
     @patch("apps.accounts.auth0.get_userinfo")
