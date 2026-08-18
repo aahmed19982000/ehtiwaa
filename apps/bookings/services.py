@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import datetime, timedelta
 
 from django.utils import timezone
@@ -71,6 +72,80 @@ def get_session_duration_minutes(specialist):
 def get_session_price(specialist):
     duration = get_session_duration_minutes(specialist)
     return specialist.hourly_rate if duration == 60 else specialist.price_30min
+
+
+def _windows_for_day(windows, target_date):
+    specific = [w for w in windows if w.specific_date == target_date]
+    if specific:
+        return specific
+    return [w for w in windows if w.specific_date is None and w.weekday == target_date.weekday()]
+
+
+def _earliest_free_slot_on_day(windows, target_date, duration, booked_ranges, now):
+    day_windows = sorted(_windows_for_day(windows, target_date), key=lambda w: w.start_time)
+    for window in day_windows:
+        current = timezone.make_aware(datetime.combine(target_date, window.start_time))
+        window_end = timezone.make_aware(datetime.combine(target_date, window.end_time))
+        while current + duration <= window_end:
+            slot_end = current + duration
+            if current > now:
+                is_booked = any(
+                    current < b_end and slot_end > b_start for b_start, b_end in booked_ranges
+                )
+                if not is_booked:
+                    return current
+            current += duration
+    return None
+
+
+def get_next_available_slots(specialists, lookahead_days=SLOT_LOOKAHEAD_DAYS):
+    """Bulk-computes the earliest free slot (if any, within the next
+    `lookahead_days`) for every specialist in `specialists` — two queries
+    for the whole list rather than looking up each specialist's
+    availability/bookings one at a time, since this feeds the directory
+    listing page (apps.specialists.views.SpecialistDirectoryView), not a
+    single specialist's booking page.
+
+    Returns {specialist_id: datetime | None}.
+    """
+    specialists = list(specialists)
+    specialist_ids = [s.pk for s in specialists]
+    if not specialist_ids:
+        return {}
+
+    now = timezone.now()
+    today = timezone.localdate()
+    horizon = today + timedelta(days=lookahead_days)
+
+    windows_by_specialist = defaultdict(list)
+    for window in Availability.objects.filter(specialist_id__in=specialist_ids, is_active=True):
+        windows_by_specialist[window.specialist_id].append(window)
+
+    booked_by_specialist = defaultdict(list)
+    for specialist_id, start, end in Booking.objects.filter(
+        specialist_id__in=specialist_ids,
+        status__in=["pending", "confirmed"],
+        scheduled_start__date__gte=today,
+        scheduled_start__date__lte=horizon,
+    ).values_list("specialist_id", "scheduled_start", "scheduled_end"):
+        booked_by_specialist[specialist_id].append((start, end))
+
+    results = {}
+    for specialist in specialists:
+        windows = windows_by_specialist.get(specialist.pk)
+        if not windows:
+            results[specialist.pk] = None
+            continue
+        duration = timedelta(minutes=get_session_duration_minutes(specialist))
+        booked_ranges = booked_by_specialist.get(specialist.pk, [])
+        next_slot = None
+        for offset in range(lookahead_days + 1):
+            day = today + timedelta(days=offset)
+            next_slot = _earliest_free_slot_on_day(windows, day, duration, booked_ranges, now)
+            if next_slot:
+                break
+        results[specialist.pk] = next_slot
+    return results
 
 
 def confirm_bookings_from_paid_order(order):

@@ -49,6 +49,20 @@ SORT_CHOICES = [
     ("availability", _("الأقرب توفرًا")),
 ]
 
+DURATION_CHOICES = [
+    ("", _("كل المدد")),
+    ("60", _("60 دقيقة")),
+    ("30", _("30 دقيقة")),
+]
+
+MIN_RATING_CHOICES = [
+    ("", _("أي تقييم")),
+    ("4", _("4 نجوم فأكثر")),
+    ("3", _("3 نجوم فأكثر")),
+    ("2", _("نجمتان فأكثر")),
+    ("1", _("نجمة فأكثر")),
+]
+
 
 class SpecialistDirectoryFilterForm(forms.Form):
     """GET-based search/filter/sort controls for the public directory
@@ -71,6 +85,14 @@ class SpecialistDirectoryFilterForm(forms.Form):
         choices=[("", _("كل اللغات"))] + LANGUAGE_CHOICES,
         required=False,
     )
+    duration = forms.ChoiceField(label=_("مدة الجلسة"), choices=DURATION_CHOICES, required=False)
+    min_rating = forms.ChoiceField(
+        label=_("الحد الأدنى للتقييم"), choices=MIN_RATING_CHOICES, required=False
+    )
+    # Shortcut for category="psychiatrist" — only a psychiatrist (a
+    # licensed physician) can legally prescribe medication; clinical
+    # psychologists/counselors can't, regardless of experience.
+    can_prescribe = forms.BooleanField(label=_("يقدر يصف دواء"), required=False)
     price_min = forms.IntegerField(label=_("السعر من"), required=False, min_value=0)
     price_max = forms.IntegerField(label=_("السعر إلى"), required=False, min_value=0)
     available_only = forms.BooleanField(label=_("متاح للحجز قريبًا فقط"), required=False)
@@ -97,6 +119,9 @@ class SpecialistDirectoryFilterForm(forms.Form):
                 "category",
                 "gender",
                 "language",
+                "duration",
+                "min_rating",
+                "can_prescribe",
                 "price_min",
                 "price_max",
                 "available_only",

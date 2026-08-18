@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, FormView, ListView, TemplateView
 
 from apps.accounts import auth0
+from apps.bookings.services import get_next_available_slots
 from apps.reviews.models import Review
 
 from .forms import SpecialistApplicationForm, SpecialistDirectoryFilterForm, SpecialistDocumentsForm
@@ -34,7 +35,11 @@ class SpecialistDirectoryView(ListView):
 
     def get_queryset(self):
         self.filter_form = SpecialistDirectoryFilterForm(self.request.GET or None)
-        qs = Specialist.objects.filter(status="approved").select_related("user__profile")
+        qs = (
+            Specialist.objects.filter(status="approved")
+            .select_related("user__profile")
+            .prefetch_related("specialties")
+        )
 
         if not self.filter_form.is_valid():
             return qs.order_by("-average_rating")
@@ -57,6 +62,14 @@ class SpecialistDirectoryView(ListView):
             qs = qs.filter(gender=data["gender"])
         if data.get("language"):
             qs = qs.filter(languages__contains=[data["language"]])
+        if data.get("duration") == "60":
+            qs = qs.filter(hourly_rate__isnull=False)
+        elif data.get("duration") == "30":
+            qs = qs.filter(price_30min__isnull=False)
+        if data.get("min_rating"):
+            qs = qs.filter(average_rating__gte=int(data["min_rating"]))
+        if data.get("can_prescribe"):
+            qs = qs.filter(category="psychiatrist")
         if data.get("price_min") is not None:
             qs = qs.filter(hourly_rate__gte=data["price_min"])
         if data.get("price_max") is not None:
@@ -78,6 +91,14 @@ class SpecialistDirectoryView(ListView):
         context = super().get_context_data(**kwargs)
         context["filter_form"] = self.filter_form
         context["has_active_filters"] = self.filter_form.has_active_filters()
+        # Real availability data, not the static admin-editable
+        # next_available_date field — computed only for this page's 12
+        # specialists (not the whole filtered queryset), same reasoning as
+        # any other per-page-only enrichment.
+        page_specialists = context["specialists"]
+        next_slots = get_next_available_slots(page_specialists)
+        for specialist in page_specialists:
+            specialist.next_available_slot = next_slots.get(specialist.pk)
         return context
 
 

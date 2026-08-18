@@ -1,5 +1,5 @@
 import threading
-from datetime import time, timedelta
+from datetime import datetime, time, timedelta
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
@@ -13,6 +13,7 @@ from apps.specialists.models import Specialist
 
 from . import google_calendar
 from .models import Availability, Booking
+from .services import get_next_available_slots
 
 User = get_user_model()
 
@@ -199,6 +200,62 @@ class BookingConcurrencyTests(TransactionTestCase):
             1,
             "two concurrent requests for the same slot both created a booking",
         )
+
+
+class GetNextAvailableSlotsTests(TestCase):
+    """Feeds the "أقرب ميعاد متاح" (next available slot) shown on the
+    specialists directory card — real data from Availability/Booking, not
+    the static, admin-only Specialist.next_available_date field."""
+
+    def setUp(self):
+        specialist_user = User.objects.create_user(
+            username="slots-specialist", email="slots-specialist@example.com", password="w-123"
+        )
+        self.specialist = Specialist.objects.create(
+            user=specialist_user,
+            status="approved",
+            full_name_ar="د. سلوى",
+            hourly_rate=200,
+        )
+        self.tomorrow = timezone.localdate() + timedelta(days=1)
+        Availability.objects.create(
+            specialist=self.specialist,
+            specific_date=self.tomorrow,
+            start_time=time(9, 0),
+            end_time=time(11, 0),
+            is_active=True,
+        )
+
+    def test_returns_none_for_specialist_with_no_availability(self):
+        other_user = User.objects.create_user(
+            username="no-avail-specialist", email="no-avail@example.com", password="w-123"
+        )
+        other_specialist = Specialist.objects.create(
+            user=other_user, status="approved", full_name_ar="د. بلا مواعيد", hourly_rate=100
+        )
+        result = get_next_available_slots([other_specialist])
+        self.assertIsNone(result[other_specialist.pk])
+
+    def test_returns_earliest_free_slot(self):
+        result = get_next_available_slots([self.specialist])
+        expected = timezone.make_aware(datetime.combine(self.tomorrow, time(9, 0)))
+        self.assertEqual(result[self.specialist.pk], expected)
+
+    def test_skips_fully_booked_slot_and_returns_the_next_one(self):
+        client_user = User.objects.create_user(
+            username="slots-client", email="slots-client@example.com", password="w-123"
+        )
+        start = timezone.make_aware(datetime.combine(self.tomorrow, time(9, 0)))
+        Booking.objects.create(
+            client=client_user,
+            specialist=self.specialist,
+            status="confirmed",
+            scheduled_start=start,
+            scheduled_end=start + timedelta(hours=1),
+        )
+        result = get_next_available_slots([self.specialist])
+        expected = timezone.make_aware(datetime.combine(self.tomorrow, time(10, 0)))
+        self.assertEqual(result[self.specialist.pk], expected)
 
 
 class GoogleCalendarMissingConfigTests(TestCase):
