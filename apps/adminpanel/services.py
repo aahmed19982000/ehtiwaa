@@ -1,5 +1,6 @@
 from django.utils import timezone
 
+from apps.core.tasks import safe_delay
 from apps.specialists.models import ApprovalRequest
 from apps.specialists.tasks import notify_specialist_decision_task
 
@@ -14,7 +15,7 @@ def approve_specialist(specialist, reviewer, notes=""):
         notes=notes,
         decided_at=timezone.now(),
     )
-    notify_specialist_decision_task.delay(specialist.pk, "approved")
+    safe_delay(notify_specialist_decision_task, specialist.pk, "approved")
 
 
 def reject_specialist(specialist, reviewer, notes=""):
@@ -27,4 +28,4 @@ def reject_specialist(specialist, reviewer, notes=""):
         notes=notes,
         decided_at=timezone.now(),
     )
-    notify_specialist_decision_task.delay(specialist.pk, "rejected", notes)
+    safe_delay(notify_specialist_decision_task, specialist.pk, "rejected", notes)

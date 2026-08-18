@@ -80,6 +80,7 @@ def confirm_bookings_from_paid_order(order):
     time: generating a calendar invite for a session nobody has paid for
     yet would clutter the specialist's calendar with sessions that may
     never happen."""
+    from apps.core.tasks import safe_delay
     from apps.notifications.tasks import notify_booking_payment_confirmed_task
 
     from . import google_calendar
@@ -101,4 +102,4 @@ def confirm_bookings_from_paid_order(order):
             update_fields += ["meeting_link", "calendar_event_id"]
         booking.save(update_fields=update_fields)
 
-        notify_booking_payment_confirmed_task.delay(booking.pk)
+        safe_delay(notify_booking_payment_confirmed_task, booking.pk)

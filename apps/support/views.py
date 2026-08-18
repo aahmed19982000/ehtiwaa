@@ -7,6 +7,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import DetailView, TemplateView
 
+from apps.core.tasks import safe_delay
+
 from .forms import TicketForm
 from .models import FAQItem, HelpCategory, SupportTicket
 from .services import search_faqs
@@ -91,6 +93,6 @@ class TicketCreateView(View):
             body=form.cleaned_data["body"],
             attachment=form.cleaned_data["attachment"],
         )
-        notify_team_new_ticket_task.delay(ticket.pk)
+        safe_delay(notify_team_new_ticket_task, ticket.pk)
         messages.success(request, _("تم إرسال تذكرتك بنجاح، بنرد خلال 24 ساعة في أيام العمل."))
         return redirect("support:home")

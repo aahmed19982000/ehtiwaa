@@ -80,6 +80,23 @@ class BookingCreateViewTests(TestCase):
         )
         mock_notify_task.delay.assert_called_once_with(booking.pk)
 
+    @patch("apps.bookings.views.notify_booking_created_task")
+    def test_booking_succeeds_even_if_celery_broker_is_unreachable(self, mock_notify_task):
+        # Verified for real: task.delay() raises
+        # kombu.exceptions.OperationalError synchronously when the broker
+        # (Redis) is unreachable — nothing was catching that, so a broker
+        # outage would have 500'd every booking request. safe_delay()
+        # (apps/core/tasks.py) is what's under test here.
+        from kombu.exceptions import OperationalError
+
+        mock_notify_task.delay.side_effect = OperationalError("Connection refused")
+        self.client.force_login(self.client_user)
+
+        response = self._post_booking()
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Booking.objects.filter(client=self.client_user).exists())
+
     def _get_order_id(self, response):
         # The redirect target itself encodes the order id — pull it back out
         # instead of hard-coding an assumption about which id gets assigned.

@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import DetailView, ListView
 
+from apps.core.tasks import safe_delay
 from apps.notifications.tasks import notify_booking_cancelled_task, notify_booking_created_task
 from apps.payments.services import create_order_for_item
 from apps.specialists.models import Specialist
@@ -107,7 +108,7 @@ class BookingCreateView(LoginRequiredMixin, View):
                 # confirmed (apps.bookings.services.confirm_bookings_from_paid_order),
                 # so unpaid/abandoned bookings never clutter the specialist's
                 # calendar with a session that may never happen.
-                notify_booking_created_task.delay(booking.pk)
+                safe_delay(notify_booking_created_task, booking.pk)
                 order = create_order_for_item(request.user, booking, get_session_price(specialist))
                 messages.success(request, _("تم إرسال طلب الحجز — أكمل الدفع لتأكيد موعدك."))
                 return redirect("payments:checkout", order_id=order.pk)
@@ -150,7 +151,7 @@ class BookingCancelView(LoginRequiredMixin, View):
             )
             if booking.calendar_event_id:
                 google_calendar.delete_event(booking.calendar_event_id)
-            notify_booking_cancelled_task.delay(booking.pk)
+            safe_delay(notify_booking_cancelled_task, booking.pk)
             messages.success(request, _("تم إلغاء الحجز."))
         else:
             messages.error(request, _("لا يمكن إلغاء هذا الحجز."))

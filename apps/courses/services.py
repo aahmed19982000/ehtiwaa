@@ -4,6 +4,8 @@ from django.core.files.base import ContentFile
 from django.template.loader import render_to_string
 from django.utils import timezone
 
+from apps.core.tasks import safe_delay
+
 from .models import Certificate, Course, Enrollment, LessonProgress
 from .tasks import notify_certificate_issued_task, notify_enrollment_created_task
 
@@ -22,7 +24,7 @@ def enroll_from_paid_order(order):
         )
         if was_created:
             created.append(enrollment)
-            notify_enrollment_created_task.delay(enrollment.pk)
+            safe_delay(notify_enrollment_created_task, enrollment.pk)
     return created
 
 
@@ -69,5 +71,5 @@ def generate_certificate(enrollment):
     )
     certificate.file.save(f"{certificate_number}.pdf", ContentFile(pdf_bytes), save=True)
 
-    notify_certificate_issued_task.delay(enrollment.pk)
+    safe_delay(notify_certificate_issued_task, enrollment.pk)
     return certificate
