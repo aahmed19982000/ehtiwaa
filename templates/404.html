@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "الصفحة غير موجودة" %} · {% trans "احتواء" %}{% endblock %}
+
+{% block content %}
+<div class="page-container" style="text-align:center; padding-top:4rem; padding-bottom:4rem;">
+  <div style="font-size:5rem; font-weight:800; color:var(--color-primary); line-height:1;">404</div>
+  <h1 style="margin-top:1rem; color:var(--color-text);">{% trans "الصفحة اللي بتدور عليها مش موجودة" %}</h1>
+  <p style="color:var(--color-text-muted); max-width:520px; margin:1rem auto 2rem;">
+    {% trans "ممكن يكون الرابط اتغيّر أو اتحذف. جرّب ترجع للصفحة الرئيسية أو تستخدم البحث." %}
+  </p>
+  <a href="{% url 'home' %}" class="btn btn-primary">{% trans "الرجوع للصفحة الرئيسية" %}</a>
+</div>
+{% endblock %}

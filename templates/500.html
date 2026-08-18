@@ -1,0 +1,49 @@
+{% load i18n %}{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% trans "خطأ في الخادم" %} · {% trans "احتواء" %}</title>
+<style>
+  :root {
+    --color-primary: #17205c;
+    --color-text: #1a1a1a;
+    --color-text-muted: #6b6b6b;
+    --color-bg-lavender-1: #f4f2ea;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+    color: var(--color-text);
+    background: var(--color-bg-lavender-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+  }
+  .wrap { max-width: 520px; padding: 2rem 1.5rem; }
+  .code { font-size: 4.5rem; font-weight: 800; color: var(--color-primary); line-height: 1; }
+  h1 { margin: 1rem 0 0.75rem; font-size: 1.4rem; }
+  p { color: var(--color-text-muted); margin: 0 0 1.75rem; }
+  a.btn {
+    display: inline-block;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    background: var(--color-primary);
+    color: #fff;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="code">500</div>
+    <h1>{% trans "حصل خطأ غير متوقع من عندنا" %}</h1>
+    <p>{% trans "الفريق عندنا وصله إشعار بالمشكلة وبنشتغل عليها. جرّب تاني بعد شوية." %}</p>
+    <a class="btn" href="{% if LANGUAGE_CODE == 'en' %}/en/{% else %}/{% endif %}">{% trans "الرجوع للصفحة الرئيسية" %}</a>
+  </div>
+</body>
+</html>

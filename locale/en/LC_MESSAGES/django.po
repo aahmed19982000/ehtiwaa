@@ -845,3 +845,31 @@ msgstr "Master's certificate (clinical psychology or psychology)"
 #: templates/specialists/apply.html:192
 msgid "إرسال الطلب"
 msgstr "Submit application"
+
+#: templates/404.html:4
+msgid "الصفحة غير موجودة"
+msgstr "Page not found"
+
+#: templates/404.html:8
+msgid "الصفحة اللي بتدور عليها مش موجودة"
+msgstr "The page you're looking for doesn't exist"
+
+#: templates/404.html:10
+msgid "ممكن يكون الرابط اتغيّر أو اتحذف. جرّب ترجع للصفحة الرئيسية أو تستخدم البحث."
+msgstr "The link may have changed or been removed. Try going back to the homepage or using search."
+
+#: templates/404.html:13 templates/500.html:33
+msgid "الرجوع للصفحة الرئيسية"
+msgstr "Back to homepage"
+
+#: templates/500.html:5
+msgid "خطأ في الخادم"
+msgstr "Server error"
+
+#: templates/500.html:29
+msgid "حصل خطأ غير متوقع من عندنا"
+msgstr "Something unexpected went wrong on our end"
+
+#: templates/500.html:30
+msgid "الفريق عندنا وصله إشعار بالمشكلة وبنشتغل عليها. جرّب تاني بعد شوية."
+msgstr "Our team has been notified and is working on it. Please try again shortly."
