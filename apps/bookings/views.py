@@ -2,6 +2,7 @@ from datetime import date, datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -75,26 +76,33 @@ class BookingCreateView(LoginRequiredMixin, View):
             )
             start = timezone.make_aware(naive_start)
             end = start + timedelta(minutes=duration)
-            # Re-check right before creating — someone else may have booked
-            # this exact slot between the page load and this submission.
-            already_taken = Booking.objects.filter(
-                specialist=specialist,
-                status__in=["pending", "confirmed"],
-                scheduled_start__lt=end,
-                scheduled_end__gt=start,
-            ).exists()
+            # Re-check right before creating, inside a transaction that
+            # locks the specialist row — two concurrent requests for the
+            # same specialist now serialize on that lock instead of both
+            # passing .exists() before either has committed (the previous
+            # plain check-then-create was a TOCTOU race that could produce
+            # two overlapping bookings for the same slot).
+            with transaction.atomic():
+                Specialist.objects.select_for_update().get(pk=specialist.pk)
+                already_taken = Booking.objects.filter(
+                    specialist=specialist,
+                    status__in=["pending", "confirmed"],
+                    scheduled_start__lt=end,
+                    scheduled_end__gt=start,
+                ).exists()
+                if not already_taken:
+                    booking = Booking.objects.create(
+                        client=request.user,
+                        specialist=specialist,
+                        status="pending",
+                        scheduled_start=start,
+                        scheduled_end=end,
+                        contact_phone=form.cleaned_data["contact_phone"],
+                        notes=form.cleaned_data["notes"],
+                    )
             if already_taken:
                 form.add_error(None, _("للأسف تم حجز هذا الموعد للتو، برجاء اختيار موعد آخر."))
             else:
-                booking = Booking.objects.create(
-                    client=request.user,
-                    specialist=specialist,
-                    status="pending",
-                    scheduled_start=start,
-                    scheduled_end=end,
-                    contact_phone=form.cleaned_data["contact_phone"],
-                    notes=form.cleaned_data["notes"],
-                )
                 # No calendar event yet — that's created once payment is
                 # confirmed (apps.bookings.services.confirm_bookings_from_paid_order),
                 # so unpaid/abandoned bookings never clutter the specialist's

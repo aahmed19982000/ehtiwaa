@@ -1,8 +1,11 @@
+import threading
 from datetime import time, timedelta
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase, override_settings
+from django.db import connection
+from django.test import TestCase, TransactionTestCase, override_settings
+from django.test.client import Client
 from django.urls import reverse
 from django.utils import timezone
 
@@ -109,6 +112,76 @@ class BookingCreateViewTests(TestCase):
             1,
         )
         self.assertNotEqual(first_response.status_code, second_response.status_code)
+
+
+class BookingConcurrencyTests(TransactionTestCase):
+    """TransactionTestCase (real, separate DB transactions per thread) —
+    a plain TestCase wraps everything in one outer transaction and can't
+    exercise select_for_update's actual locking behavior."""
+
+    def setUp(self):
+        self.client_a = User.objects.create_user(
+            username="race-client-a", email="race-a@example.com", password="whatever-123"
+        )
+        self.client_b = User.objects.create_user(
+            username="race-client-b", email="race-b@example.com", password="whatever-123"
+        )
+        specialist_user = User.objects.create_user(
+            username="race-specialist", email="race-specialist@example.com", password="w-123"
+        )
+        self.specialist = Specialist.objects.create(
+            user=specialist_user,
+            status="approved",
+            full_name_ar="د. منى",
+            full_name_en="Dr. Mona",
+            hourly_rate=200,
+        )
+        self.target_date = timezone.localdate() + timedelta(days=2)
+        Availability.objects.create(
+            specialist=self.specialist,
+            specific_date=self.target_date,
+            start_time=time(9, 0),
+            end_time=time(17, 0),
+            is_active=True,
+        )
+        self.slot_value = f"{self.target_date.isoformat()}T09:00"
+        self.create_url = reverse("bookings:create", kwargs={"specialist_pk": self.specialist.pk})
+
+    def _post_as(self, user):
+        client = Client()
+        client.force_login(user)
+        try:
+            client.post(
+                self.create_url,
+                data={
+                    "date": self.target_date.isoformat(),
+                    "time_slot": self.slot_value,
+                    "contact_phone": "01001234567",
+                    "notes": "concurrent test",
+                },
+            )
+        finally:
+            connection.close()
+
+    @patch("apps.bookings.views.notify_booking_created_task.delay")
+    def test_concurrent_requests_cannot_double_book_same_slot(self, _mock_notify):
+        t1 = threading.Thread(target=self._post_as, args=(self.client_a,))
+        t2 = threading.Thread(target=self._post_as, args=(self.client_b,))
+        t1.start()
+        t2.start()
+        t1.join(timeout=10)
+        t2.join(timeout=10)
+
+        overlapping = Booking.objects.filter(
+            specialist=self.specialist,
+            status__in=["pending", "confirmed"],
+            scheduled_start__date=self.target_date,
+        )
+        self.assertEqual(
+            overlapping.count(),
+            1,
+            "two concurrent requests for the same slot both created a booking",
+        )
 
 
 class GoogleCalendarMissingConfigTests(TestCase):
