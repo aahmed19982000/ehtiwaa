@@ -6,7 +6,14 @@
   @page { size: A4; margin: 28mm 20mm; }
   body {
     margin: 0;
-    font-family: "Segoe UI", "DejaVu Sans", sans-serif;
+    /* Arabic-capable fonts listed first — "Segoe UI"/"DejaVu Sans" have
+       little to no Arabic glyph coverage, so on a production Linux server
+       (unlike this may look fine on a Mac dev machine, which silently
+       substitutes a system Arabic font behind the scenes) WeasyPrint would
+       otherwise fall back to tofu boxes or a font with no proper Arabic
+       shaping. Install one of these system-wide in production — see
+       docs/weasyprint-arabic-fonts.md. */
+    font-family: "Cairo", "Amiri", "Noto Naskh Arabic", "Segoe UI", "DejaVu Sans", sans-serif;
     color: #1F1B29;
     font-size: 13px;
   }
