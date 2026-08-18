@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n %}
+{% load static i18n l10n %}
 {% block title %}{% trans "سلة التسوق" %} — {% trans "احتواء" %}{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/store.css' %}">
@@ -12,7 +12,7 @@
   <div class="cart-page__grid">
     <div class="cart-page__items">
       {% for item in items %}
-      <div class="cart-row">
+      <div class="cart-row" data-cart-row data-unit-price="{{ item.product.price|unlocalize }}">
         {% if item.product.image %}
         <img class="cart-row__image" src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
         {% else %}
@@ -29,7 +29,7 @@
           <button type="button" data-qty-increase aria-label="{% trans "زيادة الكمية" %}">+</button>
           <button type="submit" class="btn btn-outline cart-row__update-btn">{% trans "تحديث" %}</button>
         </form>
-        <span class="cart-row__total">{% blocktrans with price=item.line_total %}{{ price }} ج.م{% endblocktrans %}</span>
+        <span class="cart-row__total" data-line-total>{% blocktrans with price=item.line_total %}{{ price }} ج.م{% endblocktrans %}</span>
         <form method="post" action="{% url 'store:cart-item-update' item.pk %}">
           {% csrf_token %}
           <input type="hidden" name="quantity" value="0">
@@ -43,7 +43,7 @@
       <div class="cart-summary-box">
         <div class="cart-summary-box__row">
           <span>{% trans "الإجمالي الفرعي" %}</span>
-          <span>{% blocktrans with price=subtotal %}{{ price }} ج.م{% endblocktrans %}</span>
+          <span data-cart-subtotal>{% blocktrans with price=subtotal %}{{ price }} ج.م{% endblocktrans %}</span>
         </div>
         {% if user.is_authenticated %}
         <form method="post" action="{% url 'store:cart-checkout' %}">
