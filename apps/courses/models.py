@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
@@ -32,6 +33,9 @@ class Course(TimeStampedModel):
     # signal whenever a Review targets this course.
     average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
     reviews_count = models.PositiveIntegerField(default=0)
+    # See apps/specialists/models.py Specialist.reviews for why this is
+    # needed — without it, deleting a Course leaves orphaned Review rows.
+    reviews = GenericRelation("reviews.Review", related_query_name="course")
 
     def __str__(self):
         return self.title

@@ -21,6 +21,27 @@ def _make_specialist(username):
     )
 
 
+class ReviewCascadeDeleteTests(TestCase):
+    """Confirmed via QA: Review only had a bare GenericForeignKey, with no
+    GenericRelation declared on Specialist/Course/Product — Django's delete
+    collector (used by both .delete() and the admin's delete-confirmation
+    page) can't discover a GenericForeignKey without one, so deleting a
+    Specialist left its Reviews as orphaned rows pointing at a
+    content_type/object_id that no longer resolved to anything."""
+
+    def test_deleting_specialist_cascades_to_its_reviews(self):
+        specialist = _make_specialist("cascade-target")
+        reviewer = User.objects.create_user(
+            username="cascade-reviewer", email="cascade-reviewer@example.com", password="w-123"
+        )
+        submit_review(reviewer, specialist, 5, comment="great")
+        self.assertEqual(Review.objects.count(), 1)
+
+        specialist.delete()
+
+        self.assertEqual(Review.objects.count(), 0)
+
+
 class SubmitReviewServiceTests(TestCase):
     """apps.reviews.models.Review enforces `unique_together = ("user",
     "content_type", "object_id")` at the DB level, and submit_review() uses

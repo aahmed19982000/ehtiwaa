@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -75,6 +76,12 @@ class Specialist(TimeStampedModel):
     # default Django Admin for temporary tracking at this phase.
     average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
     reviews_count = models.PositiveIntegerField(default=0)
+    # No inverse FK exists for a GenericForeignKey without this — without
+    # it, deleting a Specialist (e.g. via Django admin) leaves its Reviews
+    # as orphaned rows pointing at a content_type/object_id that no longer
+    # resolves to anything, since the admin's delete-cascade collector has
+    # no way to discover them otherwise.
+    reviews = GenericRelation("reviews.Review", related_query_name="specialist")
     next_available_date = models.DateField(null=True, blank=True)
     completed_sessions_count = models.PositiveIntegerField(default=0)
 

@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
 from apps.core.models import TimeStampedModel
@@ -22,6 +23,9 @@ class Product(TimeStampedModel):
     # signal whenever a Review targets this product.
     average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
     reviews_count = models.PositiveIntegerField(default=0)
+    # See apps/specialists/models.py Specialist.reviews for why this is
+    # needed — without it, deleting a Product leaves orphaned Review rows.
+    reviews = GenericRelation("reviews.Review", related_query_name="product")
 
     def __str__(self):
         return self.name
