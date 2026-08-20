@@ -87,6 +87,37 @@ class CourseDetailView(DetailView):
                 user=user, content_type=content_type, object_id=course.pk
             ).exists()
 
+        instructor_stats = None
+        if course.instructor:
+            instructor_courses = Course.objects.filter(
+                instructor=course.instructor, is_published=True
+            )
+            instructor_stats = {
+                "courses_count": instructor_courses.count(),
+                "students_count": Enrollment.objects.filter(course__in=instructor_courses)
+                .values("user")
+                .distinct()
+                .count(),
+            }
+
+        related_courses = (
+            Course.objects.filter(is_published=True)
+            .exclude(pk=course.pk)
+            .select_related("instructor")
+        )
+        if course.category:
+            related_courses = related_courses.filter(category=course.category)
+        related_courses = list(related_courses.order_by("-average_rating")[:4])
+        if len(related_courses) < 4:
+            fallback_ids = [c.pk for c in related_courses]
+            fallback = (
+                Course.objects.filter(is_published=True)
+                .exclude(pk__in=[course.pk, *fallback_ids])
+                .select_related("instructor")
+                .order_by("-average_rating")[: 4 - len(related_courses)]
+            )
+            related_courses.extend(fallback)
+
         context.update(
             {
                 "modules": modules,
@@ -95,6 +126,8 @@ class CourseDetailView(DetailView):
                 "is_wishlisted": is_wishlisted,
                 "reviews": reviews,
                 "first_lesson": first_lesson,
+                "instructor_stats": instructor_stats,
+                "related_courses": related_courses,
             }
         )
         return context

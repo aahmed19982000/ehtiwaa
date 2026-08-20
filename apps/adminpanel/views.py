@@ -10,11 +10,11 @@ from django.core.files.storage import default_storage
 from django.db.models import Count, ProtectedError, Q, Sum
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views import View
-from django.views.generic import CreateView, ListView, TemplateView, UpdateView
+from django.views.generic import CreateView, DetailView, ListView, TemplateView, UpdateView
 
 from apps.accounts.models import User
 from apps.bookings.models import Booking
@@ -22,9 +22,9 @@ from apps.content.models import Article, Banner, Category, Testimonial, Video
 from apps.core.images import compress_image_bytes
 from apps.core.models import HomepageContent
 from apps.core.validators import validate_image_extension, validate_image_size
-from apps.courses.models import Course
+from apps.courses.models import Course, Lesson, Module
 from apps.payments.models import Payment
-from apps.specialists.models import Specialist
+from apps.specialists.models import Specialist, SpecialtyTag
 
 from .forms import (
     AdminForm,
@@ -33,12 +33,15 @@ from .forms import (
     CategoryForm,
     CourseForm,
     HomepageContentForm,
+    LessonForm,
+    ModuleForm,
     PanelLoginForm,
     ReportGenerateForm,
     ReviewDecisionForm,
     RoleForm,
     SpecialistCreateForm,
     SpecialistForm,
+    SpecialtyTagForm,
     TestimonialForm,
     VideoForm,
 )
@@ -151,6 +154,11 @@ class PanelDeleteView(PanelContextMixin, PanelPermissionRequiredMixin, View):
     def extra_warning(self, obj):
         return None
 
+    def get_success_url(self, obj):
+        """Override for a redirect target that needs args (e.g. back to a
+        parent object's page) — defaults to the static success_url_name."""
+        return self.success_url_name
+
     def get(self, request, pk):
         obj = get_object_or_404(self.get_queryset(), pk=pk)
         context = self.get_context_data(
@@ -160,12 +168,13 @@ class PanelDeleteView(PanelContextMixin, PanelPermissionRequiredMixin, View):
 
     def post(self, request, pk):
         obj = get_object_or_404(self.get_queryset(), pk=pk)
+        success_url = self.get_success_url(obj)
         try:
             obj.delete()
             messages.success(request, _("تم الحذف بنجاح."))
         except ProtectedError:
             messages.error(request, self.protected_message)
-        return redirect(self.success_url_name)
+        return redirect(success_url)
 
 
 class ToggleFeaturedView(PanelPermissionRequiredMixin, View):
@@ -295,7 +304,7 @@ class SpecialistListView(PanelContextMixin, PanelPermissionRequiredMixin, ListVi
 
     def get_queryset(self):
         queryset = (
-            Specialist.objects.select_related("user")
+            Specialist.objects.select_related("user", "user__profile")
             .prefetch_related("credential_documents")
             .order_by("-created_at")
         )
@@ -316,6 +325,13 @@ class SpecialistListView(PanelContextMixin, PanelPermissionRequiredMixin, ListVi
         context["status_choices"] = Specialist.STATUS_CHOICES
         context["selected_status"] = self.request.GET.get("status", "")
         context["query"] = self.request.GET.get("q", "")
+        counts = dict(
+            Specialist.objects.values_list("status").annotate(count=Count("id"))
+        )
+        context["status_summary"] = [
+            (value, label, counts.get(value, 0)) for value, label in Specialist.STATUS_CHOICES
+        ]
+        context["total_specialists_count"] = sum(counts.values())
         return context
 
 
@@ -509,6 +525,164 @@ class CourseToggleFeaturedView(ToggleFeaturedView):
 
     def get_queryset(self):
         return _scope_courses_to_instructor(Course.objects.all(), self.request.user)
+
+
+# --- Course curriculum: modules + lessons ------------------------------
+# Gated on courses.change_course (same as editing the course itself) rather
+# than dedicated Module/Lesson permissions — there's no panel role UI for
+# those, and "can edit this course" already implies "can edit its content".
+
+
+class CourseCurriculumView(PanelContextMixin, PanelPermissionRequiredMixin, DetailView):
+    model = Course
+    template_name = "adminpanel/course_curriculum.html"
+    context_object_name = "course"
+    active_nav = "courses"
+    required_perms = ["courses.change_course"]
+
+    def get_queryset(self):
+        return _scope_courses_to_instructor(Course.objects.all(), self.request.user).prefetch_related(
+            "modules__lessons"
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["module_form"] = ModuleForm()
+        context["lesson_form"] = LessonForm()
+        return context
+
+
+class ModuleCreateView(PanelPermissionRequiredMixin, View):
+    active_nav = "courses"
+    required_perms = ["courses.change_course"]
+
+    def post(self, request, pk):
+        course = get_object_or_404(
+            _scope_courses_to_instructor(Course.objects.all(), request.user), pk=pk
+        )
+        form = ModuleForm(request.POST)
+        if form.is_valid():
+            module = form.save(commit=False)
+            module.course = course
+            module.save()
+            messages.success(request, _("تمت إضافة الوحدة."))
+        else:
+            errors = " ".join(error for field_errors in form.errors.values() for error in field_errors)
+            messages.error(request, errors or _("تعذّرت إضافة الوحدة."))
+        return redirect("adminpanel:course-curriculum", pk=course.pk)
+
+
+class ModuleUpdateView(PanelContextMixin, PanelPermissionRequiredMixin, UpdateView):
+    model = Module
+    form_class = ModuleForm
+    template_name = "adminpanel/panel_form.html"
+    active_nav = "courses"
+    required_perms = ["courses.change_course"]
+
+    def get_queryset(self):
+        return Module.objects.filter(
+            course__in=_scope_courses_to_instructor(Course.objects.all(), self.request.user)
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = _("تعديل الوحدة")
+        return context
+
+    def get_success_url(self):
+        return reverse("adminpanel:course-curriculum", args=[self.object.course_id])
+
+    def form_valid(self, form):
+        messages.success(self.request, _("تم تحديث الوحدة."))
+        return super().form_valid(form)
+
+
+class ModuleDeleteView(PanelDeleteView):
+    model = Module
+    active_nav = "courses"
+    required_perms = ["courses.change_course"]
+
+    def get_queryset(self):
+        return Module.objects.filter(
+            course__in=_scope_courses_to_instructor(Course.objects.all(), self.request.user)
+        )
+
+    def label_for(self, obj):
+        return obj.title
+
+    def extra_warning(self, obj):
+        count = obj.lessons.count()
+        if count:
+            return _("سيتم حذف %(count)d درس مرتبط بهذه الوحدة أيضًا.") % {"count": count}
+        return None
+
+    def get_success_url(self, obj):
+        return reverse("adminpanel:course-curriculum", args=[obj.course_id])
+
+
+class LessonCreateView(PanelPermissionRequiredMixin, View):
+    active_nav = "courses"
+    required_perms = ["courses.change_course"]
+
+    def post(self, request, pk):
+        module = get_object_or_404(
+            Module.objects.filter(
+                course__in=_scope_courses_to_instructor(Course.objects.all(), request.user)
+            ),
+            pk=pk,
+        )
+        form = LessonForm(request.POST)
+        if form.is_valid():
+            lesson = form.save(commit=False)
+            lesson.module = module
+            lesson.save()
+            messages.success(request, _("تمت إضافة الدرس."))
+        else:
+            errors = " ".join(error for field_errors in form.errors.values() for error in field_errors)
+            messages.error(request, errors or _("تعذّرت إضافة الدرس."))
+        return redirect("adminpanel:course-curriculum", pk=module.course_id)
+
+
+class LessonUpdateView(PanelContextMixin, PanelPermissionRequiredMixin, UpdateView):
+    model = Lesson
+    form_class = LessonForm
+    template_name = "adminpanel/panel_form.html"
+    active_nav = "courses"
+    required_perms = ["courses.change_course"]
+
+    def get_queryset(self):
+        return Lesson.objects.filter(
+            module__course__in=_scope_courses_to_instructor(Course.objects.all(), self.request.user)
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = _("تعديل الدرس")
+        return context
+
+    def get_success_url(self):
+        return reverse("adminpanel:course-curriculum", args=[self.object.module.course_id])
+
+    def form_valid(self, form):
+        messages.success(self.request, _("تم تحديث الدرس."))
+        return super().form_valid(form)
+
+
+class LessonDeleteView(PanelDeleteView):
+    model = Lesson
+    active_nav = "courses"
+    required_perms = ["courses.change_course"]
+
+    def get_queryset(self):
+        return Lesson.objects.filter(
+            module__course__in=_scope_courses_to_instructor(Course.objects.all(), self.request.user)
+        )
+
+    def label_for(self, obj):
+        return obj.title
+
+    def get_success_url(self, obj):
+        return reverse("adminpanel:course-curriculum", args=[obj.module.course_id])
 
 
 # --- Articles ------------------------------------------------------
@@ -835,11 +1009,38 @@ class HomepageContentView(PanelContextMixin, PanelPermissionRequiredMixin, Updat
         context = super().get_context_data(**kwargs)
         context["banners"] = Banner.objects.order_by("-created_at")[:10]
         context["testimonials"] = Testimonial.objects.order_by("-created_at")[:10]
+        context["specialty_tags"] = SpecialtyTag.objects.order_by("name")
+        context.setdefault("specialty_tag_form", SpecialtyTagForm())
         return context
 
     def form_valid(self, form):
         messages.success(self.request, _("تم تحديث محتوى الصفحة الرئيسية."))
         return super().form_valid(form)
+
+
+class SpecialtyTagCreateView(PanelPermissionRequiredMixin, View):
+    active_nav = "homepage"
+    required_perms = ["core.change_homepagecontent"]
+
+    def post(self, request):
+        form = SpecialtyTagForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _("تمت إضافة التصنيف."))
+        else:
+            errors = " ".join(error for field_errors in form.errors.values() for error in field_errors)
+            messages.error(request, errors or _("تعذّرت إضافة التصنيف."))
+        return redirect("adminpanel:homepage")
+
+
+class SpecialtyTagDeleteView(PanelDeleteView):
+    model = SpecialtyTag
+    success_url_name = "adminpanel:homepage"
+    active_nav = "homepage"
+    required_perms = ["core.change_homepagecontent"]
+
+    def label_for(self, obj):
+        return obj.name
 
 
 class BannerListView(PanelContextMixin, PanelPermissionRequiredMixin, ListView):

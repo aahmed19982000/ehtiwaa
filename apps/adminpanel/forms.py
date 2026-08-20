@@ -1,13 +1,14 @@
 from django import forms
 from django.contrib.auth.models import Group, Permission
 from django.utils.crypto import get_random_string
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 from apps.accounts.models import User
 from apps.content.models import Article, Banner, Category, Testimonial, Video
 from apps.core.models import HomepageContent
-from apps.courses.models import Course
-from apps.specialists.models import LANGUAGE_CHOICES, Specialist
+from apps.courses.models import Course, Lesson, Module
+from apps.specialists.models import LANGUAGE_CHOICES, Specialist, SpecialtyTag
 
 from .models import Report
 from .permissions import PANEL_CAPABILITIES, admin_eligible_users
@@ -109,11 +110,34 @@ class SpecialistCreateForm(SpecialistForm):
     field_order = ["email"]
 
 
+class NewlineArrayField(forms.CharField):
+    """Renders a Postgres ArrayField as a plain textarea, one item per
+    line — friendlier for staff than the ModelForm default (SimpleArrayField,
+    comma-separated on one line)."""
+
+    def __init__(self, **kwargs):
+        kwargs.setdefault("widget", forms.Textarea(attrs={"rows": 4}))
+        kwargs.setdefault("required", False)
+        super().__init__(**kwargs)
+
+    def prepare_value(self, value):
+        if isinstance(value, list):
+            return "\n".join(value)
+        return value or ""
+
+    def to_python(self, value):
+        if not value:
+            return []
+        return [line.strip() for line in value.splitlines() if line.strip()]
+
+
 class CourseForm(forms.ModelForm):
     slug = forms.SlugField(label=_("الرابط المختصر (Slug)"), required=False)
     instructor = SpecialistChoiceField(
         queryset=Specialist.objects.all(), required=False, label=_("المحاضر")
     )
+    learning_outcomes = NewlineArrayField(label=_("أهداف التعلم (سطر لكل هدف)"))
+    requirements = NewlineArrayField(label=_("متطلبات الدورة (سطر لكل متطلب)"))
 
     class Meta:
         model = Course
@@ -123,6 +147,8 @@ class CourseForm(forms.ModelForm):
             "category",
             "description",
             "instructor",
+            "level",
+            "language",
             "price",
             "original_price",
             "is_published",
@@ -130,6 +156,7 @@ class CourseForm(forms.ModelForm):
             "cover_image",
             "intro_video_url",
             "learning_outcomes",
+            "requirements",
         ]
         widgets = {"description": forms.Textarea(attrs={"rows": 4})}
         labels = {
@@ -137,13 +164,43 @@ class CourseForm(forms.ModelForm):
             "category": _("التصنيف"),
             "description": _("الوصف"),
             "instructor": _("المحاضر"),
+            "level": _("المستوى"),
+            "language": _("اللغة"),
             "price": _("السعر"),
             "original_price": _("السعر قبل الخصم"),
             "is_published": _("منشورة"),
             "is_featured": _("مميزة في الرئيسية"),
             "cover_image": _("صورة الغلاف"),
-            "intro_video_url": _("رابط فيديو تعريفي"),
-            "learning_outcomes": _("أهداف التعلم (سطر لكل هدف)"),
+            "intro_video_url": _("رابط فيديو تعريفي (يوتيوب أو Bunny Stream)"),
+        }
+
+
+class ModuleForm(forms.ModelForm):
+    class Meta:
+        model = Module
+        fields = ["title", "order", "is_free_preview"]
+        labels = {
+            "title": _("عنوان الوحدة"),
+            "order": _("ترتيب العرض"),
+            "is_free_preview": _("معاينة مجانية (بدون اشتراك)"),
+        }
+
+
+class LessonForm(forms.ModelForm):
+    class Meta:
+        model = Lesson
+        fields = ["title", "content", "video_url", "order", "duration_minutes"]
+        widgets = {
+            "content": forms.Textarea(attrs={"rows": 4}),
+            "title": forms.TextInput(attrs={"placeholder": _("عنوان الدرس")}),
+            "video_url": forms.URLInput(attrs={"placeholder": _("رابط يوتيوب أو Bunny Stream")}),
+        }
+        labels = {
+            "title": _("عنوان الدرس"),
+            "content": _("محتوى نصي إضافي (اختياري)"),
+            "video_url": _("رابط الفيديو"),
+            "order": _("الترتيب"),
+            "duration_minutes": _("المدة (دقائق)"),
         }
 
 
@@ -270,16 +327,64 @@ class TestimonialForm(forms.ModelForm):
         }
 
 
+# (field_name, section_label, help_text) — drives the section-visibility
+# toggle grid in templates/adminpanel/homepage.html. Order here is the
+# display order, and matches the section order in templates/core/home.html.
+HOMEPAGE_SECTION_TOGGLES = [
+    ("show_specialty_tags", _("التخصصات المقترحة"), _('شرائح "إيه اللي بتواجهه" أعلى الصفحة')),
+    ("show_hero_banner", _("بانر الهيرو الإعلاني"), _("الإعلان الكبير أسفل قسم الهيرو مباشرة")),
+    ("show_how_it_works", _("كيف تعمل المنصة"), _("خطوات الاستخدام الأربع")),
+    ("show_featured", _("الأخصائيون والدورات المميزون"), _("تبويب أبرز الأخصائيين وأبرز الدورات")),
+    ("show_stats", _("الإحصائيات"), _("عدد الأخصائيين والمستخدمين والجلسات المكتملة")),
+    ("show_small_banners", _("بانرات الشركاء الصغيرة"), _("شبكة الإعلانات الصغيرة")),
+    ("show_articles", _("أحدث المقالات"), _("آخر المقالات المنشورة")),
+    ("show_videos", _("الفيديوهات التعليمية"), _("قسم الفيديوهات المميزة")),
+    ("show_benefits", _("مميزات المنصة"), _("الخصوصية والاعتماد ومرونة المواعيد")),
+    ("show_testimonials", _("آراء المستخدمين"), _("شهادات العملاء النشطة")),
+]
+
+
 class HomepageContentForm(forms.ModelForm):
+    SECTION_TOGGLES = HOMEPAGE_SECTION_TOGGLES
+
     class Meta:
         model = HomepageContent
-        fields = ["hero_title", "hero_subtitle", "hero_image"]
+        fields = ["hero_title", "hero_subtitle", "hero_image"] + [
+            name for name, label, help_text in HOMEPAGE_SECTION_TOGGLES
+        ]
         widgets = {"hero_subtitle": forms.Textarea(attrs={"rows": 3})}
         labels = {
             "hero_title": _("العنوان الرئيسي"),
             "hero_subtitle": _("الوصف الفرعي"),
             "hero_image": _("صورة الهيرو"),
+            **{name: label for name, label, help_text in HOMEPAGE_SECTION_TOGGLES},
         }
+        help_texts = {name: help_text for name, label, help_text in HOMEPAGE_SECTION_TOGGLES}
+
+
+class SpecialtyTagForm(forms.ModelForm):
+    """Powers the inline "add a concern chip" form on the homepage panel
+    page — slug is derived from the name automatically since it's only
+    used internally (SpecialtyTag has no detail page of its own)."""
+
+    class Meta:
+        model = SpecialtyTag
+        fields = ["name"]
+        labels = {"name": _("اسم التصنيف")}
+        widgets = {"name": forms.TextInput(attrs={"placeholder": _("مثال: القلق والتوتر")})}
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        base_slug = slugify(instance.name, allow_unicode=True) or "tag"
+        slug = base_slug
+        suffix = 2
+        while SpecialtyTag.objects.exclude(pk=instance.pk).filter(slug=slug).exists():
+            slug = f"{base_slug}-{suffix}"
+            suffix += 1
+        instance.slug = slug
+        if commit:
+            instance.save()
+        return instance
 
 
 class RoleForm(forms.ModelForm):

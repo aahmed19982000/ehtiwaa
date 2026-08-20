@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n %}
+{% load static i18n course_extras %}
 {% block title %}{{ course.title }} — {% trans "احتواء" %}{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/courses.css' %}">
@@ -17,16 +17,29 @@
 
       <div class="course-detail__author-row">
         {% if course.instructor %}
-        <div class="course-detail__author">
+        <a href="{% url 'specialists:detail' course.instructor.pk %}" class="course-detail__author">
           {% if course.instructor.user.profile.avatar %}
           <img src="{{ course.instructor.user.profile.avatar.url }}" alt="{{ course.instructor.full_name_ar }}">
           {% endif %}
           <span>{{ course.instructor.full_name_ar|default:course.instructor.full_name_en }}</span>
-        </div>
+        </a>
         {% endif %}
         {% if course.average_rating %}
         <span class="rating-badge">★ {{ course.average_rating }} {% blocktrans with count=course.reviews_count %}({{ count }} تقييم){% endblocktrans %}</span>
         {% endif %}
+      </div>
+
+      <div class="course-detail__meta-row">
+        <span>
+          {% with hm=course.total_duration_minutes|hours_minutes %}
+          {% if hm.hours and hm.minutes %}{% blocktrans with h=hm.hours m=hm.minutes %}{{ h }} ساعة {{ m }} دقيقة{% endblocktrans %}
+          {% elif hm.hours %}{% blocktrans with h=hm.hours %}{{ h }} ساعة{% endblocktrans %}
+          {% else %}{% blocktrans with m=hm.minutes %}{{ m }} دقيقة{% endblocktrans %}{% endif %}
+          {% endwith %}
+          / {% blocktrans count count=course.total_lessons_count %}{{ count }} درس{% plural %}{{ count }} دروس{% endblocktrans %}
+        </span>
+        <span>{% trans "المستوى" %}: {{ course.get_level_display }}</span>
+        <span>{% trans "اللغة" %}: {{ course.get_language_display }}</span>
       </div>
 
       {% if enrollment %}
@@ -36,7 +49,11 @@
       </div>
       {% endif %}
 
-      {% if course.cover_image %}
+      {% if course.intro_video_url and course.intro_video_url|is_embeddable_video %}
+      <div class="course-detail__video">
+        <iframe src="{{ course.intro_video_url|video_embed_url }}" title="{{ course.title }}" allowfullscreen loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+      </div>
+      {% elif course.cover_image %}
       <div class="course-detail__cover">
         <img src="{{ course.cover_image.url }}" alt="{{ course.title }}">
       </div>
@@ -50,6 +67,7 @@
 
       <div class="course-tab-panel is-active" data-course-panel="overview">
         {% if course.description %}<p class="course-detail__description">{{ course.description|linebreaksbr }}</p>{% endif %}
+
         {% if course.learning_outcomes %}
         <h2>{% trans "ماذا ستتعلم" %}</h2>
         <div class="learn-grid">
@@ -58,15 +76,61 @@
           {% endfor %}
         </div>
         {% endif %}
+
+        <h2>{% trans "هذه الدورة تتضمن" %}</h2>
+        <ul class="course-includes">
+          <li>
+            <span class="course-includes__icon">⏱</span>
+            {% with hm=course.total_duration_minutes|hours_minutes %}
+            {% if hm.hours and hm.minutes %}{% blocktrans with h=hm.hours m=hm.minutes %}{{ h }} ساعة {{ m }} دقيقة{% endblocktrans %}
+            {% elif hm.hours %}{% blocktrans with h=hm.hours %}{{ h }} ساعة{% endblocktrans %}
+            {% else %}{% blocktrans with m=hm.minutes %}{{ m }} دقيقة{% endblocktrans %}{% endif %}
+            {% endwith %}
+            / {% blocktrans count count=course.total_lessons_count %}{{ count }} درس{% plural %}{{ count }} دروس{% endblocktrans %}
+          </li>
+          <li><span class="course-includes__icon">🎓</span>{% trans "شهادة إتمام الدورة" %}</li>
+          <li><span class="course-includes__icon">♾</span>{% trans "وصول مدى الحياة للمحتوى" %}</li>
+        </ul>
+
+        {% if course.requirements %}
+        <h2>{% trans "متطلبات الدورة" %}</h2>
+        <ul class="course-detail__requirements">
+          {% for requirement in course.requirements %}
+          <li>{{ requirement }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if course.instructor %}
+        <h2>{% trans "عن المحاضر" %}</h2>
+        <a href="{% url 'specialists:detail' course.instructor.pk %}" class="instructor-card">
+          {% if course.instructor.user.profile.avatar %}
+          <img class="instructor-card__avatar" src="{{ course.instructor.user.profile.avatar.url }}" alt="">
+          {% else %}
+          <span class="instructor-card__avatar instructor-card__avatar--placeholder">{{ course.instructor.full_name_ar|default:course.instructor.full_name_en|first }}</span>
+          {% endif %}
+          <div class="instructor-card__body">
+            <h3>{{ course.instructor.get_title_display }} {{ course.instructor.full_name_ar|default:course.instructor.full_name_en }}</h3>
+            {% if course.instructor.headline %}<p class="instructor-card__headline">{{ course.instructor.headline }}</p>{% endif %}
+            {% if instructor_stats %}
+            <p class="instructor-card__stats">
+              {% blocktrans count count=instructor_stats.students_count %}{{ count }} متعلم{% plural %}{{ count }} متعلمين{% endblocktrans %}
+              ·
+              {% blocktrans count count=instructor_stats.courses_count %}{{ count }} دورة{% plural %}{{ count }} دورات{% endblocktrans %}
+            </p>
+            {% endif %}
+          </div>
+        </a>
+        {% endif %}
       </div>
 
       <div class="course-tab-panel" data-course-panel="content">
         {% for module in modules %}
-        <div class="curriculum-module">
-          <div class="curriculum-module__header">
+        <details class="curriculum-module" {% if forloop.first %}open{% endif %}>
+          <summary class="curriculum-module__header">
             <span>{{ module.title }}</span>
             {% if module.is_free_preview %}<span class="badge badge--preview">{% trans "معاينة مجانية" %}</span>{% endif %}
-          </div>
+          </summary>
           {% for lesson in module.lessons.all %}
           <div class="curriculum-lesson">
             {% if lesson.locked %}
@@ -80,7 +144,7 @@
             </span>
           </div>
           {% endfor %}
-        </div>
+        </details>
         {% empty %}
         <p class="course-detail__empty-note">{% trans "لم تتم إضافة محتوى لهذه الدورة بعد." %}</p>
         {% endfor %}
@@ -118,6 +182,37 @@
         <p class="course-detail__empty-note">{% trans "لا توجد تقييمات بعد." %}</p>
         {% endif %}
       </div>
+
+      {% if related_courses %}
+      <div class="course-detail__related">
+        <h2>{% trans "دورات قد تهمك" %}</h2>
+        <div class="course-grid">
+          {% for related in related_courses %}
+          <a href="{% url 'courses:detail' related.slug %}" class="course-card">
+            {% if related.cover_image %}
+            <img class="course-card__cover" src="{{ related.cover_image.url }}" alt="{{ related.title }}">
+            {% else %}
+            <span class="course-card__cover course-card__cover--placeholder">{{ related.title|first }}</span>
+            {% endif %}
+            <div class="course-card__body">
+              {% if related.category %}<p class="course-card__category">{{ related.category }}</p>{% endif %}
+              <h3>{{ related.title }}</h3>
+              {% if related.instructor %}
+              <p class="course-card__instructor">{{ related.instructor.full_name_ar|default:related.instructor.full_name_en }}</p>
+              {% endif %}
+              <div class="course-card__meta">
+                {% if related.average_rating %}<span class="rating-badge">★ {{ related.average_rating }}</span>{% endif %}
+              </div>
+              <p class="course-card__price">
+                {% blocktrans with price=related.price %}{{ price }} ج.م{% endblocktrans %}
+                {% if related.original_price %}<span class="course-card__price-original">{% blocktrans with price=related.original_price %}{{ price }} ج.م{% endblocktrans %}</span>{% endif %}
+              </p>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
     </div>
 
     <div class="course-detail__sidebar">
@@ -129,6 +224,20 @@
           <span class="badge badge--discount">-{{ course.discount_percent }}%</span>
           {% endif %}
         </div>
+
+        <ul class="price-box__meta">
+          <li>
+            <span>⏱</span>
+            {% with hm=course.total_duration_minutes|hours_minutes %}
+            {% if hm.hours and hm.minutes %}{% blocktrans with h=hm.hours m=hm.minutes %}{{ h }} ساعة {{ m }} دقيقة{% endblocktrans %}
+            {% elif hm.hours %}{% blocktrans with h=hm.hours %}{{ h }} ساعة{% endblocktrans %}
+            {% else %}{% blocktrans with m=hm.minutes %}{{ m }} دقيقة{% endblocktrans %}{% endif %}
+            {% endwith %}
+            / {% blocktrans count count=course.total_lessons_count %}{{ count }} درس{% plural %}{{ count }} دروس{% endblocktrans %}
+          </li>
+          <li><span>🎯</span>{{ course.get_level_display }}</li>
+          <li><span>🌐</span>{{ course.get_language_display }}</li>
+        </ul>
 
         {% if is_enrolled %}
           {% if enrollment.completed_at %}

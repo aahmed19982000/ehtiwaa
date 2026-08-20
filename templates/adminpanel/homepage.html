@@ -3,23 +3,75 @@
 {% block title %}{% trans "الصفحة الرئيسية" %} — {% trans "احتواء" %}{% endblock %}
 {% block panel_title %}{% trans "الصفحة الرئيسية" %}{% endblock %}
 {% block panel_content %}
-<div class="panel-card">
-  <div class="panel-section-title">{% trans "قسم الهيرو" %}</div>
-  <form method="post" enctype="multipart/form-data" class="panel-form">
-    {% csrf_token %}
-    {% for field in form %}
-    <div class="panel-form__field">
-      {{ field.label_tag }}
-      {{ field }}
-      {% if field.name == "hero_image" and object.hero_image %}
-      <img src="{{ object.hero_image.url }}" alt="" class="panel-form__preview-image">
+<p class="adminpanel-page__subtitle">{% trans "تحكّم في كل قسم يظهر بالصفحة الرئيسية للموقع من مكان واحد — المحتوى، الأقسام الظاهرة، والتخصصات المقترحة." %}</p>
+
+<form method="post" enctype="multipart/form-data" class="homepage-editor">
+  {% csrf_token %}
+
+  <div class="panel-card">
+    <div class="panel-section-title">{% trans "قسم الهيرو" %}</div>
+    <p class="panel-form__help panel-form__help--block">{% trans "العنوان والوصف والصورة الظاهرة أعلى الصفحة الرئيسية. اتركها فارغة لاستخدام المحتوى الافتراضي." %}</p>
+    <div class="panel-form">
+      {% for field in form %}
+      {% if field.name == "hero_title" or field.name == "hero_subtitle" or field.name == "hero_image" %}
+      <div class="panel-form__field">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.name == "hero_image" and object.hero_image %}
+        <img src="{{ object.hero_image.url }}" alt="" class="panel-form__preview-image">
+        {% endif %}
+        {% if field.errors %}<div class="panel-report-form__error">{{ field.errors|striptags }}</div>{% endif %}
+      </div>
       {% endif %}
-      {% if field.errors %}<div class="panel-report-form__error">{{ field.errors|striptags }}</div>{% endif %}
+      {% endfor %}
     </div>
+  </div>
+
+  <div class="panel-card">
+    <div class="panel-section-title">{% trans "الأقسام الظاهرة بالصفحة" %}</div>
+    <p class="panel-form__help panel-form__help--block">{% trans "فعّل أو أوقف أي قسم مباشرة — القسم يختفي من الصفحة الرئيسية فورًا عند الحفظ." %}</p>
+    <div class="panel-switch-grid">
+      {% for field in form %}
+      {% if field.name != "hero_title" and field.name != "hero_subtitle" and field.name != "hero_image" %}
+      <label class="panel-switch" for="{{ field.id_for_label }}">
+        {{ field }}
+        <span class="panel-switch__track"></span>
+        <span class="panel-switch__body">
+          <strong>{{ field.label }}</strong>
+          <small>{{ field.help_text }}</small>
+        </span>
+      </label>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="panel-form__actions">
+    <button type="submit" class="btn btn-primary">{% trans "حفظ التغييرات" %}</button>
+  </div>
+</form>
+
+<div class="panel-card panel-section-title--spaced">
+  <div class="panel-section-title">{% trans "التخصصات المقترحة" %}</div>
+  <p class="panel-form__help panel-form__help--block">{% trans "الشرائح الظاهرة في قسم \"إيه اللي بتواجهه؟\" — تظهر بنفس الترتيب الأبجدي." %}</p>
+
+  {% if specialty_tags %}
+  <ul class="tag-chip-list">
+    {% for tag in specialty_tags %}
+    <li class="tag-chip">
+      <span>{{ tag.name }}</span>
+      <a href="{% url 'adminpanel:specialty-tag-delete' tag.pk %}" class="tag-chip__remove" title="{% trans 'حذف' %}" aria-label="{% trans 'حذف' %}">×</a>
+    </li>
     {% endfor %}
-    <div class="panel-form__actions">
-      <button type="submit" class="btn btn-primary">{% trans "حفظ" %}</button>
-    </div>
+  </ul>
+  {% else %}
+  <div class="empty-state"><p>{% trans "لا توجد تخصصات مضافة بعد." %}</p></div>
+  {% endif %}
+
+  <form method="post" action="{% url 'adminpanel:specialty-tag-create' %}" class="tag-chip-form">
+    {% csrf_token %}
+    {{ specialty_tag_form.name }}
+    <button type="submit" class="btn btn-outline">{% trans "+ إضافة تخصص" %}</button>
   </form>
 </div>
 
@@ -30,7 +82,12 @@
 {% if banners %}
 <ul class="panel-simple-list">
   {% for banner in banners %}
-  <li>{{ banner.title|default:"—" }} — {{ banner.get_placement_display }} {% if not banner.is_active %}({% trans "غير مفعّل" %}){% endif %}</li>
+  <li>
+    <span>{{ banner.title|default:"—" }} — {{ banner.get_placement_display }}</span>
+    <span class="badge {% if banner.is_active %}badge--status-approved{% else %}badge--status-cancelled{% endif %}">
+      {% if banner.is_active %}{% trans "مفعّل" %}{% else %}{% trans "غير مفعّل" %}{% endif %}
+    </span>
+  </li>
   {% endfor %}
 </ul>
 {% else %}
@@ -44,10 +101,24 @@
 {% if testimonials %}
 <ul class="panel-simple-list">
   {% for testimonial in testimonials %}
-  <li>{{ testimonial.author_name }} {% if not testimonial.is_active %}({% trans "غير مفعّل" %}){% endif %}</li>
+  <li>
+    <span>{{ testimonial.author_name }}</span>
+    <span class="badge {% if testimonial.is_active %}badge--status-approved{% else %}badge--status-cancelled{% endif %}">
+      {% if testimonial.is_active %}{% trans "مفعّل" %}{% else %}{% trans "غير مفعّل" %}{% endif %}
+    </span>
+  </li>
   {% endfor %}
 </ul>
 {% else %}
 <div class="empty-state"><p>{% trans "لا توجد آراء بعد." %}</p></div>
 {% endif %}
+
+<div class="panel-toolbar panel-section-title--spaced">
+  <div class="panel-section-title">{% trans "الأخصائيون والدورات المميزون" %}</div>
+</div>
+<p class="panel-form__help panel-form__help--block">
+  {% blocktrans %}يتم اختيار العناصر المميزة من صفحتي "الأخصائيون" و"الدورات" — زر "★ تمييز في الرئيسية" على كل عنصر.{% endblocktrans %}
+  <a href="{% url 'adminpanel:specialists' %}" class="panel-form__help-link">{% trans "الأخصائيون ←" %}</a>
+  <a href="{% url 'adminpanel:courses' %}" class="panel-form__help-link">{% trans "الدورات ←" %}</a>
+</p>
 {% endblock %}

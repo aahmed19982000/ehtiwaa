@@ -55,7 +55,7 @@ class HomeView(TemplateView):
 
         context.update(
             {
-                "homepage_content": HomepageContent.objects.first(),
+                "homepage_content": HomepageContent.objects.first() or HomepageContent(),
                 "hero_banner": self._active_banners("home_hero").first(),
                 "small_banners": self._active_banners("home_small_grid")[:3],
                 "specialty_tags": SpecialtyTag.objects.all()[:8],

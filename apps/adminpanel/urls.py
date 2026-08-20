@@ -29,6 +29,17 @@ urlpatterns = [
         views.CourseToggleFeaturedView.as_view(),
         name="course-toggle-featured",
     ),
+    path("courses/<int:pk>/curriculum/", views.CourseCurriculumView.as_view(), name="course-curriculum"),
+    path("courses/<int:pk>/modules/create/", views.ModuleCreateView.as_view(), name="module-create"),
+    path("courses/modules/<int:pk>/edit/", views.ModuleUpdateView.as_view(), name="module-edit"),
+    path("courses/modules/<int:pk>/delete/", views.ModuleDeleteView.as_view(), name="module-delete"),
+    path(
+        "courses/modules/<int:pk>/lessons/create/",
+        views.LessonCreateView.as_view(),
+        name="lesson-create",
+    ),
+    path("courses/lessons/<int:pk>/edit/", views.LessonUpdateView.as_view(), name="lesson-edit"),
+    path("courses/lessons/<int:pk>/delete/", views.LessonDeleteView.as_view(), name="lesson-delete"),
     # Articles
     path("articles/", views.ArticleListView.as_view(), name="articles"),
     path("articles/create/", views.ArticleCreateView.as_view(), name="article-create"),
@@ -81,6 +92,16 @@ urlpatterns = [
         "homepage/testimonials/<int:pk>/delete/",
         views.TestimonialDeleteView.as_view(),
         name="testimonial-delete",
+    ),
+    path(
+        "homepage/specialty-tags/create/",
+        views.SpecialtyTagCreateView.as_view(),
+        name="specialty-tag-create",
+    ),
+    path(
+        "homepage/specialty-tags/<int:pk>/delete/",
+        views.SpecialtyTagDeleteView.as_view(),
+        name="specialty-tag-delete",
     ),
     # Users / Bookings / Payments / Reports
     path("payments/", views.PaymentsListView.as_view(), name="payments"),

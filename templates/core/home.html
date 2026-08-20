@@ -53,7 +53,7 @@
   </div>
 </div>
 
-{% if specialty_tags %}
+{% if homepage_content.show_specialty_tags and specialty_tags %}
 <section class="home-section">
   <div class="page-container">
     <h2 class="home-section__title home-section__title--center">{% trans "إيه اللي بتواجهه؟" %}</h2>
@@ -68,7 +68,7 @@
 </section>
 {% endif %}
 
-{% if hero_banner %}
+{% if homepage_content.show_hero_banner and hero_banner %}
 <div class="page-container home-ad-wrap">
   <a href="{{ hero_banner.link_url|default:'#' }}" class="home-ad-banner">
     <img src="{{ hero_banner.image.url }}" alt="" class="home-ad-banner__bg">
@@ -80,6 +80,7 @@
 </div>
 {% endif %}
 
+{% if homepage_content.show_how_it_works %}
 <section class="home-section home-section--bordered">
   <div class="page-container">
     <h2 class="home-section__title home-section__title--center">{% trans "كيف تعمل المنصة" %}</h2>
@@ -107,7 +108,9 @@
     </div>
   </div>
 </section>
+{% endif %}
 
+{% if homepage_content.show_featured %}
 {% if specialists or courses %}
 <section class="home-section">
   <div class="page-container">
@@ -157,7 +160,9 @@
   </div>
 </section>
 {% endif %}
+{% endif %}
 
+{% if homepage_content.show_stats %}
 <section class="home-section home-section--bordered home-stats">
   <div class="page-container home-stats-grid">
     <div class="home-stat">
@@ -178,8 +183,9 @@
     </div>
   </div>
 </section>
+{% endif %}
 
-{% if small_banners %}
+{% if homepage_content.show_small_banners and small_banners %}
 <div class="page-container home-small-ads-wrap">
   <div class="home-section__title home-section__title--small">{% trans "شركاء وإعلانات" %}</div>
   <div class="home-small-ads-grid">
@@ -194,7 +200,7 @@
 </div>
 {% endif %}
 
-{% if articles %}
+{% if homepage_content.show_articles and articles %}
 <section class="home-section">
   <div class="page-container">
     <h2 class="home-section__title">{% trans "أحدث المقالات" %}</h2>
@@ -219,7 +225,7 @@
 </section>
 {% endif %}
 
-{% if videos %}
+{% if homepage_content.show_videos and videos %}
 <section class="home-section">
   <div class="page-container">
     <h2 class="home-section__title">{% trans "فيديوهات تعليمية" %}</h2>
@@ -247,6 +253,7 @@
 </section>
 {% endif %}
 
+{% if homepage_content.show_benefits %}
 <section class="home-section home-section--bordered">
   <div class="page-container">
     <div class="home-benefits-grid">
@@ -268,8 +275,9 @@
     </div>
   </div>
 </section>
+{% endif %}
 
-{% if testimonials %}
+{% if homepage_content.show_testimonials and testimonials %}
 <section class="home-section home-testimonials">
   <div class="page-container">
     <h2 class="home-section__title home-section__title--center">{% trans "آراء المستخدمين" %}</h2>

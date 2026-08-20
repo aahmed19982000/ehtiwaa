@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n %}
+{% load static i18n course_extras %}
 {% block title %}{{ lesson.title }} — {{ course.title }} — {% trans "احتواء" %}{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/courses.css' %}">
@@ -34,10 +34,12 @@
       <h1>{{ lesson.title }}</h1>
 
       {% if accessible %}
-        {% if lesson.video_url %}
+        {% if lesson.video_url and lesson.video_url|is_embeddable_video %}
         <div class="lesson-page__video">
-          <iframe src="{{ lesson.video_url }}" allowfullscreen loading="lazy"></iframe>
+          <iframe src="{{ lesson.video_url|video_embed_url }}" title="{{ lesson.title }}" allowfullscreen loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
         </div>
+        {% elif lesson.video_url %}
+        <p class="course-detail__empty-note"><a href="{{ lesson.video_url }}" target="_blank" rel="noopener">{% trans "فتح الفيديو ↗" %}</a></p>
         {% endif %}
         {% if lesson.content %}
         <div class="lesson-page__content">{{ lesson.content|linebreaksbr }}</div>

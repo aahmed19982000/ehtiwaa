@@ -1,0 +1,74 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% blocktrans with title=course.title %}محتوى دورة {{ title }}{% endblocktrans %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "محتوى الدورة" %}{% endblock %}
+{% block panel_content %}
+<p class="adminpanel-page__subtitle">
+  {% blocktrans with title=course.title %}الوحدات والدروس الظاهرة في صفحة دورة "{{ title }}".{% endblocktrans %}
+  <a href="{% url 'adminpanel:course-edit' course.pk %}" class="panel-form__help-link">{% trans "← تعديل بيانات الدورة" %}</a>
+</p>
+
+<div class="curriculum-editor">
+  {% for module in course.modules.all %}
+  <div class="panel-card curriculum-editor__module">
+    <div class="panel-toolbar">
+      <div>
+        <span class="panel-section-title">{{ module.order }}. {{ module.title }}</span>
+        {% if module.is_free_preview %}<span class="badge badge--status-confirmed">{% trans "معاينة مجانية" %}</span>{% endif %}
+      </div>
+      <span class="panel-row-actions">
+        <a href="{% url 'adminpanel:module-edit' module.pk %}" class="link-btn">{% trans "تعديل" %}</a>
+        <a href="{% url 'adminpanel:module-delete' module.pk %}" class="link-btn panel-link-danger">{% trans "حذف الوحدة" %}</a>
+      </span>
+    </div>
+
+    {% if module.lessons.all %}
+    <ul class="panel-simple-list">
+      {% for lesson in module.lessons.all %}
+      <li>
+        <span>{{ lesson.order }}. {{ lesson.title }}
+          {% if lesson.duration_minutes %}<span class="panel-form__help">({{ lesson.duration_minutes }} {% trans "د" %})</span>{% endif %}
+        </span>
+        <span class="panel-row-actions">
+          <a href="{% url 'adminpanel:lesson-edit' lesson.pk %}" class="link-btn">{% trans "تعديل" %}</a>
+          <a href="{% url 'adminpanel:lesson-delete' lesson.pk %}" class="link-btn panel-link-danger">{% trans "حذف" %}</a>
+        </span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="panel-form__help">{% trans "لا توجد دروس في هذه الوحدة بعد." %}</p>
+    {% endif %}
+
+    <form method="post" action="{% url 'adminpanel:lesson-create' module.pk %}" class="curriculum-editor__lesson-form">
+      {% csrf_token %}
+      {{ lesson_form.title }}
+      {{ lesson_form.video_url }}
+      {{ lesson_form.duration_minutes }}
+      {{ lesson_form.order }}
+      <button type="submit" class="btn btn-outline">{% trans "+ إضافة درس" %}</button>
+    </form>
+  </div>
+  {% empty %}
+  <div class="empty-state"><p>{% trans "لم تُضف أي وحدات بعد — أضف أول وحدة من النموذج بالأسفل." %}</p></div>
+  {% endfor %}
+</div>
+
+<div class="panel-card panel-section-title--spaced">
+  <div class="panel-section-title">{% trans "إضافة وحدة جديدة" %}</div>
+  <form method="post" action="{% url 'adminpanel:module-create' course.pk %}">
+    {% csrf_token %}
+    <div class="panel-form">
+      {% for field in module_form %}
+      <div class="panel-form__field {% if field.field.widget.input_type == 'checkbox' %}panel-form__field--checkbox{% endif %}">
+        {{ field.label_tag }}
+        {{ field }}
+      </div>
+      {% endfor %}
+      <div class="panel-form__actions">
+        <button type="submit" class="btn btn-primary">{% trans "+ إضافة وحدة" %}</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,9 +1,18 @@
 from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import TimeStampedModel
 from apps.core.validators import validate_image_extension, validate_image_size
+from apps.specialists.models import LANGUAGE_CHOICES
+
+LEVEL_CHOICES = [
+    ("beginner", _("مبتدئ")),
+    ("intermediate", _("متوسط")),
+    ("advanced", _("متقدم")),
+    ("all", _("عام")),
+]
 
 
 class Course(TimeStampedModel):
@@ -38,6 +47,9 @@ class Course(TimeStampedModel):
     # separate from any individual lesson's video_url.
     intro_video_url = models.URLField(blank=True)
     learning_outcomes = ArrayField(models.CharField(max_length=255), default=list, blank=True)
+    requirements = ArrayField(models.CharField(max_length=255), default=list, blank=True)
+    level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default="all")
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES, default="ar")
     # Recomputed automatically by apps.reviews' post_save/post_delete
     # signal whenever a Review targets this course.
     average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
@@ -63,6 +75,10 @@ class Course(TimeStampedModel):
     @property
     def total_lessons_count(self):
         return Lesson.objects.filter(module__course=self).count()
+
+    @property
+    def total_duration_minutes(self):
+        return sum(lesson.duration_minutes for module in self.modules.all() for lesson in module.lessons.all())
 
 
 class Module(TimeStampedModel):

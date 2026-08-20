@@ -31,6 +31,7 @@
         {% endif %}
       </span>
       <span class="panel-row-actions">
+        <a href="{% url 'adminpanel:course-curriculum' course.pk %}" class="link-btn">{% trans "المحتوى" %}</a>
         <a href="{% url 'adminpanel:course-edit' course.pk %}" class="link-btn">{% trans "تعديل" %}</a>
         <form method="post" action="{% url 'adminpanel:course-toggle-featured' course.pk %}">
           {% csrf_token %}

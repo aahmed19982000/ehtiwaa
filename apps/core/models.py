@@ -46,7 +46,11 @@ class HomepageContent(TimeStampedModel):
     migration), edited from the staff panel instead of hardcoded in
     templates/core/home.html. Falls back to that template's original
     hardcoded copy/image when a field is left blank, so an empty row still
-    renders a sensible homepage."""
+    renders a sensible homepage.
+
+    The show_* fields let staff toggle whole homepage sections on/off from
+    the panel without touching the template — templates/core/home.html
+    gates each section on both its toggle and having content to show."""
 
     hero_title = models.CharField(max_length=255, blank=True)
     hero_subtitle = models.TextField(blank=True)
@@ -56,6 +60,17 @@ class HomepageContent(TimeStampedModel):
         blank=True,
         validators=[validate_image_extension, validate_image_size],
     )
+
+    show_specialty_tags = models.BooleanField(default=True)
+    show_hero_banner = models.BooleanField(default=True)
+    show_how_it_works = models.BooleanField(default=True)
+    show_featured = models.BooleanField(default=True)
+    show_stats = models.BooleanField(default=True)
+    show_small_banners = models.BooleanField(default=True)
+    show_articles = models.BooleanField(default=True)
+    show_videos = models.BooleanField(default=True)
+    show_benefits = models.BooleanField(default=True)
+    show_testimonials = models.BooleanField(default=True)
 
     image_fields_to_compress = ["hero_image"]
 
