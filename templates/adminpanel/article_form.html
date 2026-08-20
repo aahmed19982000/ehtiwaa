@@ -1,0 +1,314 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{{ title }} — {% trans "احتواء" %}{% endblock %}
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
+<style>
+.rich-text-wrapper .ql-toolbar.ql-snow {
+  border: 1px solid var(--color-border);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  background: var(--color-bg-lavender-1);
+}
+.rich-text-wrapper .ql-container.ql-snow {
+  border: 1px solid var(--color-border);
+  border-radius: 0 0 8px 8px;
+  font-family: var(--font-family-base);
+  font-size: 0.9rem;
+}
+.rich-text-wrapper .ql-editor { min-height: 320px; line-height: 1.9; }
+.rich-text-wrapper .ql-editor.ql-blank::before { font-family: var(--font-family-base); font-style: normal; color: var(--color-text-muted); }
+.rich-text-wrapper .ql-editor h2,
+.rich-text-wrapper .ql-editor h3 { font-weight: 800; }
+.rich-text-wrapper .ql-editor img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+  margin: 0.85rem auto;
+}
+.rich-text-wrapper .ql-editor iframe { max-width: 100%; border-radius: 10px; }
+</style>
+{% endblock %}
+{% block panel_content %}
+<form method="post" enctype="multipart/form-data" class="article-editor" id="article-form">
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+  <div class="panel-message panel-message--error">{{ form.non_field_errors|striptags }}</div>
+  {% endif %}
+
+  <div class="article-editor__topbar">
+    <a href="{% url 'adminpanel:articles' %}" class="link-btn">{% trans "→ رجوع للمقالات" %}</a>
+    <div class="article-editor__topbar-actions">
+      {% if can_publish %}
+      <label class="article-editor__toggle">
+        {{ form.is_published }}
+        <span class="article-editor__toggle-track"></span>
+        <span class="article-editor__toggle-label">{% trans "منشور" %}</span>
+      </label>
+      <button type="submit" class="btn btn-primary">{% trans "حفظ" %}</button>
+      {% else %}
+      <span class="article-editor__review-hint">{% trans "لا تملك صلاحية النشر — سيُرسل المقال للمراجعة" %}</span>
+      <button type="submit" class="btn btn-outline">{% trans "حفظ كمسودة" %}</button>
+      <button type="submit" name="action" value="submit_review" class="btn btn-primary">{% trans "إرسال للمراجعة" %}</button>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if form.instance.review_status == "rejected" and form.instance.review_notes %}
+  <div class="panel-message panel-message--error">{% trans "تم رفض هذا المقال" %}{% if form.instance.reviewed_by %} {% trans "بواسطة" %} {{ form.instance.reviewed_by.email }}{% endif %}: {{ form.instance.review_notes }}</div>
+  {% elif form.instance.review_status == "pending_review" %}
+  <div class="panel-note">{% trans "هذا المقال بانتظار مراجعة مشرف." %}</div>
+  {% endif %}
+
+  <div class="article-editor__layout">
+    <div class="article-editor__main">
+      <div class="article-editor__tabs" role="tablist">
+        <button type="button" class="article-editor__tab is-active" data-tab-btn="ar">{% trans "المحتوى العربي" %}</button>
+        <button type="button" class="article-editor__tab" data-tab-btn="en">{% trans "English content" %}</button>
+      </div>
+
+      <div class="article-editor__tab-panel" data-tab-panel="ar">
+        {{ form.title }}
+        {% if form.title.errors %}<div class="panel-report-form__error">{{ form.title.errors|striptags }}</div>{% endif %}
+
+        <label class="panel-form__field-label">{{ form.body.label }}</label>
+        {{ form.body }}
+        {% if form.body.errors %}<div class="panel-report-form__error">{{ form.body.errors|striptags }}</div>{% endif %}
+
+        <details class="article-editor__seo">
+          <summary>{% trans "إعدادات SEO (اختياري)" %}</summary>
+          <div class="panel-form__field">
+            {{ form.meta_title.label_tag }}
+            {{ form.meta_title }}
+          </div>
+          <div class="panel-form__field">
+            {{ form.meta_description.label_tag }}
+            {{ form.meta_description }}
+          </div>
+        </details>
+      </div>
+
+      <div class="article-editor__tab-panel" data-tab-panel="en" hidden>
+        <div class="article-editor__translate-banner">
+          <span>{% trans "لسه مفيش محتوى إنجليزي لهذا المقال." %}</span>
+          <button type="button" id="translate-to-english-btn" class="btn btn-outline">{% trans "ترجمة تلقائية من العربي" %}</button>
+        </div>
+        <div id="translate-warning" class="panel-message panel-message--error" hidden></div>
+
+        {{ form.title_en }}
+        {% if form.title_en.errors %}<div class="panel-report-form__error">{{ form.title_en.errors|striptags }}</div>{% endif %}
+
+        <label class="panel-form__field-label">{{ form.body_en.label }}</label>
+        {{ form.body_en }}
+        {% if form.body_en.errors %}<div class="panel-report-form__error">{{ form.body_en.errors|striptags }}</div>{% endif %}
+
+        <details class="article-editor__seo">
+          <summary>{% trans "إعدادات SEO (اختياري)" %}</summary>
+          <div class="panel-form__field">
+            {{ form.meta_title_en.label_tag }}
+            {{ form.meta_title_en }}
+          </div>
+          <div class="panel-form__field">
+            {{ form.meta_description_en.label_tag }}
+            {{ form.meta_description_en }}
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <aside class="article-editor__sidebar">
+      <div class="panel-card">
+        <div class="panel-form__field">
+          {{ form.category.label_tag }}
+          {{ form.category }}
+          <a href="{% url 'adminpanel:categories' %}" target="_blank" rel="noopener" class="panel-form__help panel-form__help-link">{% trans "+ إضافة/إدارة التصنيفات (يفتح في تبويب جديد)" %}</a>
+        </div>
+        <div class="panel-form__field">
+          {{ form.author.label_tag }}
+          {{ form.author }}
+          {% if not has_available_authors %}
+          <div class="panel-form__help">
+            {% trans "القائمة فاضية لأنه لسه مفيش أخصائي مصرّح له بالكتابة." %}
+            <a href="{% url 'adminpanel:specialists' %}" target="_blank" rel="noopener" class="panel-form__help-link">{% trans "فعّل الخيار من صفحة الأخصائي (يفتح في تبويب جديد)" %}</a>
+          </div>
+          {% endif %}
+        </div>
+        <div class="panel-form__field">
+          {{ form.cover_image.label_tag }}
+          <div class="article-editor__cover-preview" id="cover-preview">
+            {% if form.instance.cover_image %}<img src="{{ form.instance.cover_image.url }}" alt="">{% endif %}
+          </div>
+          {{ form.cover_image }}
+          {% if form.cover_image.errors %}<div class="panel-report-form__error">{{ form.cover_image.errors|striptags }}</div>{% endif %}
+        </div>
+        <div class="panel-form__field">
+          {{ form.slug.label_tag }}
+          {{ form.slug }}
+          <div class="panel-form__help">{% trans "اتركه فارغًا ليُنشأ تلقائيًا من العنوان." %}</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var form = document.getElementById("article-form");
+  var csrfToken = form.querySelector("[name=csrfmiddlewaretoken]").value;
+  var uploadUrl = "{% url 'adminpanel:article-upload-image' %}";
+  var uploadErrorText = "{% trans 'فشل رفع الصورة' %}";
+  var editors = {};
+
+  function mountRichText(textarea) {
+    var isEnglish = textarea.id.indexOf("_en") !== -1;
+    var dir = isEnglish ? "ltr" : "rtl";
+
+    var wrapper = document.createElement("div");
+    wrapper.className = "rich-text-wrapper";
+    wrapper.setAttribute("dir", dir);
+    var container = document.createElement("div");
+    wrapper.appendChild(container);
+    textarea.parentNode.insertBefore(wrapper, textarea);
+    textarea.style.display = "none";
+
+    var quill = new Quill(container, {
+      theme: "snow",
+      placeholder: isEnglish ? "Write the English content here…" : "اكتب محتوى المقال هنا…",
+      modules: {
+        toolbar: [
+          [{ header: [2, 3, false] }],
+          ["bold", "italic", "underline"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          ["blockquote", "link", "image", "video"],
+          ["clean"],
+        ],
+      },
+    });
+    quill.root.setAttribute("dir", dir);
+    quill.root.style.textAlign = isEnglish ? "left" : "right";
+    quill.root.innerHTML = textarea.value;
+
+    quill.getModule("toolbar").addHandler("image", function () {
+      var input = document.createElement("input");
+      input.setAttribute("type", "file");
+      input.setAttribute("accept", "image/*");
+      input.click();
+      input.onchange = function () {
+        var file = input.files[0];
+        if (!file) return;
+        var formData = new FormData();
+        formData.append("image", file);
+        fetch(uploadUrl, { method: "POST", headers: { "X-CSRFToken": csrfToken }, body: formData })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (data.url) {
+              var range = quill.getSelection(true) || { index: quill.getLength() };
+              quill.insertEmbed(range.index, "image", data.url);
+            } else {
+              alert(data.error || uploadErrorText);
+            }
+          })
+          .catch(function () { alert(uploadErrorText); });
+      };
+    });
+
+    return quill;
+  }
+
+  form.querySelectorAll("textarea.rich-text-source").forEach(function (textarea) {
+    editors[textarea.id] = mountRichText(textarea);
+  });
+
+  form.addEventListener("submit", function () {
+    Object.keys(editors).forEach(function (id) {
+      document.getElementById(id).value = editors[id].root.innerHTML;
+    });
+  });
+
+  // Language tabs
+  var tabButtons = form.querySelectorAll("[data-tab-btn]");
+  tabButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var target = btn.getAttribute("data-tab-btn");
+      form.querySelectorAll("[data-tab-btn]").forEach(function (b) { b.classList.toggle("is-active", b === btn); });
+      form.querySelectorAll("[data-tab-panel]").forEach(function (panel) {
+        panel.hidden = panel.getAttribute("data-tab-panel") !== target;
+      });
+    });
+  });
+
+  // Cover image live preview
+  var coverInput = document.getElementById("id_cover_image");
+  var coverPreview = document.getElementById("cover-preview");
+  if (coverInput && coverPreview) {
+    coverInput.addEventListener("change", function () {
+      var file = coverInput.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        coverPreview.innerHTML = '<img src="' + e.target.result + '" alt="">';
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Auto-translate to English
+  var translateBtn = document.getElementById("translate-to-english-btn");
+  if (translateBtn) {
+    var translateIdleText = translateBtn.textContent;
+    translateBtn.addEventListener("click", function () {
+      translateBtn.disabled = true;
+      translateBtn.textContent = "{% trans 'جارٍ الترجمة...' %}";
+      var titleField = document.getElementById("id_title");
+      var metaTitleField = document.getElementById("id_meta_title");
+      var metaDescriptionField = document.getElementById("id_meta_description");
+      var bodyEditor = editors["id_body"];
+      var payload = new URLSearchParams({
+        title: titleField ? titleField.value : "",
+        body: bodyEditor ? bodyEditor.root.innerHTML : "",
+        meta_title: metaTitleField ? metaTitleField.value : "",
+        meta_description: metaDescriptionField ? metaDescriptionField.value : "",
+      });
+      fetch("{% url 'adminpanel:article-translate' %}", {
+        method: "POST",
+        headers: { "X-CSRFToken": csrfToken, "Content-Type": "application/x-www-form-urlencoded" },
+        body: payload.toString(),
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          var titleEnField = document.getElementById("id_title_en");
+          var metaTitleEnField = document.getElementById("id_meta_title_en");
+          var metaDescriptionEnField = document.getElementById("id_meta_description_en");
+          if (titleEnField) titleEnField.value = data.title_en || "";
+          if (editors["id_body_en"]) editors["id_body_en"].root.innerHTML = data.body_en || "";
+          if (metaTitleEnField) metaTitleEnField.value = data.meta_title_en || "";
+          if (metaDescriptionEnField) metaDescriptionEnField.value = data.meta_description_en || "";
+
+          var warning = document.getElementById("translate-warning");
+          if (data.failed_fields && data.failed_fields.length) {
+            warning.textContent = "{% trans 'تعذّرت ترجمة بعض الحقول، برجاء إدخالها يدويًا:' %} " + data.failed_fields.join("، ");
+            warning.hidden = false;
+          } else if (warning) {
+            warning.hidden = true;
+          }
+        })
+        .catch(function () {
+          var warning = document.getElementById("translate-warning");
+          if (warning) {
+            warning.textContent = "{% trans 'تعذّر الاتصال بخدمة الترجمة.' %}";
+            warning.hidden = false;
+          }
+        })
+        .finally(function () {
+          translateBtn.disabled = false;
+          translateBtn.textContent = translateIdleText;
+        });
+    });
+  }
+});
+</script>
+{% endblock %}

@@ -40,5 +40,7 @@ class Profile(TimeStampedModel):
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True)
     city = models.CharField(max_length=100, blank=True)
 
+    image_fields_to_compress = ["avatar"]
+
     def __str__(self):
         return f"Profile<{self.user_id}>"

@@ -1,0 +1,25 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{{ title }} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{{ title }}{% endblock %}
+{% block panel_content %}
+<div class="panel-card">
+  <form method="post" class="panel-form" {% if is_multipart %}enctype="multipart/form-data"{% endif %}>
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+    <div class="panel-message panel-message--error">{{ form.non_field_errors|striptags }}</div>
+    {% endif %}
+    {% for field in form %}
+    <div class="panel-form__field {% if field.field.widget.input_type == 'checkbox' %}panel-form__field--checkbox{% endif %}">
+      {{ field.label_tag }}
+      {{ field }}
+      {% if field.help_text %}<div class="panel-form__help">{{ field.help_text }}</div>{% endif %}
+      {% if field.errors %}<div class="panel-report-form__error">{{ field.errors|striptags }}</div>{% endif %}
+    </div>
+    {% endfor %}
+    <div class="panel-form__actions">
+      <button type="submit" class="btn btn-primary">{% trans "حفظ" %}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

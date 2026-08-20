@@ -12,3 +12,4 @@ google-auth-oauthlib==1.4.0
 weasyprint==63.1
 celery==5.5.1
 redis==5.2.1
+deep-translator==1.11.4

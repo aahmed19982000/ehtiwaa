@@ -12,8 +12,16 @@
 <div class="home-hero">
   <div class="page-container home-hero__inner">
     <div class="home-hero__content">
+      {% if homepage_content.hero_title %}
+      <h1>{{ homepage_content.hero_title }}</h1>
+      {% else %}
       <h1>{% trans "محتوى موثوق، دورات، واستشارات متخصصة في مكان واحد" %}</h1>
+      {% endif %}
+      {% if homepage_content.hero_subtitle %}
+      <p>{{ homepage_content.hero_subtitle }}</p>
+      {% else %}
       <p>{% trans "منصة عربية تجمع المقالات التوعوية والدورات التدريبية والجلسات الاستشارية مع أخصائيين معتمدين، بخطوات واضحة من الاختيار إلى الحجز." %}</p>
+      {% endif %}
       <div class="home-hero__actions">
         <a href="{% url 'specialists:directory' %}" class="btn btn-accent">{% trans "احجز استشارتك الأولى" %}</a>
         <a href="{% url 'courses:list' %}" class="btn btn-outline">{% trans "استكشف الدورات" %}</a>
@@ -36,7 +44,11 @@
       {% endif %}
     </div>
     <div class="home-hero__art">
+      {% if homepage_content.hero_image %}
+      <img src="{{ homepage_content.hero_image.url }}" alt="">
+      {% else %}
       <img src="{% static 'img/hero.jpg' %}" alt="">
+      {% endif %}
     </div>
   </div>
 </div>

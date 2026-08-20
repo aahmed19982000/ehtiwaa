@@ -1,9 +1,532 @@
+/* Standalone staff control panel — its own shell, not the public site's
+   header/footer. Reuses static/css/base.css design tokens (navy primary,
+   gold accent, Cairo) so it stays visually part of the same brand while
+   remaining a completely separate surface from the client/specialist
+   dashboard (static/css/dashboard.css / templates/dashboard/). */
+
+.panel-body {
+  background: var(--color-bg-lavender-3);
+}
+
+.panel-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.panel-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--color-primary);
+  color: var(--color-text-on-dark);
+  padding: 1.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-sidebar__brand {
+  margin-bottom: 2rem;
+  padding: 0 0.6rem;
+}
+
+.panel-sidebar__brand-name {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.panel-sidebar__brand-tag {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-text-on-dark-faint);
+  margin-top: 0.2rem;
+}
+
+.panel-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+.panel-nav a {
+  padding: 0.7rem 0.85rem;
+  border-radius: 8px;
+  color: var(--color-text-on-dark);
+}
+
+.panel-nav a.is-active {
+  background: var(--color-primary-dark);
+  color: #fff;
+}
+
+.panel-sidebar__user {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+.panel-sidebar__role {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.panel-sidebar__email {
+  font-size: 0.75rem;
+  color: var(--color-text-on-dark-faint);
+  margin: 0.15rem 0 0.75rem;
+  word-break: break-all;
+}
+
+.panel-sidebar__logout {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--color-text-on-dark);
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  font-family: var(--font-family-base);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Content area */
+.panel-content {
+  flex: 1;
+  min-width: 0;
+  padding: 2rem 2.5rem 3rem;
+}
+
+.panel-content__title {
+  font-size: 1.35rem;
+  margin: 0 0 1.5rem;
+}
+
+.panel-messages {
+  margin-bottom: 1.25rem;
+}
+
+.panel-message {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 0.6rem;
+}
+
+.panel-message--success {
+  background: var(--color-success-bg);
+  color: var(--color-success-dark);
+}
+
+.panel-message--error {
+  background: var(--color-error-bg);
+  color: var(--color-error-dark);
+}
+
+.panel-note {
+  background: var(--color-bg-lavender-1);
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 1.5rem;
+}
+
+/* Stat cards */
+.panel-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  background: #fff;
+}
+
+.stat-card__label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.stat-card__value {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+/* Filters */
+.panel-filter {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.panel-filter select,
+.panel-filter input {
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-family: var(--font-family-base);
+  font-size: 0.85rem;
+}
+
+.panel-filter input {
+  flex: 1;
+  max-width: 320px;
+}
+
+/* Tables */
+.panel-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.9rem;
+}
+
+.panel-section-title--spaced {
+  margin-top: 2rem;
+}
+
+.panel-table-scroll {
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.panel-table {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  min-width: 640px;
+  background: #fff;
+}
+
+.panel-table__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  padding: 0.8rem 1.1rem;
+  font-size: 0.85rem;
+  border-top: 1px solid var(--color-border);
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.panel-table__row:first-child {
+  border-top: none;
+}
+
+.panel-table__row--head {
+  background: var(--color-bg-lavender-1);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 700;
+}
+
+.panel-table__amount {
+  font-weight: 700;
+}
+
+.panel-pagination {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.panel-pagination a {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.panel-pagination__current {
+  color: var(--color-text-muted);
+}
+
+/* Reports form */
+.panel-card {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  background: #fff;
+  margin-bottom: 1rem;
+}
+
+.panel-report-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.panel-report-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+}
+
+.panel-report-form__field label {
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.panel-report-form__field select,
+.panel-report-form__field input {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-family: var(--font-family-base);
+  font-size: 0.85rem;
+}
+
+.panel-report-form__error {
+  color: var(--color-error);
+  font-size: 0.75rem;
+}
+
+/* Toolbars, generic forms, row actions — shared by every CRUD module */
+.panel-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.panel-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  max-width: 640px;
+}
+
+.panel-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.panel-form__field--checkbox {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.panel-form__field label {
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.panel-form__field input,
+.panel-form__field select,
+.panel-form__field textarea {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-family: var(--font-family-base);
+  font-size: 0.9rem;
+}
+
+.panel-form__field input[type="checkbox"] {
+  width: auto;
+  padding: 0;
+}
+
+.panel-form__field ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  font-weight: 400;
+  color: var(--color-text);
+}
+
+.panel-form__help {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.panel-form__help-link {
+  display: inline-block;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.panel-form__preview-image {
+  max-width: 220px;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+.panel-form__actions {
+  margin-top: 0.5rem;
+}
+
+.panel-form__divider {
+  border-top: 1px solid var(--color-border);
+  padding-top: 1.1rem;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+
+.panel-form__divider .panel-section-title {
+  margin-bottom: 0;
+}
+
+.panel-row-actions {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.panel-row-actions form {
+  display: contents;
+}
+
+.panel-inline-form select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-family: var(--font-family-base);
+  font-size: 0.8rem;
+}
+
+.panel-link-danger {
+  color: var(--color-error);
+}
+
+.panel-simple-list {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Standalone login page (unauthenticated — no sidebar) */
+.panel-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.panel-login__card {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 2rem 1.75rem;
+  box-shadow: 0 12px 32px rgba(23, 32, 92, 0.12);
+}
+
+.panel-login__brand {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.panel-login__brand-name {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.panel-login__brand-tag {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 0.2rem;
+}
+
+.panel-login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.panel-login__submit {
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+/* Status badges — shared convention with static/css/dashboard.css, with
+   Payment's own status vocabulary aliased onto the same visual groups. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.badge--status-pending,
+.badge--status-initiated {
+  background: var(--color-accent-tint-1);
+  color: var(--color-accent-dark);
+}
+
+.badge--status-confirmed,
+.badge--status-paid,
+.badge--status-succeeded,
+.badge--status-approved {
+  background: var(--color-success-bg);
+  color: var(--color-success-dark);
+}
+
+.badge--status-completed {
+  background: var(--color-bg-lavender-1);
+  color: var(--color-text-muted);
+}
+
+.badge--status-cancelled,
+.badge--status-no_show,
+.badge--status-refunded,
+.badge--status-failed,
+.badge--status-rejected,
+.badge--status-suspended {
+  background: var(--color-error-bg);
+  color: var(--color-error-dark);
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  padding: 0;
+}
+
 .empty-state {
   text-align: center;
   padding: 3rem 1.5rem;
   color: var(--color-text-muted);
 }
 
+/* Reused as-is by the specialist review cards inside the panel */
 .adminpanel-page__subtitle {
   color: var(--color-text-muted);
   margin-bottom: 1.75rem;
@@ -114,8 +637,310 @@
   color: var(--color-error);
 }
 
-@media (max-width: 640px) {
+/* Article editor — dedicated two-column layout (main content + settings
+   sidebar), separate from the generic .panel-form used by every other
+   CRUD module, since articles carry meaningfully more (rich text,
+   bilingual content, SEO, cover image) than a flat field list handles well. */
+.article-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.article-editor__topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  background: var(--color-bg-lavender-3);
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.article-editor__topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.article-editor__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.article-editor__toggle input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.article-editor__toggle-track {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--color-border);
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.article-editor__toggle-track::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s ease;
+}
+
+.article-editor__toggle input:checked + .article-editor__toggle-track {
+  background: var(--color-success);
+}
+
+.article-editor__toggle input:checked + .article-editor__toggle-track::before {
+  transform: translateX(-18px);
+}
+
+.article-editor__toggle-label {
+  color: var(--color-text);
+}
+
+.article-editor__review-hint {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.role-capabilities {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.75rem;
+}
+
+.role-capabilities__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.role-capabilities__item input[type="checkbox"] {
+  width: auto;
+}
+
+.role-capabilities ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.role-capabilities ul li {
+  font-size: 0.85rem;
+}
+
+.role-capabilities ul label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.article-editor__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.article-editor__main {
+  min-width: 0;
+}
+
+.article-editor__tabs {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.article-editor__tab {
+  background: none;
+  border: none;
+  font-family: var(--font-family-base);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.article-editor__tab.is-active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.article-editor__title-input {
+  width: 100%;
+  border: none;
+  background: none;
+  font-family: var(--font-family-base);
+  font-size: 1.6rem;
+  font-weight: 800;
+  padding: 0.5rem 0 1rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.article-editor__title-input:focus {
+  outline: none;
+  border-bottom-color: var(--color-primary);
+}
+
+.article-editor__seo {
+  margin-top: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  background: #fff;
+}
+
+.article-editor__seo summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.article-editor__seo .panel-form__field {
+  margin-top: 0.9rem;
+}
+
+.article-editor__translate-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  background: var(--color-bg-lavender-1);
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+.article-editor__sidebar .panel-card {
+  margin-bottom: 0;
+  position: sticky;
+  top: 4.5rem;
+}
+
+.article-editor__cover-preview {
+  margin-bottom: 0.5rem;
+}
+
+.article-editor__cover-preview img {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.panel-form__field-label {
+  display: block;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+}
+
+@media (max-width: 800px) {
+  .panel-shell {
+    flex-direction: column;
+  }
+
+  .panel-sidebar {
+    width: 100%;
+    padding: 1rem;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .panel-sidebar__brand {
+    margin-bottom: 0;
+    margin-inline-end: 1rem;
+  }
+
+  .panel-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 0.4rem;
+    flex: 1;
+  }
+
+  .panel-nav a {
+    white-space: nowrap;
+  }
+
+  .panel-sidebar__user {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .panel-sidebar__role,
+  .panel-sidebar__email {
+    display: none;
+  }
+
+  .panel-sidebar__logout {
+    width: auto;
+    white-space: nowrap;
+  }
+
+  .panel-content {
+    padding: 1.25rem 1rem 2rem;
+  }
+
   .review-card__actions {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .article-editor__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .article-editor__sidebar .panel-card {
+    position: static;
+  }
+
+  .article-editor__title-input {
+    font-size: 1.25rem;
+  }
+
+  .article-editor__tabs {
+    overflow-x: auto;
   }
 }

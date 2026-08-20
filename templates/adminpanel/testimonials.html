@@ -1,0 +1,42 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "الشهادات والآراء" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "الشهادات والآراء" %}{% endblock %}
+{% block panel_content %}
+<div class="panel-toolbar">
+  <a href="{% url 'adminpanel:homepage' %}" class="link-btn">{% trans "→ الصفحة الرئيسية" %}</a>
+  <a href="{% url 'adminpanel:testimonial-create' %}" class="btn btn-primary">{% trans "+ إضافة رأي" %}</a>
+</div>
+
+{% if testimonials %}
+<div class="panel-table-scroll">
+  <div class="panel-table">
+    <div class="panel-table__row panel-table__row--head">
+      <span>{% trans "الاسم" %}</span>
+      <span>{% trans "الصفة" %}</span>
+      <span>{% trans "الحالة" %}</span>
+      <span>{% trans "إجراءات" %}</span>
+    </div>
+    {% for testimonial in testimonials %}
+    <div class="panel-table__row">
+      <span>{{ testimonial.author_name }}</span>
+      <span>{{ testimonial.author_title|default:"—" }}</span>
+      <span>
+        {% if testimonial.is_active %}
+        <span class="badge badge--status-confirmed">{% trans "مفعّل" %}</span>
+        {% else %}
+        <span class="badge badge--status-cancelled">{% trans "غير مفعّل" %}</span>
+        {% endif %}
+      </span>
+      <span class="panel-row-actions">
+        <a href="{% url 'adminpanel:testimonial-edit' testimonial.pk %}" class="link-btn">{% trans "تعديل" %}</a>
+        <a href="{% url 'adminpanel:testimonial-delete' testimonial.pk %}" class="link-btn panel-link-danger">{% trans "حذف" %}</a>
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% else %}
+<div class="empty-state"><p>{% trans "لا توجد آراء بعد." %}</p></div>
+{% endif %}
+{% endblock %}

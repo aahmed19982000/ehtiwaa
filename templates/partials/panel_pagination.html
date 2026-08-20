@@ -1,0 +1,12 @@
+{% load i18n %}
+{% if is_paginated %}
+<div class="panel-pagination">
+  {% if page_obj.has_previous %}
+  <a href="?{% if selected_status %}status={{ selected_status }}&{% endif %}{% if query %}q={{ query }}&{% endif %}page={{ page_obj.previous_page_number }}">{% trans "السابق" %}</a>
+  {% endif %}
+  <span class="panel-pagination__current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+  <a href="?{% if selected_status %}status={{ selected_status }}&{% endif %}{% if query %}q={{ query }}&{% endif %}page={{ page_obj.next_page_number }}">{% trans "التالي" %}</a>
+  {% endif %}
+</div>
+{% endif %}

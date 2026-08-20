@@ -1,0 +1,16 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "تأكيد الحذف" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "تأكيد الحذف" %}{% endblock %}
+{% block panel_content %}
+<div class="panel-card">
+  <p>{% blocktrans %}هل أنت متأكد من حذف "{{ object_label }}"؟ لا يمكن التراجع عن هذا الإجراء.{% endblocktrans %}</p>
+  {% if extra_warning %}
+  <div class="panel-message panel-message--error">{{ extra_warning }}</div>
+  {% endif %}
+  <form method="post" class="panel-form__actions">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline review-card__reject-btn">{% trans "تأكيد الحذف" %}</button>
+  </form>
+</div>
+{% endblock %}

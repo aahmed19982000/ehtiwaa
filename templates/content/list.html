@@ -20,7 +20,11 @@
       {% endif %}
       <div class="article-card__body">
         {% if article.category %}<span class="badge badge--category">{{ article.category }}</span>{% endif %}
+        {% if LANGUAGE_BIDI %}
         <h3>{{ article.title }}</h3>
+        {% else %}
+        <h3>{{ article.title_en|default:article.title }}</h3>
+        {% endif %}
         <p class="article-card__meta">{% blocktrans with minutes=article.reading_time_minutes %}{{ minutes }} دقائق قراءة{% endblocktrans %}</p>
       </div>
     </a>

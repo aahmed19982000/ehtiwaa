@@ -1,0 +1,53 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "الصفحة الرئيسية" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "الصفحة الرئيسية" %}{% endblock %}
+{% block panel_content %}
+<div class="panel-card">
+  <div class="panel-section-title">{% trans "قسم الهيرو" %}</div>
+  <form method="post" enctype="multipart/form-data" class="panel-form">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="panel-form__field">
+      {{ field.label_tag }}
+      {{ field }}
+      {% if field.name == "hero_image" and object.hero_image %}
+      <img src="{{ object.hero_image.url }}" alt="" class="panel-form__preview-image">
+      {% endif %}
+      {% if field.errors %}<div class="panel-report-form__error">{{ field.errors|striptags }}</div>{% endif %}
+    </div>
+    {% endfor %}
+    <div class="panel-form__actions">
+      <button type="submit" class="btn btn-primary">{% trans "حفظ" %}</button>
+    </div>
+  </form>
+</div>
+
+<div class="panel-toolbar panel-section-title--spaced">
+  <div class="panel-section-title">{% trans "البانرات والإعلانات" %}</div>
+  <a href="{% url 'adminpanel:banners' %}" class="link-btn">{% trans "إدارة البانرات ←" %}</a>
+</div>
+{% if banners %}
+<ul class="panel-simple-list">
+  {% for banner in banners %}
+  <li>{{ banner.title|default:"—" }} — {{ banner.get_placement_display }} {% if not banner.is_active %}({% trans "غير مفعّل" %}){% endif %}</li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="empty-state"><p>{% trans "لا توجد بانرات بعد." %}</p></div>
+{% endif %}
+
+<div class="panel-toolbar panel-section-title--spaced">
+  <div class="panel-section-title">{% trans "الشهادات والآراء" %}</div>
+  <a href="{% url 'adminpanel:testimonials' %}" class="link-btn">{% trans "إدارة الآراء ←" %}</a>
+</div>
+{% if testimonials %}
+<ul class="panel-simple-list">
+  {% for testimonial in testimonials %}
+  <li>{{ testimonial.author_name }} {% if not testimonial.is_active %}({% trans "غير مفعّل" %}){% endif %}</li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="empty-state"><p>{% trans "لا توجد آراء بعد." %}</p></div>
+{% endif %}
+{% endblock %}

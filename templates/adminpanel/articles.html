@@ -1,0 +1,82 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "المقالات" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "المقالات" %}{% endblock %}
+{% block panel_content %}
+<div class="panel-toolbar">
+  <a href="{% url 'adminpanel:categories' %}" class="link-btn">{% trans "إدارة التصنيفات" %}</a>
+  <a href="{% url 'adminpanel:article-create' %}" class="btn btn-primary">{% trans "+ إضافة مقال" %}</a>
+</div>
+
+{% if perms.content.publish_article and pending_review_articles %}
+<div class="panel-section-title">{% trans "بانتظار المراجعة" %}</div>
+<div class="review-card-list panel-section-title--spaced">
+  {% for article in pending_review_articles %}
+  <div class="review-card">
+    <div class="review-card__head">
+      <div>
+        <h2>{{ article.title }}</h2>
+        <p class="review-card__meta">
+          {% if article.author %}{{ article.author.full_name_ar|default:article.author.full_name_en }} · {% endif %}
+          {% if article.created_by %}{% trans "قدّمه" %}: {{ article.created_by.email }} · {% endif %}
+          {% blocktrans with duration=article.updated_at|timesince %}منذ {{ duration }}{% endblocktrans %}
+        </p>
+      </div>
+    </div>
+    <p class="review-card__about"><a href="{% url 'adminpanel:article-edit' article.pk %}" class="link-btn">{% trans "معاينة/تعديل قبل القرار" %}</a></p>
+    <div class="review-card__actions">
+      <form method="post" action="{% url 'adminpanel:article-review-approve' article.pk %}" class="review-card__decision-form">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">{% trans "اعتماد ونشر" %}</button>
+      </form>
+      <form method="post" action="{% url 'adminpanel:article-review-reject' article.pk %}" class="review-card__decision-form">
+        {% csrf_token %}
+        <textarea name="notes" rows="2" placeholder="{% trans 'سبب الرفض (يظهر للكاتب)' %}"></textarea>
+        <button type="submit" class="btn btn-outline review-card__reject-btn">{% trans "رفض" %}</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<div class="panel-section-title panel-section-title--spaced">{% trans "كل المقالات" %}</div>
+{% endif %}
+
+{% if articles %}
+<div class="panel-table-scroll">
+  <div class="panel-table">
+    <div class="panel-table__row panel-table__row--head">
+      <span>{% trans "العنوان" %}</span>
+      <span>{% trans "الكاتب" %}</span>
+      <span>{% trans "التصنيف" %}</span>
+      <span>{% trans "الحالة" %}</span>
+      <span>{% trans "إجراءات" %}</span>
+    </div>
+    {% for article in articles %}
+    <div class="panel-table__row">
+      <span>{{ article.title }}</span>
+      <span>{% if article.author %}{{ article.author.full_name_ar|default:article.author.full_name_en }}{% else %}—{% endif %}</span>
+      <span>{{ article.category|default:"—" }}</span>
+      <span>
+        {% if article.is_published %}
+        <span class="badge badge--status-confirmed">{% trans "منشور" %}</span>
+        {% elif article.review_status == "pending_review" %}
+        <span class="badge badge--status-pending">{% trans "بانتظار المراجعة" %}</span>
+        {% elif article.review_status == "rejected" %}
+        <span class="badge badge--status-rejected">{% trans "مرفوض" %}</span>
+        {% else %}
+        <span class="badge badge--status-pending">{% trans "مسودة" %}</span>
+        {% endif %}
+      </span>
+      <span class="panel-row-actions">
+        <a href="{% url 'adminpanel:article-edit' article.pk %}" class="link-btn">{% trans "تعديل" %}</a>
+        <a href="{% url 'adminpanel:article-delete' article.pk %}" class="link-btn panel-link-danger">{% trans "حذف" %}</a>
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% include "partials/panel_pagination.html" %}
+{% else %}
+<div class="empty-state"><p>{% trans "لا توجد مقالات بعد." %}</p></div>
+{% endif %}
+{% endblock %}

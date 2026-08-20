@@ -1,0 +1,49 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "الفيديوهات" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "الفيديوهات" %}{% endblock %}
+{% block panel_content %}
+<div class="panel-toolbar">
+  <span></span>
+  <a href="{% url 'adminpanel:video-create' %}" class="btn btn-primary">{% trans "+ إضافة فيديو" %}</a>
+</div>
+
+{% if videos %}
+<div class="panel-table-scroll">
+  <div class="panel-table">
+    <div class="panel-table__row panel-table__row--head">
+      <span>{% trans "العنوان" %}</span>
+      <span>{% trans "التصنيف" %}</span>
+      <span>{% trans "المدة" %}</span>
+      <span>{% trans "الحالة" %}</span>
+      <span>{% trans "إجراءات" %}</span>
+    </div>
+    {% for video in videos %}
+    <div class="panel-table__row">
+      <span>{{ video.title }}{% if video.is_featured %} <span class="badge badge--status-confirmed">★</span>{% endif %}</span>
+      <span>{{ video.category|default:"—" }}</span>
+      <span>{{ video.duration_display }}</span>
+      <span>
+        {% if video.is_published %}
+        <span class="badge badge--status-confirmed">{% trans "منشور" %}</span>
+        {% else %}
+        <span class="badge badge--status-pending">{% trans "مسودة" %}</span>
+        {% endif %}
+      </span>
+      <span class="panel-row-actions">
+        <a href="{% url 'adminpanel:video-edit' video.pk %}" class="link-btn">{% trans "تعديل" %}</a>
+        <form method="post" action="{% url 'adminpanel:video-toggle-featured' video.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="link-btn">{% if video.is_featured %}{% trans "إلغاء التمييز" %}{% else %}{% trans "★ تمييز" %}{% endif %}</button>
+        </form>
+        <a href="{% url 'adminpanel:video-delete' video.pk %}" class="link-btn panel-link-danger">{% trans "حذف" %}</a>
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% include "partials/panel_pagination.html" %}
+{% else %}
+<div class="empty-state"><p>{% trans "لا توجد فيديوهات بعد." %}</p></div>
+{% endif %}
+{% endblock %}

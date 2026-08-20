@@ -1,0 +1,39 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% trans "تسجيل الدخول" %} — {% trans "لوحة التحكم" %} — {% trans "احتواء" %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/adminpanel.css' %}">
+</head>
+<body class="panel-body">
+  <div class="panel-login">
+    <div class="panel-login__card">
+      <div class="panel-login__brand">
+        <span class="panel-login__brand-name">{% trans "احتواء" %}</span>
+        <span class="panel-login__brand-tag">{% trans "لوحة التحكم" %}</span>
+      </div>
+      {% if form.non_field_errors %}
+      <div class="panel-message panel-message--error">{{ form.non_field_errors|striptags }}</div>
+      {% endif %}
+      <form method="post" class="panel-login__form">
+        {% csrf_token %}
+        <div class="panel-form__field">
+          {{ form.email.label_tag }}
+          {{ form.email }}
+          {% if form.email.errors %}<div class="panel-report-form__error">{{ form.email.errors|striptags }}</div>{% endif %}
+        </div>
+        <div class="panel-form__field">
+          {{ form.password.label_tag }}
+          {{ form.password }}
+          {% if form.password.errors %}<div class="panel-report-form__error">{{ form.password.errors|striptags }}</div>{% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary panel-login__submit">{% trans "تسجيل الدخول" %}</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

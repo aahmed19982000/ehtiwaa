@@ -1,0 +1,55 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "الأدمنز" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "الأدمنز" %}{% endblock %}
+{% block panel_content %}
+<div class="panel-toolbar">
+  <a href="{% url 'adminpanel:roles' %}" class="link-btn">{% trans "→ الأدوار والصلاحيات" %}</a>
+  <a href="{% url 'adminpanel:admin-create' %}" class="btn btn-primary">{% trans "+ إضافة أدمن" %}</a>
+</div>
+
+{% if admin_users %}
+<div class="panel-table-scroll">
+  <div class="panel-table">
+    <div class="panel-table__row panel-table__row--head">
+      <span>{% trans "البريد الإلكتروني" %}</span>
+      <span>{% trans "الاسم" %}</span>
+      <span>{% trans "الدور الحالي" %}</span>
+      <span>{% trans "تغيير الدور" %}</span>
+      <span>{% trans "إجراءات" %}</span>
+    </div>
+    {% for admin_user in admin_users %}
+    <div class="panel-table__row">
+      <span>{{ admin_user.email }}</span>
+      <span>{{ admin_user.first_name }} {{ admin_user.last_name }}</span>
+      <span>
+        {% for group in admin_user.groups.all %}
+        {{ group.name }}{% if not forloop.last %}، {% endif %}
+        {% empty %}
+        <span class="badge badge--status-pending">{% trans "بدون دور" %}</span>
+        {% endfor %}
+        {% if not admin_user.is_active %}<span class="badge badge--status-cancelled">{% trans "موقوف" %}</span>{% endif %}
+      </span>
+      <span>
+        <form method="post" action="{% url 'adminpanel:admin-assign-role' admin_user.pk %}" class="panel-inline-form">
+          {% csrf_token %}
+          <select name="group" onchange="this.form.submit()">
+            <option value="">{% trans "بدون دور" %}</option>
+            {% for role in roles %}
+            <option value="{{ role.pk }}" {% if role in admin_user.groups.all %}selected{% endif %}>{{ role.name }}</option>
+            {% endfor %}
+          </select>
+        </form>
+      </span>
+      <span class="panel-row-actions">
+        <a href="{% url 'adminpanel:admin-edit' admin_user.pk %}" class="link-btn">{% trans "تعديل" %}</a>
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<div class="panel-note">{% trans "هذه القائمة لا تعرض عملاء المنصة العاديين — فقط الأخصائيون والحسابات الإدارية." %}</div>
+{% else %}
+<div class="empty-state"><p>{% trans "لا يوجد أدمنز بعد." %}</p></div>
+{% endif %}
+{% endblock %}

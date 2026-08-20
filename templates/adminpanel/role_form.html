@@ -1,0 +1,45 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{{ title }} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{{ title }}{% endblock %}
+{% block panel_content %}
+<form method="post" class="panel-form">
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+  <div class="panel-message panel-message--error">{{ form.non_field_errors|striptags }}</div>
+  {% endif %}
+
+  <div class="panel-card">
+    <div class="panel-form__field">
+      {{ form.name.label_tag }}
+      {{ form.name }}
+      {% if form.name.errors %}<div class="panel-report-form__error">{{ form.name.errors|striptags }}</div>{% endif %}
+    </div>
+  </div>
+
+  <div class="panel-card panel-section-title--spaced">
+    <div class="panel-section-title">{% trans "الصلاحيات" %}</div>
+    <div class="role-capabilities">
+      {% for field in form %}
+      {% if field.name|slice:":4" == "cap_" %}
+      <label class="role-capabilities__item">
+        {{ field }}
+        {{ field.label }}
+      </label>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="panel-card panel-section-title--spaced">
+    <div class="panel-section-title">{{ form.users.label }}</div>
+    <div class="role-capabilities">
+      {{ form.users }}
+    </div>
+  </div>
+
+  <div class="panel-form__actions">
+    <button type="submit" class="btn btn-primary">{% trans "حفظ" %}</button>
+  </div>
+</form>
+{% endblock %}

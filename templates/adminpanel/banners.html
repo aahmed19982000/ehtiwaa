@@ -1,0 +1,44 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "البانرات" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "البانرات والإعلانات" %}{% endblock %}
+{% block panel_content %}
+<div class="panel-toolbar">
+  <a href="{% url 'adminpanel:homepage' %}" class="link-btn">{% trans "→ الصفحة الرئيسية" %}</a>
+  <a href="{% url 'adminpanel:banner-create' %}" class="btn btn-primary">{% trans "+ إضافة بانر" %}</a>
+</div>
+
+{% if banners %}
+<div class="panel-table-scroll">
+  <div class="panel-table">
+    <div class="panel-table__row panel-table__row--head">
+      <span>{% trans "العنوان" %}</span>
+      <span>{% trans "الموضع" %}</span>
+      <span>{% trans "الفترة" %}</span>
+      <span>{% trans "الحالة" %}</span>
+      <span>{% trans "إجراءات" %}</span>
+    </div>
+    {% for banner in banners %}
+    <div class="panel-table__row">
+      <span>{{ banner.title|default:"—" }}</span>
+      <span>{{ banner.get_placement_display }}</span>
+      <span>{{ banner.starts_at|date:"Y-m-d"|default:"—" }} — {{ banner.ends_at|date:"Y-m-d"|default:"—" }}</span>
+      <span>
+        {% if banner.is_active %}
+        <span class="badge badge--status-confirmed">{% trans "مفعّل" %}</span>
+        {% else %}
+        <span class="badge badge--status-cancelled">{% trans "غير مفعّل" %}</span>
+        {% endif %}
+      </span>
+      <span class="panel-row-actions">
+        <a href="{% url 'adminpanel:banner-edit' banner.pk %}" class="link-btn">{% trans "تعديل" %}</a>
+        <a href="{% url 'adminpanel:banner-delete' banner.pk %}" class="link-btn panel-link-danger">{% trans "حذف" %}</a>
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% else %}
+<div class="empty-state"><p>{% trans "لا توجد بانرات بعد." %}</p></div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "المدفوعات" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "المدفوعات" %}{% endblock %}
+{% block panel_content %}
+<form method="get" class="panel-filter">
+  <select name="status" onchange="this.form.submit()">
+    <option value="">{% trans "كل الحالات" %}</option>
+    {% for value, label in status_choices %}
+    <option value="{{ value }}" {% if value == selected_status %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+</form>
+
+{% if payments %}
+<div class="panel-table-scroll">
+  <div class="panel-table">
+    <div class="panel-table__row panel-table__row--head">
+      <span>{% trans "المستخدم" %}</span>
+      <span>{% trans "طريقة الدفع" %}</span>
+      <span>{% trans "الحالة" %}</span>
+      <span>{% trans "التاريخ" %}</span>
+      <span>{% trans "المبلغ" %}</span>
+    </div>
+    {% for payment in payments %}
+    <div class="panel-table__row">
+      <span>{{ payment.order.user.email }}</span>
+      <span>{{ payment.get_method_display }}</span>
+      <span><span class="badge badge--status-{{ payment.status }}">{{ payment.get_status_display }}</span></span>
+      <span>{{ payment.created_at|date:"Y-m-d H:i" }}</span>
+      <span class="panel-table__amount">{{ payment.order.total }} {% trans "ج.م" %}</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% include "partials/panel_pagination.html" %}
+{% else %}
+<div class="empty-state"><p>{% trans "لا توجد مدفوعات مطابقة." %}</p></div>
+{% endif %}
+{% endblock %}

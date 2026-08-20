@@ -1,0 +1,49 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "الدورات" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "الدورات" %}{% endblock %}
+{% block panel_content %}
+<div class="panel-toolbar">
+  <span></span>
+  <a href="{% url 'adminpanel:course-create' %}" class="btn btn-primary">{% trans "+ إضافة دورة" %}</a>
+</div>
+
+{% if courses %}
+<div class="panel-table-scroll">
+  <div class="panel-table">
+    <div class="panel-table__row panel-table__row--head">
+      <span>{% trans "العنوان" %}</span>
+      <span>{% trans "المحاضر" %}</span>
+      <span>{% trans "السعر" %}</span>
+      <span>{% trans "الحالة" %}</span>
+      <span>{% trans "إجراءات" %}</span>
+    </div>
+    {% for course in courses %}
+    <div class="panel-table__row">
+      <span>{{ course.title }}{% if course.is_featured %} <span class="badge badge--status-confirmed">★</span>{% endif %}</span>
+      <span>{% if course.instructor %}{{ course.instructor.full_name_ar|default:course.instructor.full_name_en }}{% else %}—{% endif %}</span>
+      <span>{{ course.price }} {% trans "ج.م" %}</span>
+      <span>
+        {% if course.is_published %}
+        <span class="badge badge--status-confirmed">{% trans "منشورة" %}</span>
+        {% else %}
+        <span class="badge badge--status-pending">{% trans "مسودة" %}</span>
+        {% endif %}
+      </span>
+      <span class="panel-row-actions">
+        <a href="{% url 'adminpanel:course-edit' course.pk %}" class="link-btn">{% trans "تعديل" %}</a>
+        <form method="post" action="{% url 'adminpanel:course-toggle-featured' course.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="link-btn">{% if course.is_featured %}{% trans "إلغاء التمييز" %}{% else %}{% trans "★ تمييز" %}{% endif %}</button>
+        </form>
+        <a href="{% url 'adminpanel:course-delete' course.pk %}" class="link-btn panel-link-danger">{% trans "حذف" %}</a>
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% include "partials/panel_pagination.html" %}
+{% else %}
+<div class="empty-state"><p>{% trans "لا توجد دورات بعد." %}</p></div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "الأخصائيون" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "الأخصائيون" %}{% endblock %}
+{% block panel_content %}
+<div class="panel-toolbar">
+  <form method="get" class="panel-filter">
+    <input type="text" name="q" value="{{ query }}" placeholder="{% trans 'بحث بالاسم أو البريد' %}">
+    <select name="status" onchange="this.form.submit()">
+      <option value="">{% trans "كل الحالات" %}</option>
+      {% for value, label in status_choices %}
+      <option value="{{ value }}" {% if value == selected_status %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-outline">{% trans "بحث" %}</button>
+  </form>
+  <a href="{% url 'adminpanel:specialist-create' %}" class="btn btn-primary">{% trans "+ إضافة أخصائي" %}</a>
+</div>
+
+{% if specialists %}
+<div class="review-card-list">
+  {% for specialist in specialists %}
+  <div class="review-card">
+    <div class="review-card__head">
+      <div>
+        <h2>{{ specialist.get_title_display }} {{ specialist.full_name_ar|default:specialist.full_name_en }}</h2>
+        <p class="review-card__meta">
+          {{ specialist.user.email }} · {{ specialist.get_category_display }}
+          · <span class="badge badge--status-{{ specialist.status }}">{{ specialist.get_status_display }}</span>
+          {% if specialist.is_featured %}· <span class="badge badge--status-confirmed">★ {% trans "مميز" %}</span>{% endif %}
+        </p>
+      </div>
+    </div>
+
+    {% if specialist.headline %}<p class="review-card__headline">{{ specialist.headline }}</p>{% endif %}
+
+    {% if specialist.status == 'pending' %}
+    {% if specialist.credential_documents.all %}
+    <div class="review-card__documents">
+      <div class="review-card__documents-title">{% trans "المستندات المرفقة" %}</div>
+      <ul>
+        {% for document in specialist.credential_documents.all %}
+        <li><a href="{{ document.file.url }}" target="_blank" rel="noopener">{{ document.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% else %}
+    <p class="review-card__no-documents">{% trans "لا توجد مستندات مرفقة بعد." %}</p>
+    {% endif %}
+
+    <div class="review-card__actions">
+      <form method="post" action="{% url 'adminpanel:specialist-approve' specialist.pk %}" class="review-card__decision-form">
+        {% csrf_token %}
+        <textarea name="notes" rows="2" placeholder="{% trans 'ملاحظات (اختياري)' %}"></textarea>
+        <button type="submit" class="btn btn-primary">{% trans "قبول" %}</button>
+      </form>
+      <form method="post" action="{% url 'adminpanel:specialist-reject' specialist.pk %}" class="review-card__decision-form">
+        {% csrf_token %}
+        <textarea name="notes" rows="2" placeholder="{% trans 'سبب الرفض (يظهر للأخصائي)' %}"></textarea>
+        <button type="submit" class="btn btn-outline review-card__reject-btn">{% trans "رفض" %}</button>
+      </form>
+    </div>
+    {% endif %}
+
+    <div class="panel-row-actions">
+      <a href="{% url 'adminpanel:specialist-edit' specialist.pk %}" class="link-btn">{% trans "تعديل" %}</a>
+      <form method="post" action="{% url 'adminpanel:specialist-toggle-featured' specialist.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="link-btn">{% if specialist.is_featured %}{% trans "إلغاء التمييز" %}{% else %}{% trans "★ تمييز في الرئيسية" %}{% endif %}</button>
+      </form>
+      <a href="{% url 'adminpanel:specialist-delete' specialist.pk %}" class="link-btn panel-link-danger">{% trans "حذف" %}</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% include "partials/panel_pagination.html" %}
+{% else %}
+<div class="empty-state"><p>{% trans "لا يوجد أخصائيون مطابقون." %}</p></div>
+{% endif %}
+{% endblock %}

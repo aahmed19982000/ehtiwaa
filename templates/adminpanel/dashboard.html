@@ -1,0 +1,42 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "لوحة المؤشرات" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "لوحة المؤشرات" %}{% endblock %}
+{% block panel_content %}
+<div class="panel-stats">
+  {% if pending_specialists_count is not None %}
+  <div class="stat-card">
+    <div class="stat-card__label">{% trans "أخصائيون بانتظار الاعتماد" %}</div>
+    <div class="stat-card__value">{{ pending_specialists_count }}</div>
+  </div>
+  {% endif %}
+  {% if bookings_today_count is not None %}
+  <div class="stat-card">
+    <div class="stat-card__label">{% trans "حجوزات اليوم" %}</div>
+    <div class="stat-card__value">{{ bookings_today_count }}</div>
+  </div>
+  {% endif %}
+  {% if payments_this_month is not None %}
+  <div class="stat-card">
+    <div class="stat-card__label">{% trans "إجمالي المدفوعات هذا الشهر" %}</div>
+    <div class="stat-card__value">{{ payments_this_month }} {% trans "ج.م" %}</div>
+  </div>
+  {% endif %}
+  {% if new_users_week_count is not None %}
+  <div class="stat-card">
+    <div class="stat-card__label">{% trans "مستخدمون جدد هذا الأسبوع" %}</div>
+    <div class="stat-card__value">{{ new_users_week_count }}</div>
+  </div>
+  {% endif %}
+  {% if pending_articles_count is not None %}
+  <div class="stat-card">
+    <div class="stat-card__label">{% trans "مقالات بانتظار المراجعة" %}</div>
+    <div class="stat-card__value">{{ pending_articles_count }}</div>
+  </div>
+  {% endif %}
+</div>
+
+{% if not perms.specialists.view_specialist and not perms.courses.view_course and not perms.content.view_article %}
+<div class="panel-note">{% trans "الأقسام المتاحة لدورك محدودة — راجع القائمة الجانبية لمعرفة ما يمكنك الوصول إليه." %}</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "الحجوزات" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "الحجوزات" %}{% endblock %}
+{% block panel_content %}
+<form method="get" class="panel-filter">
+  <select name="status" onchange="this.form.submit()">
+    <option value="">{% trans "كل الحالات" %}</option>
+    {% for value, label in status_choices %}
+    <option value="{{ value }}" {% if value == selected_status %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+</form>
+
+{% if bookings %}
+<div class="panel-table-scroll">
+  <div class="panel-table">
+    <div class="panel-table__row panel-table__row--head">
+      <span>{% trans "العميل" %}</span>
+      <span>{% trans "الأخصائي" %}</span>
+      <span>{% trans "الحالة" %}</span>
+      <span>{% trans "موعد الجلسة" %}</span>
+    </div>
+    {% for booking in bookings %}
+    <div class="panel-table__row">
+      <span>{{ booking.client.email }}</span>
+      <span>{{ booking.specialist.full_name_ar|default:booking.specialist.full_name_en }}</span>
+      <span><span class="badge badge--status-{{ booking.status }}">{{ booking.get_status_display }}</span></span>
+      <span>{{ booking.scheduled_start|date:"Y-m-d H:i" }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% include "partials/panel_pagination.html" %}
+{% else %}
+<div class="empty-state"><p>{% trans "لا توجد حجوزات مطابقة." %}</p></div>
+{% endif %}
+{% endblock %}

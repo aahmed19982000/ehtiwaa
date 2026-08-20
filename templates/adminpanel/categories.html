@@ -1,0 +1,34 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "تصنيفات المقالات" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "تصنيفات المقالات" %}{% endblock %}
+{% block panel_content %}
+<div class="panel-toolbar">
+  <a href="{% url 'adminpanel:articles' %}" class="link-btn">{% trans "→ المقالات" %}</a>
+  <a href="{% url 'adminpanel:category-create' %}" class="btn btn-primary">{% trans "+ إضافة تصنيف" %}</a>
+</div>
+
+{% if categories %}
+<div class="panel-table-scroll">
+  <div class="panel-table">
+    <div class="panel-table__row panel-table__row--head">
+      <span>{% trans "الاسم" %}</span>
+      <span>{% trans "عدد المقالات" %}</span>
+      <span>{% trans "إجراءات" %}</span>
+    </div>
+    {% for category in categories %}
+    <div class="panel-table__row">
+      <span>{{ category.name }}</span>
+      <span>{{ category.articles.count }}</span>
+      <span class="panel-row-actions">
+        <a href="{% url 'adminpanel:category-edit' category.pk %}" class="link-btn">{% trans "تعديل" %}</a>
+        <a href="{% url 'adminpanel:category-delete' category.pk %}" class="link-btn panel-link-danger">{% trans "حذف" %}</a>
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% else %}
+<div class="empty-state"><p>{% trans "لا توجد تصنيفات بعد." %}</p></div>
+{% endif %}
+{% endblock %}

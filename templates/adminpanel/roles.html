@@ -1,0 +1,34 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "الأدوار والصلاحيات" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "الأدوار والصلاحيات" %}{% endblock %}
+{% block panel_content %}
+<div class="panel-toolbar">
+  <a href="{% url 'adminpanel:admins' %}" class="link-btn">{% trans "الأدمنز ←" %}</a>
+  <a href="{% url 'adminpanel:role-create' %}" class="btn btn-primary">{% trans "+ إضافة دور" %}</a>
+</div>
+
+{% if roles %}
+<div class="panel-table-scroll">
+  <div class="panel-table">
+    <div class="panel-table__row panel-table__row--head">
+      <span>{% trans "الدور" %}</span>
+      <span>{% trans "عدد الأعضاء" %}</span>
+      <span>{% trans "إجراءات" %}</span>
+    </div>
+    {% for role in roles %}
+    <div class="panel-table__row">
+      <span>{{ role.name }}</span>
+      <span>{{ role.member_count }}</span>
+      <span class="panel-row-actions">
+        <a href="{% url 'adminpanel:role-edit' role.pk %}" class="link-btn">{% trans "تعديل" %}</a>
+        <a href="{% url 'adminpanel:role-delete' role.pk %}" class="link-btn panel-link-danger">{% trans "حذف" %}</a>
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% else %}
+<div class="empty-state"><p>{% trans "لا توجد أدوار بعد." %}</p></div>
+{% endif %}
+{% endblock %}

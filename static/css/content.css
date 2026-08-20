@@ -144,6 +144,59 @@
   margin: 0 0 1.25rem;
 }
 
+.article-detail__body h2,
+.article-detail__body h3 {
+  font-weight: 800;
+  margin: 2rem 0 1rem;
+}
+
+.article-detail__body h2 {
+  font-size: 1.5rem;
+}
+
+.article-detail__body h3 {
+  font-size: 1.2rem;
+}
+
+.article-detail__body ul,
+.article-detail__body ol {
+  margin: 0 0 1.25rem;
+  padding-inline-start: 1.5rem;
+}
+
+.article-detail__body li {
+  margin-bottom: 0.5rem;
+}
+
+.article-detail__body blockquote {
+  border-inline-start: 3px solid var(--color-accent);
+  padding-inline-start: 1rem;
+  margin: 0 0 1.25rem;
+  color: var(--color-text-muted);
+}
+
+.article-detail__body a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.article-detail__body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+  margin: 1.5rem auto;
+}
+
+.article-detail__body iframe {
+  max-width: 100%;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  border: none;
+  margin: 1.5rem 0;
+}
+
 .tag-pills {
   display: flex;
   gap: 0.5rem;

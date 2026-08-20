@@ -1,13 +1,21 @@
 {% extends "base.html" %}
 {% load static i18n %}
-{% block title %}{{ article.title }} — {% trans "احتواء" %}{% endblock %}
+{% block title %}{% if LANGUAGE_BIDI %}{{ article.meta_title|default:article.title }}{% else %}{{ article.meta_title_en|default:article.title_en|default:article.meta_title|default:article.title }}{% endif %} — {% trans "احتواء" %}{% endblock %}
+{% block meta_description %}{% if LANGUAGE_BIDI %}{{ article.meta_description|default:article.title }}{% else %}{{ article.meta_description_en|default:article.meta_description|default:article.title_en|default:article.title }}{% endif %}{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/content.css' %}">
+{% endblock %}
+{% block extra_js %}
+<script type="application/ld+json">{{ structured_data|safe }}</script>
 {% endblock %}
 {% block content %}
 <div class="page-container article-detail">
   {% if article.category %}<span class="badge badge--category">{{ article.category }}</span>{% endif %}
+  {% if LANGUAGE_BIDI %}
   <h1 class="article-detail__title">{{ article.title }}</h1>
+  {% else %}
+  <h1 class="article-detail__title">{{ article.title_en|default:article.title }}</h1>
+  {% endif %}
 
   <div class="article-detail__byline">
     {% if article.author %}
@@ -27,7 +35,11 @@
   </div>
   {% endif %}
 
+  {% if LANGUAGE_BIDI %}
   <div class="article-detail__body">{{ article.body|safe }}</div>
+  {% else %}
+  <div class="article-detail__body">{{ article.body_en|default:article.body|safe }}</div>
+  {% endif %}
 
   {% if article.tags %}
   <div class="tag-pills">

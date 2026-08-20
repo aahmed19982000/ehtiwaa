@@ -1,0 +1,42 @@
+{% extends "adminpanel/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "المستخدمون" %} — {% trans "احتواء" %}{% endblock %}
+{% block panel_title %}{% trans "المستخدمون" %}{% endblock %}
+{% block panel_content %}
+<form method="get" class="panel-filter">
+  <input type="text" name="q" value="{{ query }}" placeholder="{% trans 'بحث بالبريد أو الهاتف' %}">
+  <button type="submit" class="btn btn-outline">{% trans "بحث" %}</button>
+</form>
+
+{% if users %}
+<div class="panel-table-scroll">
+  <div class="panel-table">
+    <div class="panel-table__row panel-table__row--head">
+      <span>{% trans "البريد الإلكتروني" %}</span>
+      <span>{% trans "الهاتف" %}</span>
+      <span>{% trans "الدور" %}</span>
+      <span>{% trans "الحالة" %}</span>
+      <span>{% trans "تاريخ التسجيل" %}</span>
+    </div>
+    {% for account in users %}
+    <div class="panel-table__row">
+      <span>{{ account.email }}</span>
+      <span>{{ account.phone|default:"—" }}</span>
+      <span>{{ account.get_role_display }}</span>
+      <span>
+        {% if account.is_active %}
+        <span class="badge badge--status-confirmed">{% trans "نشط" %}</span>
+        {% else %}
+        <span class="badge badge--status-cancelled">{% trans "موقوف" %}</span>
+        {% endif %}
+      </span>
+      <span>{{ account.date_joined|date:"Y-m-d" }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% include "partials/panel_pagination.html" %}
+{% else %}
+<div class="empty-state"><p>{% trans "لا يوجد مستخدمون مطابقون." %}</p></div>
+{% endif %}
+{% endblock %}

@@ -2,6 +2,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
 from apps.core.models import TimeStampedModel
+from apps.core.validators import validate_image_extension, validate_image_size
 
 
 class Product(TimeStampedModel):
@@ -17,7 +18,12 @@ class Product(TimeStampedModel):
     stock_quantity = models.PositiveIntegerField(default=0)
     # Cover image used on the catalog grid; the detail page's gallery comes
     # from ProductImage below (falls back to this if none are set).
-    image = models.ImageField(upload_to="products/", null=True, blank=True)
+    image = models.ImageField(
+        upload_to="products/",
+        null=True,
+        blank=True,
+        validators=[validate_image_extension, validate_image_size],
+    )
     is_active = models.BooleanField(default=True)
     # Recomputed automatically by apps.reviews' post_save/post_delete
     # signal whenever a Review targets this product.
@@ -26,6 +32,8 @@ class Product(TimeStampedModel):
     # See apps/specialists/models.py Specialist.reviews for why this is
     # needed — without it, deleting a Product leaves orphaned Review rows.
     reviews = GenericRelation("reviews.Review", related_query_name="product")
+
+    image_fields_to_compress = ["image"]
 
     def __str__(self):
         return self.name
@@ -43,8 +51,13 @@ class Product(TimeStampedModel):
 
 class ProductImage(TimeStampedModel):
     product = models.ForeignKey("store.Product", on_delete=models.CASCADE, related_name="images")
-    image = models.ImageField(upload_to="products/gallery/")
+    image = models.ImageField(
+        upload_to="products/gallery/",
+        validators=[validate_image_extension, validate_image_size],
+    )
     order = models.PositiveSmallIntegerField(default=0)
+
+    image_fields_to_compress = ["image"]
 
     class Meta:
         ordering = ["order", "id"]

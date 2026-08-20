@@ -55,6 +55,14 @@ class Specialist(TimeStampedModel):
         "accounts.User", on_delete=models.CASCADE, related_name="specialist_profile"
     )
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    # Manually curated homepage placement — the "أبرز الأخصائيين" section
+    # falls back to top-rated specialists when nothing is featured, so this
+    # only overrides that default ordering, never hides anyone.
+    is_featured = models.BooleanField(default=False)
+    # Gates whether this specialist appears in the panel's article-author
+    # picker (apps.adminpanel.forms.ArticleForm) — being approved doesn't
+    # by itself mean staff should be able to byline articles under them.
+    can_write_articles = models.BooleanField(default=False)
     license_number = models.CharField(max_length=100, blank=True)
     years_of_experience = models.PositiveSmallIntegerField(default=0)
     headline = models.CharField(max_length=255, blank=True)

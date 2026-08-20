@@ -1,0 +1,77 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% trans "لوحة التحكم" %} — {% trans "احتواء" %}{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/adminpanel.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="panel-body">
+  <div class="panel-shell">
+    <aside class="panel-sidebar">
+      <div class="panel-sidebar__brand">
+        <span class="panel-sidebar__brand-name">{% trans "احتواء" %}</span>
+        <span class="panel-sidebar__brand-tag">{% trans "لوحة التحكم" %}</span>
+      </div>
+      <nav class="panel-nav">
+        <a href="{% url 'adminpanel:dashboard' %}" class="{% if active_nav == 'dashboard' %}is-active{% endif %}">{% trans "لوحة المؤشرات" %}</a>
+        {% if perms.specialists.view_specialist %}
+        <a href="{% url 'adminpanel:specialists' %}" class="{% if active_nav == 'specialists' %}is-active{% endif %}">{% trans "الأخصائيون" %}</a>
+        {% endif %}
+        {% if perms.courses.view_course %}
+        <a href="{% url 'adminpanel:courses' %}" class="{% if active_nav == 'courses' %}is-active{% endif %}">{% trans "الدورات" %}</a>
+        {% endif %}
+        {% if perms.content.view_article %}
+        <a href="{% url 'adminpanel:articles' %}" class="{% if active_nav == 'articles' %}is-active{% endif %}">{% trans "المقالات" %}</a>
+        {% endif %}
+        {% if perms.content.view_video %}
+        <a href="{% url 'adminpanel:videos' %}" class="{% if active_nav == 'videos' %}is-active{% endif %}">{% trans "الفيديوهات" %}</a>
+        {% endif %}
+        {% if perms.core.change_homepagecontent %}
+        <a href="{% url 'adminpanel:homepage' %}" class="{% if active_nav == 'homepage' %}is-active{% endif %}">{% trans "الصفحة الرئيسية" %}</a>
+        {% endif %}
+        {% if perms.accounts.view_user %}
+        <a href="{% url 'adminpanel:users' %}" class="{% if active_nav == 'users' %}is-active{% endif %}">{% trans "المستخدمون" %}</a>
+        {% endif %}
+        {% if perms.bookings.view_booking %}
+        <a href="{% url 'adminpanel:bookings' %}" class="{% if active_nav == 'bookings' %}is-active{% endif %}">{% trans "الحجوزات" %}</a>
+        {% endif %}
+        {% if perms.payments.view_order %}
+        <a href="{% url 'adminpanel:payments' %}" class="{% if active_nav == 'payments' %}is-active{% endif %}">{% trans "المدفوعات" %}</a>
+        {% endif %}
+        {% if perms.adminpanel.view_report %}
+        <a href="{% url 'adminpanel:reports' %}" class="{% if active_nav == 'reports' %}is-active{% endif %}">{% trans "التقارير" %}</a>
+        {% endif %}
+        {% if user.is_superuser %}
+        <a href="{% url 'adminpanel:roles' %}" class="{% if active_nav == 'roles' %}is-active{% endif %}">{% trans "الأدوار والصلاحيات" %}</a>
+        {% endif %}
+      </nav>
+      <div class="panel-sidebar__user">
+        <div class="panel-sidebar__role">{% if user.is_superuser %}{% trans "مدير عام" %}{% else %}{% for group in user.groups.all %}{{ group.name }}{% if not forloop.last %}، {% endif %}{% endfor %}{% endif %}</div>
+        <div class="panel-sidebar__email">{{ user.email }}</div>
+        <form method="post" action="{% url 'accounts:logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="panel-sidebar__logout">{% trans "تسجيل الخروج" %}</button>
+        </form>
+      </div>
+    </aside>
+
+    <main class="panel-content">
+      {% if messages %}
+      <div class="panel-messages">
+        {% for message in messages %}
+        <div class="panel-message panel-message--{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <h1 class="panel-content__title">{% block panel_title %}{% endblock %}</h1>
+      {% block panel_content %}{% endblock %}
+    </main>
+  </div>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

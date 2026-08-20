@@ -3,6 +3,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 from apps.core.models import TimeStampedModel
+from apps.core.validators import validate_image_extension, validate_image_size
 
 
 class Course(TimeStampedModel):
@@ -24,7 +25,15 @@ class Course(TimeStampedModel):
     # the course isn't discounted.
     original_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     is_published = models.BooleanField(default=False)
-    cover_image = models.ImageField(upload_to="courses/covers/", null=True, blank=True)
+    # Manually curated homepage placement — the "أبرز الدورات" section falls
+    # back to top-rated published courses when nothing is featured.
+    is_featured = models.BooleanField(default=False)
+    cover_image = models.ImageField(
+        upload_to="courses/covers/",
+        null=True,
+        blank=True,
+        validators=[validate_image_extension, validate_image_size],
+    )
     # Intro/trailer video shown on the detail page above the curriculum,
     # separate from any individual lesson's video_url.
     intro_video_url = models.URLField(blank=True)
@@ -36,6 +45,11 @@ class Course(TimeStampedModel):
     # See apps/specialists/models.py Specialist.reviews for why this is
     # needed — without it, deleting a Course leaves orphaned Review rows.
     reviews = GenericRelation("reviews.Review", related_query_name="course")
+
+    image_fields_to_compress = ["cover_image"]
+
+    class Meta:
+        permissions = [("manage_own_courses_only", "Restricted to own courses only")]
 
     def __str__(self):
         return self.title
